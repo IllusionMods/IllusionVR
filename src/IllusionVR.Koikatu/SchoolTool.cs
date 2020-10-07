@@ -1,13 +1,13 @@
-﻿using System;
+﻿using IllusionVR.Koikatu.Interpreters;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using VRGIN.Controls;
 using VRGIN.Controls.Tools;
 using VRGIN.Core;
 using VRGIN.Helpers;
-using static SteamVR_Controller;
 using WindowsInput.Native;
-using IllusionVR.Koikatu.Interpreters;
+using static SteamVR_Controller;
 
 namespace IllusionVR.Koikatu
 {
@@ -30,13 +30,7 @@ namespace IllusionVR.Koikatu
             _KeySet = keySets[_KeySetIndex];
         }
 
-        public override Texture2D Image
-        {
-            get
-            {
-                return UnityHelper.LoadImage("icon_school.png");
-            }
-        }
+        public override Texture2D Image => UnityHelper.LoadImage("icon_school.png");
 
         protected override void OnAwake()
         {
@@ -78,48 +72,48 @@ namespace IllusionVR.Koikatu
             base.OnUpdate();
             var device = this.Controller;
 
-            if (device.GetPressDown(ButtonMask.Trigger))
+            if(device.GetPressDown(ButtonMask.Trigger))
             {
                 InputKey(_KeySet.Trigger, KeyMode.PressDown);
             }
 
-            if (device.GetPressUp(ButtonMask.Trigger))
+            if(device.GetPressUp(ButtonMask.Trigger))
             {
                 InputKey(_KeySet.Trigger, KeyMode.PressUp);
             }
 
-            if (device.GetPressDown(ButtonMask.Grip))
+            if(device.GetPressDown(ButtonMask.Grip))
             {
                 InputKey(_KeySet.Grip, KeyMode.PressDown);
             }
 
-            if (device.GetPressUp(ButtonMask.Grip))
+            if(device.GetPressUp(ButtonMask.Grip))
             {
                 InputKey(_KeySet.Grip, KeyMode.PressUp);
             }
 
-            if (device.GetPressDown(ButtonMask.Touchpad))
+            if(device.GetPressDown(ButtonMask.Touchpad))
             {
                 Vector2 touchPosition = device.GetAxis();
                 {
                     float threshold = _Settings.TouchpadThreshold;
 
-                    if (touchPosition.y > threshold) // up
+                    if(touchPosition.y > threshold) // up
                     {
                         InputKey(_KeySet.Up, KeyMode.PressDown);
                         _PrevTouchDirection = 8;
                     }
-                    else if (touchPosition.y < -threshold) // down
+                    else if(touchPosition.y < -threshold) // down
                     {
                         InputKey(_KeySet.Down, KeyMode.PressDown);
                         _PrevTouchDirection = 2;
                     }
-                    else if (touchPosition.x > threshold) // right
+                    else if(touchPosition.x > threshold) // right
                     {
                         InputKey(_KeySet.Right, KeyMode.PressDown);
                         _PrevTouchDirection = 6;
                     }
-                    else if (touchPosition.x < -threshold)// left
+                    else if(touchPosition.x < -threshold)// left
                     {
                         InputKey(_KeySet.Left, KeyMode.PressDown);
                         _PrevTouchDirection = 4;
@@ -130,37 +124,37 @@ namespace IllusionVR.Koikatu
                         _PrevTouchDirection = 5;
                     }
                 }
-             }
+            }
 
             // 上げたときの位置によらず、押したボタンを離す
-            if (device.GetPressUp(ButtonMask.Touchpad))
+            if(device.GetPressUp(ButtonMask.Touchpad))
             {
                 Vector2 touchPosition = device.GetAxis();
                 {
-                    if (_PrevTouchDirection == 8) // up
+                    if(_PrevTouchDirection == 8) // up
                     {
                         InputKey(_KeySet.Up, KeyMode.PressUp);
                     }
-                    else if (_PrevTouchDirection == 2) // down
+                    else if(_PrevTouchDirection == 2) // down
                     {
                         InputKey(_KeySet.Down, KeyMode.PressUp);
                     }
-                    else if (_PrevTouchDirection == 6) // right
+                    else if(_PrevTouchDirection == 6) // right
                     {
                         InputKey(_KeySet.Right, KeyMode.PressUp);
                     }
-                    else if (_PrevTouchDirection == 4)// left
+                    else if(_PrevTouchDirection == 4)// left
                     {
                         InputKey(_KeySet.Left, KeyMode.PressUp);
                     }
-                    else if (_PrevTouchDirection == 5)
+                    else if(_PrevTouchDirection == 5)
                     {
                         InputKey(_KeySet.Center, KeyMode.PressUp);
                     }
                 }
             }
 
-            if (_Pl2Cam)
+            if(_Pl2Cam)
             {
                 _Interpreter.MovePlayerToCamera();
             }
@@ -168,9 +162,9 @@ namespace IllusionVR.Koikatu
 
         private void InputKey(string keyName, KeyMode mode)
         {
-            if (mode == KeyMode.PressDown)
+            if(mode == KeyMode.PressDown)
             {
-                switch (keyName)
+                switch(keyName)
                 {
                     case "WALK":
                         _Interpreter.StartWalking();
@@ -205,7 +199,7 @@ namespace IllusionVR.Koikatu
             }
             else
             {
-                switch (keyName)
+                switch(keyName)
                 {
                     case "WALK":
                         _Interpreter.StopWalking();

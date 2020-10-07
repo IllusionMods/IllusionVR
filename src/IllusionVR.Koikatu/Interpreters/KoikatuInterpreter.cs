@@ -3,7 +3,7 @@ using VRGIN.Core;
 
 namespace IllusionVR.Koikatu.Interpreters
 {
-    class KoikatuInterpreter : GameInterpreter
+    internal class KoikatuInterpreter : GameInterpreter
     {
         public const int NoScene = -1;
         public const int OtherScene = 0;
@@ -38,9 +38,9 @@ namespace IllusionVR.Koikatu.Interpreters
             int nextSceneType = NoScene;
             SceneInterpreter nextInterpreter = new OtherSceneInterpreter();
 
-            if (GameObject.Find("TalkScene") != null)
+            if(GameObject.Find("TalkScene") != null)
             {
-                if (_SceneType != TalkScene)
+                if(_SceneType != TalkScene)
                 {
                     nextSceneType = TalkScene;
                     //nextInterpreter = new TalkSceneInterpreter(); 特有の処理がないため不要
@@ -48,9 +48,9 @@ namespace IllusionVR.Koikatu.Interpreters
                 }
             }
 
-            else if (GameObject.Find("HScene") != null)
+            else if(GameObject.Find("HScene") != null)
             {
-                if (_SceneType != HScene)
+                if(_SceneType != HScene)
                 {
                     nextSceneType = HScene;
                     nextInterpreter = new HSceneInterpreter();
@@ -58,9 +58,9 @@ namespace IllusionVR.Koikatu.Interpreters
                 }
             }
 
-            else if (GameObject.Find("NightMenuScene") != null)
+            else if(GameObject.Find("NightMenuScene") != null)
             {
-                if (_SceneType != NightMenuScene)
+                if(_SceneType != NightMenuScene)
                 {
                     nextSceneType = NightMenuScene;
                     nextInterpreter = new NightMenuSceneInterpreter();
@@ -68,9 +68,9 @@ namespace IllusionVR.Koikatu.Interpreters
                 }
             }
 
-            else if (GameObject.Find("ActionScene") != null)
+            else if(GameObject.Find("ActionScene") != null)
             {
-                if (_SceneType != ActionScene)
+                if(_SceneType != ActionScene)
                 {
                     nextSceneType = ActionScene;
                     nextInterpreter = new ActionSceneInterpreter();
@@ -90,7 +90,7 @@ namespace IllusionVR.Koikatu.Interpreters
 
             else
             {
-                if (_SceneType != OtherScene)
+                if(_SceneType != OtherScene)
                 {
                     nextSceneType = OtherScene;
                     //nextInterpreter = new OtherSceneInterpreter();
@@ -98,7 +98,7 @@ namespace IllusionVR.Koikatu.Interpreters
                 }
             }
 
-            if (nextSceneType != NoScene)
+            if(nextSceneType != NoScene)
             {
                 SceneInterpreter.OnDisable();
 

@@ -1,7 +1,7 @@
 ﻿
 namespace IllusionVR.Koikatu.Interpreters
 {
-    abstract class SceneInterpreter
+    internal abstract class SceneInterpreter
     {
         public abstract void OnStart();
         public abstract void OnDisable();

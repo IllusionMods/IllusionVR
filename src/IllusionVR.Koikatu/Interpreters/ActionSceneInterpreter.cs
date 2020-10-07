@@ -4,7 +4,7 @@ using WindowsInput.Native;
 
 namespace IllusionVR.Koikatu.Interpreters
 {
-    class ActionSceneInterpreter : SceneInterpreter
+    internal class ActionSceneInterpreter : SceneInterpreter
     {
         private KoikatuSettings _Settings;
 
@@ -51,18 +51,18 @@ namespace IllusionVR.Koikatu.Interpreters
             var pl = GameObject.Find("ActionScene/Player/chaM_001/BodyTop");
             //_CameraSystem = GameObject.Find("ActionScene/CameraSystem");
 
-            if (pl != null && pl.activeSelf)
+            if(pl != null && pl.activeSelf)
             {
                 GameObject scene = GameObject.Find("ActionScene");
                 _CameraSystem = scene.transform.Find("CameraSystem").gameObject;
 
                 // トイレなどでFPS視点になっている場合にTPS視点に戻す
-                _CameraSystem.GetComponent<ActionGame.CameraStateDefinitionChange>().ModeChangeForce((ActionGame.CameraMode?) ActionGame.CameraMode.TPS);
+                _CameraSystem.GetComponent<ActionGame.CameraStateDefinitionChange>().ModeChangeForce((ActionGame.CameraMode?)ActionGame.CameraMode.TPS);
                 //scene.GetComponent<ActionScene>().isCursorLock = false;
 
                 // プレイヤーキャラの頭を非表示にする
-                if (pl.transform.Find("p_cf_body_bone/cf_j_root") is Transform t1) t1.gameObject.SetActive(false);
-                else if (pl.transform.Find("p_cf_body_bone_low/cf_j_root") is Transform t2) t2.gameObject.SetActive(false);
+                if(pl.transform.Find("p_cf_body_bone/cf_j_root") is Transform t1) t1.gameObject.SetActive(false);
+                else if(pl.transform.Find("p_cf_body_bone_low/cf_j_root") is Transform t2) t2.gameObject.SetActive(false);
 
                 // カメラをプレイヤーの位置に移動
                 MoveCameraToPlayer();
@@ -78,7 +78,7 @@ namespace IllusionVR.Koikatu.Interpreters
 
             _CameraSystem = GameObject.Find("ActionScene").transform.Find("CameraSystem").gameObject;
 
-            if (_CameraSystem != null)
+            if(_CameraSystem != null)
             {
                 _CameraSystem.SetActive(false);
 
@@ -90,7 +90,7 @@ namespace IllusionVR.Koikatu.Interpreters
         {
             VRLog.Info("ActionScene ReleaseCamera");
 
-            if (_CameraSystem != null)
+            if(_CameraSystem != null)
             {
                 _CameraSystem.SetActive(true);
 
@@ -102,7 +102,7 @@ namespace IllusionVR.Koikatu.Interpreters
         {
             var player = GameObject.Find("ActionScene/Player");
             var camera = StrayTech.MonoBehaviourSingleton<StrayTech.CameraSystem>.Instance.CurrentCamera;
-            if (player != null && camera != null)
+            if(player != null && camera != null)
             {
                 camera.transform.rotation = player.transform.rotation;
                 camera.transform.position = player.transform.position;
@@ -110,7 +110,7 @@ namespace IllusionVR.Koikatu.Interpreters
 
             GameObject map = GameObject.Find("Map");
 
-            if (map != _Map)
+            if(map != _Map)
             {
 
                 VRLog.Info("! map changed.");
@@ -122,24 +122,24 @@ namespace IllusionVR.Koikatu.Interpreters
 
             UpdateCrouch();
 
-            if (_MoveCameraWaitTime > 0)
+            if(_MoveCameraWaitTime > 0)
             {
                 _MoveCameraWaitTime--;
 
-                if (_MoveCameraWaitTime == 0)
+                if(_MoveCameraWaitTime == 0)
                 {
                     _NeedsMoveCamera = true;
                 }
             }
 
-            if (_NeedsMoveCamera || _Walking)
+            if(_NeedsMoveCamera || _Walking)
             {
                 MoveCameraToPlayer(_Walking);
                 _NeedsMoveCamera = false;
                 _MoveCameraWaitTime = 0;
             }
 
-            if (_NeedsResetCamera)
+            if(_NeedsResetCamera)
             {
                 ResetCamera();
             }
@@ -147,17 +147,17 @@ namespace IllusionVR.Koikatu.Interpreters
 
         private void UpdateCrouch()
         {
-            if (_Settings.CrouchByHMDPos)// && _CameraSystem != null)
+            if(_Settings.CrouchByHMDPos)// && _CameraSystem != null)
             {
                 var cam = GameObject.Find("VRGIN_Camera (origin)").transform;
                 var headCam = GameObject.Find("VRGIN_Camera (origin)/VRGIN_Camera (eye)/VRGIN_Camera (head)").transform;
                 var delta_y = cam.position.y - headCam.position.y;
 
-                if (_IsStanding && delta_y > _Settings.CrouchThrethould)
+                if(_IsStanding && delta_y > _Settings.CrouchThrethould)
                 {
                     Crouch();
                 }
-                else if (!_IsStanding && delta_y < _Settings.StandUpThrethould)
+                else if(!_IsStanding && delta_y < _Settings.StandUpThrethould)
                 {
                     StandUp();
                 }
@@ -176,7 +176,7 @@ namespace IllusionVR.Koikatu.Interpreters
 
             // 歩いているときに回転をコピーするとおかしくなるバグの暫定対策
             // 歩く方向がHMDの方向基準なので歩いている時はコピーしなくても回転は一致する
-            if (!onlyPosition)
+            if(!onlyPosition)
             {
                 cam.rotation = player.rotation;
                 var delta_y = cam.rotation.eulerAngles.y - headCam.rotation.eulerAngles.y;
@@ -186,7 +186,7 @@ namespace IllusionVR.Koikatu.Interpreters
             Vector3 cf = Vector3.Scale(player.forward, new Vector3(1, 0, 1)).normalized;
 
             Vector3 pos;
-            if (_Settings.UsingHeadPos)
+            if(_Settings.UsingHeadPos)
             {
                 pos = playerHead.position;
             }
@@ -216,7 +216,7 @@ namespace IllusionVR.Koikatu.Interpreters
             player.Rotate(Vector3.up * delta_y);
             Vector3 cf = Vector3.Scale(player.forward, new Vector3(1, 0, 1)).normalized;
 
-            if (!onlyRotation)
+            if(!onlyRotation)
             {
                 player.position = pos - cf * 0.1f;
             }
@@ -231,7 +231,7 @@ namespace IllusionVR.Koikatu.Interpreters
 
         public void Crouch()
         {
-            if (_IsStanding)
+            if(_IsStanding)
             {
                 _IsStanding = false;
                 VR.Input.Keyboard.KeyDown(VirtualKeyCode.VK_Z);
@@ -244,7 +244,7 @@ namespace IllusionVR.Koikatu.Interpreters
 
         public void StandUp()
         {
-            if (!_IsStanding)
+            if(!_IsStanding)
             {
                 _IsStanding = true;
                 VR.Input.Keyboard.KeyUp(VirtualKeyCode.VK_Z);
@@ -259,7 +259,7 @@ namespace IllusionVR.Koikatu.Interpreters
         {
             MovePlayerToCamera(true);
 
-            if (!dash)
+            if(!dash)
             {
                 VR.Input.Keyboard.KeyDown(VirtualKeyCode.SHIFT);
                 _Dashing = true;
@@ -273,7 +273,7 @@ namespace IllusionVR.Koikatu.Interpreters
         {
             VR.Input.Mouse.LeftButtonUp();
 
-            if (_Dashing)
+            if(_Dashing)
             {
                 VR.Input.Keyboard.KeyUp(VirtualKeyCode.SHIFT);
                 _Dashing = false;

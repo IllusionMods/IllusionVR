@@ -1,12 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Xml.Serialization;
 using UnityEngine;
 using VRGIN.Controls.Speech;
 using VRGIN.Core;
-using VRGIN.Helpers;
 using VRGIN.Visuals;
 
 namespace IllusionVR.Koikatu
@@ -17,8 +13,8 @@ namespace IllusionVR.Koikatu
     [XmlRoot("Context")]
     public class ConfigurableContext : IVRManagerContext
     {
-        DefaultMaterialPalette _Materials;
-        VRSettings _Settings;
+        private DefaultMaterialPalette _Materials;
+        private VRSettings _Settings;
 
         public ConfigurableContext()
         {
@@ -46,13 +42,13 @@ namespace IllusionVR.Koikatu
         }
 
         [XmlIgnore]
-        public IMaterialPalette Materials { get { return _Materials; } }
+        public IMaterialPalette Materials => _Materials;
 
         [XmlIgnore]
-        public VRSettings Settings { get { return _Settings; } }
+        public VRSettings Settings => _Settings;
 
         [XmlIgnore]
-        public Type VoiceCommandType { get { return typeof(VoiceCommand); } }
+        public Type VoiceCommandType => typeof(VoiceCommand);
 
         public bool ConfineMouse { get; set; }
 

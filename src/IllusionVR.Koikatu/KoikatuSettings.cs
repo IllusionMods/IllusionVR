@@ -1,17 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.IO;
-using System.Linq;
-using System.Reflection;
-using System.Text;
-using System.Xml.Linq;
 using System.Xml.Serialization;
-using UnityEngine;
-using VRGIN.Controls;
 using VRGIN.Core;
-using VRGIN.Helpers;
-using static VRGIN.Visuals.GUIMonitor;
 
 namespace IllusionVR.Koikatu
 {
@@ -30,7 +20,7 @@ namespace IllusionVR.Koikatu
         public static KoikatuSettings Load(string path)
         {
             KoikatuSettings settings = VRSettings.Load<KoikatuSettings>(path);
-            if (settings.KeySets.Count == 0)
+            if(settings.KeySets.Count == 0)
             {
                 settings.KeySets = new List<KeySet> { new KeySet() };
             }
@@ -39,31 +29,31 @@ namespace IllusionVR.Koikatu
         }
 
         [XmlElement(Type = typeof(List<KeySet>))]
-        public List<KeySet> KeySets { get { return _KeySets; } set { _KeySets = value; } }
+        public List<KeySet> KeySets { get => _KeySets; set => _KeySets = value; }
         private List<KeySet> _KeySets = null;
 
-        public bool UsingHeadPos { get { return _UsingHeadPos; } set { _UsingHeadPos = value; } }
+        public bool UsingHeadPos { get => _UsingHeadPos; set => _UsingHeadPos = value; }
         private bool _UsingHeadPos = false;
 
-        public float StandingCameraPos { get { return _StandingCameraPos; } set { _StandingCameraPos = value; } }
+        public float StandingCameraPos { get => _StandingCameraPos; set => _StandingCameraPos = value; }
         private float _StandingCameraPos = 1.5f;
 
-        public float CrouchingCameraPos { get { return _CrouchingCameraPos; } set { _CrouchingCameraPos = value; } }
+        public float CrouchingCameraPos { get => _CrouchingCameraPos; set => _CrouchingCameraPos = value; }
         private float _CrouchingCameraPos = 0.7f;
 
-        public bool CrouchByHMDPos { get { return _CrouchByHMDPos; } set { _CrouchByHMDPos = value; } }
+        public bool CrouchByHMDPos { get => _CrouchByHMDPos; set => _CrouchByHMDPos = value; }
         private bool _CrouchByHMDPos = true;
 
-        public float CrouchThrethould { get { return _CrouchThrethould; } set { _CrouchThrethould = value; } }
+        public float CrouchThrethould { get => _CrouchThrethould; set => _CrouchThrethould = value; }
         private float _CrouchThrethould = 0.15f;
 
-        public float StandUpThrethould { get { return _StandUpThrethould; } set { _StandUpThrethould = value; } }
+        public float StandUpThrethould { get => _StandUpThrethould; set => _StandUpThrethould = value; }
         private float _StandUpThrethould = -0.55f;
 
-        public float TouchpadThreshold { get { return _TouchpadThreshold; } set { _TouchpadThreshold = value; } }
+        public float TouchpadThreshold { get => _TouchpadThreshold; set => _TouchpadThreshold = value; }
         private float _TouchpadThreshold = 0.8f;
 
-        public float RotationAngle { get { return _RotationAngle; } set { _RotationAngle = value; } }
+        public float RotationAngle { get => _RotationAngle; set => _RotationAngle = value; }
         private float _RotationAngle = 45f;
     }
 

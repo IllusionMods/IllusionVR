@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using UnityEngine;
 using VRGIN.Controls;
 using VRGIN.Core;
 using VRGIN.Helpers;
@@ -10,7 +7,7 @@ using VRGIN.Modes;
 
 namespace IllusionVR.Koikatu
 {
-    class GenericSeatedMode : SeatedMode
+    internal class GenericSeatedMode : SeatedMode
     {
         protected override IEnumerable<IShortcut> CreateShortcuts()
         {
@@ -18,7 +15,7 @@ namespace IllusionVR.Koikatu
                 new MultiKeyboardShortcut(new KeyStroke("Ctrl+C"), new KeyStroke("Ctrl+C"), () => { VR.Manager.SetMode<GenericStandingMode>(); })
             });
         }
-        
+
         /// <summary>
         /// Disables controllers for seated mode.
         /// </summary>

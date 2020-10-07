@@ -3,7 +3,7 @@ using VRGIN.Core;
 
 namespace IllusionVR.Koikatu.Interpreters
 {
-    class HSceneInterpreter : SceneInterpreter
+    internal class HSceneInterpreter : SceneInterpreter
     {
         private bool _NeedsResetCamera;
 
@@ -19,7 +19,7 @@ namespace IllusionVR.Koikatu.Interpreters
 
         public override void OnUpdate()
         {
-            if (_NeedsResetCamera)
+            if(_NeedsResetCamera)
             {
                 ResetCamera();
             }
@@ -31,7 +31,7 @@ namespace IllusionVR.Koikatu.Interpreters
 
             var cam = GameObject.FindObjectOfType<CameraControl_Ver2>();
 
-            if (cam != null)
+            if(cam != null)
             {
                 cam.enabled = false;
                 _NeedsResetCamera = false;

@@ -2,7 +2,7 @@
 
 namespace IllusionVR.Koikatu.Interpreters
 {
-    class NightMenuSceneInterpreter : SceneInterpreter
+    internal class NightMenuSceneInterpreter : SceneInterpreter
     {
         public override void OnStart()
         {

@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using VRGIN.Controls;
 using VRGIN.Controls.Tools;
 using VRGIN.Core;
@@ -10,7 +9,7 @@ using VRGIN.Modes;
 
 namespace IllusionVR.Koikatu
 {
-    class GenericStandingMode : StandingMode
+    internal class GenericStandingMode : StandingMode
     {
         protected override IEnumerable<IShortcut> CreateShortcuts()
         {
@@ -19,12 +18,6 @@ namespace IllusionVR.Koikatu
             });
         }
 
-        public override IEnumerable<Type> Tools
-        {
-            get
-            {
-                return base.Tools.Concat(new Type[] { typeof(MenuTool), typeof(WarpTool), typeof(SchoolTool)});
-            }
-        }
+        public override IEnumerable<Type> Tools => base.Tools.Concat(new Type[] { typeof(MenuTool), typeof(WarpTool), typeof(SchoolTool) });
     }
 }
