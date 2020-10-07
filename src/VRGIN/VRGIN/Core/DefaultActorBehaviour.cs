@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace VRGIN.Core
 {
@@ -20,14 +16,8 @@ namespace VRGIN.Core
             }
             return actor;
         }
-        
-        public virtual bool IsValid
-        {
-            get
-            {
-                return Actor;
-            }
-        }
+
+        public virtual bool IsValid => Actor;
 
         public abstract Transform Eyes
         {

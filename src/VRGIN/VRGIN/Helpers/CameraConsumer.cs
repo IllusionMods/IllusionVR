@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Collections.Generic;
 using UnityEngine;
 using VRGIN.Core;
 
@@ -25,7 +22,7 @@ namespace VRGIN.Helpers
 
         public void OnAssign(Camera camera)
         {
-            if (_SoftMode)
+            if(_SoftMode)
             {
                 camera.cullingMask = 0;
                 camera.nearClipPlane = 1;

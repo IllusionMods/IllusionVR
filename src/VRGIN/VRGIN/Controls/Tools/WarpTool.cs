@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using UnityEngine;
 using Valve.VR;
 using VRGIN.Core;
@@ -24,9 +23,8 @@ namespace VRGIN.Controls.Tools
             Grabbing
         }
 
-
-        ArcRenderer ArcRenderer;
-        PlayAreaVisualization _Visualization;
+        private ArcRenderer ArcRenderer;
+        private PlayAreaVisualization _Visualization;
         private PlayArea _ProspectedPlayArea = new PlayArea();
         private const float SCALE_THRESHOLD = 0.05f;
         private const float TRANSLATE_THRESHOLD = 0.05f;
@@ -41,7 +39,7 @@ namespace VRGIN.Controls.Tools
         private Vector3 _PrevPoint;
         private float? _GripStartTime = null;
         private float? _TriggerDownTime = null;
-        bool Showing = false;
+        private bool Showing = false;
 
         private List<Vector2> _Points = new List<Vector2>();
         private const float GRIP_TIME_THRESHOLD = 0.1f;
@@ -60,13 +58,7 @@ namespace VRGIN.Controls.Tools
         private bool _ScaleInitialized;
         private bool _RotationInitialized;
 
-        public override Texture2D Image
-        {
-            get
-            {
-                return UnityHelper.LoadImage("icon_warp.png");
-            }
-        }
+        public override Texture2D Image => UnityHelper.LoadImage("icon_warp.png");
 
 
         protected override void OnAwake()
@@ -116,17 +108,17 @@ namespace VRGIN.Controls.Tools
             ResetPlayArea(_ProspectedPlayArea);
         }
 
-        void SetVisibility(bool visible)
+        private void SetVisibility(bool visible)
         {
             Showing = visible;
 
-            if (visible)
+            if(visible)
             {
                 ArcRenderer.Update();
                 UpdateProspectedArea();
                 _Visualization.UpdatePosition();
             }
-            
+
             ArcRenderer.gameObject.SetActive(visible);
             _Visualization.gameObject.SetActive(visible);
         }
@@ -151,7 +143,7 @@ namespace VRGIN.Controls.Tools
 
         protected override void OnLateUpdate()
         {
-            if (Showing)
+            if(Showing)
             {
                 UpdateProspectedArea();
             }
@@ -166,15 +158,15 @@ namespace VRGIN.Controls.Tools
 
         private void CheckRotationalPress()
         {
-            if (Controller.GetPressDown(EVRButtonId.k_EButton_SteamVR_Touchpad))
+            if(Controller.GetPressDown(EVRButtonId.k_EButton_SteamVR_Touchpad))
             {
                 var v = Controller.GetAxis(EVRButtonId.k_EButton_SteamVR_Touchpad);
                 _ProspectedPlayArea.Reset();
-                if (v.x < -0.2f)
+                if(v.x < -0.2f)
                 {
                     _ProspectedPlayArea.Rotation -= 20f;
                 }
-                else if (v.x > 0.2f)
+                else if(v.x > 0.2f)
                 {
                     _ProspectedPlayArea.Rotation += 20f;
                 }
@@ -185,12 +177,12 @@ namespace VRGIN.Controls.Tools
         {
             base.OnUpdate();
 
-            if (State == WarpState.None)
+            if(State == WarpState.None)
             {
                 var v = Controller.GetAxis(EVRButtonId.k_EButton_SteamVR_Touchpad);
-                if (v.magnitude < 0.5f)
+                if(v.magnitude < 0.5f)
                 {
-                    if (Controller.GetTouchDown(EVRButtonId.k_EButton_SteamVR_Touchpad) /*||Controller.GetTouch(EVRButtonId.k_EButton_SteamVR_Touchpad)*/)
+                    if(Controller.GetTouchDown(EVRButtonId.k_EButton_SteamVR_Touchpad) /*||Controller.GetTouch(EVRButtonId.k_EButton_SteamVR_Touchpad)*/)
                     {
                         EnterState(WarpState.Rotating);
                     }
@@ -200,25 +192,25 @@ namespace VRGIN.Controls.Tools
                     CheckRotationalPress();
                 }
 
-                if (Controller.GetPressDown(EVRButtonId.k_EButton_Grip))
+                if(Controller.GetPressDown(EVRButtonId.k_EButton_Grip))
                 {
                     EnterState(WarpState.Grabbing);
                 }
             }
-            if (State == WarpState.Grabbing)
+            if(State == WarpState.Grabbing)
             {
                 HandleGrabbing();
             }
 
 
-            if (State == WarpState.Rotating)
+            if(State == WarpState.Rotating)
             {
                 HandleRotation();
             }
 
-            if (State == WarpState.Transforming)
+            if(State == WarpState.Transforming)
             {
-                if (Controller.GetPressUp(EVRButtonId.k_EButton_Axis0))
+                if(Controller.GetPressUp(EVRButtonId.k_EButton_Axis0))
                 {
                     // Warp!
                     _ProspectedPlayArea.Apply();
@@ -230,21 +222,21 @@ namespace VRGIN.Controls.Tools
                 }
             }
 
-            if (State == WarpState.None)
+            if(State == WarpState.None)
             {
-                if (Controller.GetHairTriggerDown())
+                if(Controller.GetHairTriggerDown())
                 {
                     _TriggerDownTime = Time.unscaledTime;
                 }
-                if (_TriggerDownTime != null)
+                if(_TriggerDownTime != null)
                 {
-                    if (Controller.GetHairTrigger() && (Time.unscaledTime - _TriggerDownTime) > EXACT_IMPERSONATION_TIME)
+                    if(Controller.GetHairTrigger() && (Time.unscaledTime - _TriggerDownTime) > EXACT_IMPERSONATION_TIME)
                     {
                         VRManager.Instance.Mode.Impersonate(VR.Interpreter.FindNextActorToImpersonate(),
                             ImpersonationMode.Exactly);
                         _TriggerDownTime = null;
                     }
-                    if (VRManager.Instance.Interpreter.Actors.Any() && Controller.GetHairTriggerUp())
+                    if(VRManager.Instance.Interpreter.Actors.Any() && Controller.GetHairTriggerUp())
                     {
                         VRManager.Instance.Mode.Impersonate(VR.Interpreter.FindNextActorToImpersonate(),
                             ImpersonationMode.Approximately);
@@ -255,22 +247,22 @@ namespace VRGIN.Controls.Tools
 
         private void HandleRotation()
         {
-            if (Showing)
+            if(Showing)
             {
                 _Points.Add(Controller.GetAxis(EVRButtonId.k_EButton_Axis0));
 
-                if (_Points.Count > 2)
+                if(_Points.Count > 2)
                 {
                     DetectCircle();
                 }
             }
 
-            if (Controller.GetPressDown(EVRButtonId.k_EButton_Axis0))
+            if(Controller.GetPressDown(EVRButtonId.k_EButton_Axis0))
             {
                 EnterState(WarpState.Transforming);
             }
 
-            if (Controller.GetTouchUp(EVRButtonId.k_EButton_Axis0))
+            if(Controller.GetTouchUp(EVRButtonId.k_EButton_Axis0))
             {
                 EnterState(WarpState.None);
             }
@@ -278,7 +270,7 @@ namespace VRGIN.Controls.Tools
 
         private void InitializeScaleIfNeeded()
         {
-            if (!_ScaleInitialized)
+            if(!_ScaleInitialized)
             {
                 _InitialControllerDistance = Vector3.Distance(OtherController.transform.position, transform.position);
                 _InitialIPD = VR.Settings.IPDScale;
@@ -289,7 +281,7 @@ namespace VRGIN.Controls.Tools
 
         private void InitializeRotationIfNeeded()
         {
-            if (!_ScaleInitialized && !_RotationInitialized)
+            if(!_ScaleInitialized && !_RotationInitialized)
             {
                 _PrevFromTo = (OtherController.transform.position - transform.position).normalized;
                 _RotationInitialized = true;
@@ -299,29 +291,29 @@ namespace VRGIN.Controls.Tools
 
         private void HandleGrabbing()
         {
-            if (OtherController.IsTracking && !HasLock())
+            if(OtherController.IsTracking && !HasLock())
             {
                 OtherController.TryAcquireFocus(out _OtherLock);
             }
 
-            if (HasLock() && OtherController.Input.GetPressDown(SECONDARY_SCALE_BUTTON))
+            if(HasLock() && OtherController.Input.GetPressDown(SECONDARY_SCALE_BUTTON))
             {
                 _ScaleInitialized = false;
             }
 
-            if (HasLock() && OtherController.Input.GetPressDown(SECONDARY_ROTATE_BUTTON))
+            if(HasLock() && OtherController.Input.GetPressDown(SECONDARY_ROTATE_BUTTON))
             {
                 _RotationInitialized = false;
             }
 
 
-            if (Controller.GetPress(EVRButtonId.k_EButton_Grip))
+            if(Controller.GetPress(EVRButtonId.k_EButton_Grip))
             {
-                if (HasLock() && (OtherController.Input.GetPress(SECONDARY_ROTATE_BUTTON) || OtherController.Input.GetPress(SECONDARY_SCALE_BUTTON)))
+                if(HasLock() && (OtherController.Input.GetPress(SECONDARY_ROTATE_BUTTON) || OtherController.Input.GetPress(SECONDARY_SCALE_BUTTON)))
                 {
                     var newFromTo = (OtherController.transform.position - transform.position).normalized;
 
-                    if (OtherController.Input.GetPress(SECONDARY_SCALE_BUTTON))
+                    if(OtherController.Input.GetPress(SECONDARY_SCALE_BUTTON))
                     {
                         InitializeScaleIfNeeded();
                         var controllerDistance = Vector3.Distance(OtherController.transform.position, transform.position) * (_InitialIPD / VR.Settings.IPDScale);
@@ -330,7 +322,7 @@ namespace VRGIN.Controls.Tools
                         _ProspectedPlayArea.Scale = VR.Settings.IPDScale;
                     }
 
-                    if (OtherController.Input.GetPress(SECONDARY_ROTATE_BUTTON))
+                    if(OtherController.Input.GetPress(SECONDARY_ROTATE_BUTTON))
                     {
                         InitializeRotationIfNeeded();
                         var angleDiff = Calculator.Angle(_PrevFromTo, newFromTo) * VR.Settings.RotationMultiplier;
@@ -345,7 +337,7 @@ namespace VRGIN.Controls.Tools
                 {
                     var diffPos = transform.position - _PrevControllerPos;
                     var diffRot = Quaternion.Inverse(_PrevControllerRot * Quaternion.Inverse(transform.rotation)) * (transform.rotation * Quaternion.Inverse(transform.rotation));
-                    if (Time.unscaledTime - _GripStartTime > GRIP_TIME_THRESHOLD || Calculator.Distance(diffPos.magnitude) > GRIP_DIFF_THRESHOLD)
+                    if(Time.unscaledTime - _GripStartTime > GRIP_TIME_THRESHOLD || Calculator.Distance(diffPos.magnitude) > GRIP_DIFF_THRESHOLD)
                     {
                         var forwardA = Vector3.forward;
                         var forwardB = diffRot * Vector3.forward;
@@ -354,7 +346,7 @@ namespace VRGIN.Controls.Tools
                         VR.Camera.SteamCam.origin.transform.position -= diffPos;
                         _ProspectedPlayArea.Height -= diffPos.y;
                         //VRLog.Info("Rotate: {0}", NormalizeAngle(diffRot.eulerAngles.y));
-                        if (!VR.Settings.GrabRotationImmediateMode && Controller.GetPress(ButtonMask.Trigger | ButtonMask.Touchpad))
+                        if(!VR.Settings.GrabRotationImmediateMode && Controller.GetPress(ButtonMask.Trigger | ButtonMask.Touchpad))
                         {
                             VR.Camera.SteamCam.origin.transform.RotateAround(VR.Camera.Head.position, Vector3.up, -angleDiff);
                             _ProspectedPlayArea.Rotation -= angleDiff;
@@ -364,17 +356,17 @@ namespace VRGIN.Controls.Tools
                     }
                 }
             }
-            if (Controller.GetPressUp(EVRButtonId.k_EButton_Grip))
+            if(Controller.GetPressUp(EVRButtonId.k_EButton_Grip))
             {
                 EnterState(WarpState.None);
-                if (Time.unscaledTime - _GripStartTime < GRIP_TIME_THRESHOLD)
+                if(Time.unscaledTime - _GripStartTime < GRIP_TIME_THRESHOLD)
                 {
                     Owner.StartRumble(new RumbleImpulse(800));
                     _ProspectedPlayArea.Height = 0;
                     _ProspectedPlayArea.Scale = _IPDOnStart;
                 }
             }
-            
+
             if(VR.Settings.GrabRotationImmediateMode && Controller.GetPressUp(ButtonMask.Trigger | ButtonMask.Touchpad))
             {
                 // Rotate
@@ -405,7 +397,7 @@ namespace VRGIN.Controls.Tools
             float avgDist = 0;
 
             // evaulate points to determine center
-            foreach (var point in _Points)
+            foreach(var point in _Points)
             {
                 float dist = point.magnitude;
                 minDist = Math.Max(minDist ?? dist, dist);
@@ -414,12 +406,12 @@ namespace VRGIN.Controls.Tools
             }
             avgDist /= _Points.Count;
 
-            if (maxDist - minDist < 0.2f && minDist > 0.2f)
+            if(maxDist - minDist < 0.2f && minDist > 0.2f)
             {
                 float startAngle = Mathf.Atan2(_Points.First().y, _Points.First().x) * Mathf.Rad2Deg;
                 float endAngle = Mathf.Atan2(_Points.Last().y, _Points.Last().x) * Mathf.Rad2Deg;
                 float rot = (endAngle - startAngle);
-                if (Mathf.Abs(rot) < 60)
+                if(Mathf.Abs(rot) < 60)
                 {
                     _ProspectedPlayArea.Rotation -= rot;
                     //Logger.Info("Detected circular movement. Total: {0}", _AdditionalRotation);
@@ -435,7 +427,7 @@ namespace VRGIN.Controls.Tools
         private void EnterState(WarpState state)
         {
             // LEAVE state
-            switch (State)
+            switch(State)
             {
                 case WarpState.None:
 
@@ -448,7 +440,7 @@ namespace VRGIN.Controls.Tools
                 case WarpState.Grabbing:
                     Owner.StopRumble(_TravelRumble);
                     _ScaleInitialized = _RotationInitialized = false;
-                    if (HasLock())
+                    if(HasLock())
                     {
                         VRLog.Info("Releasing lock on other controller!");
                         _OtherLock.SafeRelease();
@@ -458,7 +450,7 @@ namespace VRGIN.Controls.Tools
 
 
             // ENTER state
-            switch (state)
+            switch(state)
             {
                 case WarpState.None:
                     SetVisibility(false);

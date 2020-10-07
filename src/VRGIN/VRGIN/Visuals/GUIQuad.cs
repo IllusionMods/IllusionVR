@@ -1,24 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using UnityEngine;
 using VRGIN.Core;
-using VRGIN.Modes;
 
 namespace VRGIN.Visuals
 {
     public static class GUIQuadRegistry
     {
-        static HashSet<GUIQuad> _Quads = new HashSet<GUIQuad>();
+        private static HashSet<GUIQuad> _Quads = new HashSet<GUIQuad>();
 
-        public static IEnumerable<GUIQuad> Quads
-        {
-            get
-            {
-                return _Quads;
-            }
-        }
+        public static IEnumerable<GUIQuad> Quads => _Quads;
 
         internal static void Register(GUIQuad quad)
         {
@@ -45,7 +37,7 @@ namespace VRGIN.Visuals
             VRLog.Info("Create GUI");
             var gui = GameObject.CreatePrimitive(PrimitiveType.Quad).AddComponent<GUIQuad>();
             gui.name = "GUIQuad";
-            
+
             if(source != VR.GUI)
             {
                 gui.gameObject.SetActive(false);
@@ -77,7 +69,7 @@ namespace VRGIN.Visuals
 
         protected virtual void OnEnable()
         {
-            if (IsGUISource())
+            if(IsGUISource())
             {
                 VRLog.Info("Start listening to GUI ({0})", name);
                 GUIQuadRegistry.Register(this);
@@ -87,7 +79,7 @@ namespace VRGIN.Visuals
 
         protected virtual void OnDisable()
         {
-            if (IsGUISource())
+            if(IsGUISource())
             {
                 VRLog.Info("Stop listening to GUI ({0})", name);
                 GUIQuadRegistry.Unregister(this);
@@ -113,7 +105,7 @@ namespace VRGIN.Visuals
             //VRLog.Info();
             //renderGUI = false;
             UpdateAspect();
-            if (!renderer) VRLog.Warn("No renderer!");
+            if(!renderer) VRLog.Warn("No renderer!");
             try
             {
                 renderer.receiveShadows = false;
@@ -126,7 +118,7 @@ namespace VRGIN.Visuals
                 var textures = _Source.GetTextures();
                 VRLog.Info("Updating GUI {0} with {1} textures", name, textures.Count());
 
-                if (textures.Count() >= 2)
+                if(textures.Count() >= 2)
                 {
                     renderer.material = VR.Context.Materials.UnlitTransparentCombined;
                     renderer.material.SetTexture("_MainTex", textures.FirstOrDefault());
@@ -138,7 +130,7 @@ namespace VRGIN.Visuals
                     renderer.material.SetTexture("_MainTex", textures.FirstOrDefault());
                 }
             }
-            catch (Exception e)
+            catch(Exception e)
             {
                 VRLog.Info(e);
             }

@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Reflection;
-using System.Text;
 using UnityEngine;
 
 namespace VRGIN.Helpers
@@ -20,7 +17,7 @@ namespace VRGIN.Helpers
         {
             Type type = objectToCheck.GetType();
             MethodInfo methodInfo = type.GetMethod(methodName, BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
-            if (methodInfo != null)
+            if(methodInfo != null)
             {
                 methodInfo.Invoke(objectToCheck, parameters);
             }
@@ -32,7 +29,7 @@ namespace VRGIN.Helpers
         public static void BroadcastToAll(this GameObject gameobject, string methodName, params object[] parameters)
         {
             MonoBehaviour[] components = gameobject.GetComponents<MonoBehaviour>();
-            foreach (MonoBehaviour m in components)
+            foreach(MonoBehaviour m in components)
             {
                 m.InvokeIfExists(methodName, parameters);
             }
@@ -51,7 +48,7 @@ namespace VRGIN.Helpers
         public static void SendMessageToAll(this GameObject gameobject, string methodName, params object[] parameters)
         {
             MonoBehaviour[] components = gameobject.GetComponentsInChildren<MonoBehaviour>(true);
-            foreach (MonoBehaviour m in components)
+            foreach(MonoBehaviour m in components)
             {
                 m.InvokeIfExists(methodName, parameters);
             }
@@ -70,7 +67,7 @@ namespace VRGIN.Helpers
         public static void SendMessageUpwardsToAll(this GameObject gameobject, string methodName, params object[] parameters)
         {
             Transform tranform = gameobject.transform;
-            while (tranform != null)
+            while(tranform != null)
             {
                 tranform.gameObject.BroadcastToAll(methodName, parameters);
                 tranform = tranform.parent;

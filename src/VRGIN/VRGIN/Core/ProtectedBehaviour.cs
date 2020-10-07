@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
-using System.Linq;
 using System.Text;
 using UnityEngine;
 
@@ -18,7 +16,7 @@ namespace VRGIN.Core
 
         private string GetKey(string method)
         {
-            return String.Format("{0}#{1}",GetType().FullName,method);
+            return String.Format("{0}#{1}", GetType().FullName, method);
         }
         protected void Start()
         {
@@ -77,7 +75,7 @@ namespace VRGIN.Core
                 //}
                 //PerformanceTable[key] += stopWatch.Elapsed.TotalMilliseconds;
             }
-            catch (Exception ex)
+            catch(Exception ex)
             {
                 Logger.Error(ex);
             }
@@ -108,7 +106,8 @@ namespace VRGIN.Core
             try
             {
                 action();
-            } catch(Exception e)
+            }
+            catch(Exception e)
             {
                 VRLog.Error(e);
             }

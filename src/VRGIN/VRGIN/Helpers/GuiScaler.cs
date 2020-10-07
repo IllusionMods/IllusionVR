@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using UnityEngine;
+﻿using UnityEngine;
 using VRGIN.Core;
 using VRGIN.Visuals;
 
@@ -10,17 +6,16 @@ namespace VRGIN.U46.Helpers
 {
     public class GuiScaler
     {
-        GUIQuad _Gui;
-        Vector3? _StartLeft;
-        Vector3? _StartRight;
-        Vector3? _StartScale;
-        Quaternion? _StartRotation;
-        Vector3? _StartPosition;
-        Quaternion _StartRotationController;
-        Vector3? _OffsetFromCenter;
-
-        Transform _Left;
-        Transform _Right;
+        private GUIQuad _Gui;
+        private Vector3? _StartLeft;
+        private Vector3? _StartRight;
+        private Vector3? _StartScale;
+        private Quaternion? _StartRotation;
+        private Vector3? _StartPosition;
+        private Quaternion _StartRotationController;
+        private Vector3? _OffsetFromCenter;
+        private Transform _Left;
+        private Transform _Right;
 
         public GuiScaler(GUIQuad gui, Transform left, Transform right)
         {
@@ -40,37 +35,13 @@ namespace VRGIN.U46.Helpers
             _OffsetFromCenter = _Gui.transform.position - originalCenter;
         }
 
-        Vector3 TopLeft
-        {
-            get
-            {
-                return _Left.position;
-            }
-        }
+        private Vector3 TopLeft => _Left.position;
 
-        Vector3 BottomRight
-        {
-            get
-            {
-                return _Right.position;
-            }
-        }
+        private Vector3 BottomRight => _Right.position;
 
-        Vector3 Center
-        {
-            get
-            {
-                return Vector3.Lerp(TopLeft, BottomRight, 0.5f);
-            }
-        }
+        private Vector3 Center => Vector3.Lerp(TopLeft, BottomRight, 0.5f);
 
-        Vector3 Up
-        {
-            get
-            {
-                return Vector3.Lerp((VR.Camera.Head.position - TopLeft).normalized, (VR.Camera.Head.position - BottomRight).normalized, 0.5f);
-            }
-        }
+        private Vector3 Up => Vector3.Lerp((VR.Camera.Head.position - TopLeft).normalized, (VR.Camera.Head.position - BottomRight).normalized, 0.5f);
 
 
         //Vector3 BottomLeft
@@ -87,7 +58,7 @@ namespace VRGIN.U46.Helpers
 
         public void Update()
         {
-            if (!_Left || !_Right) return;
+            if(!_Left || !_Right) return;
             var distance = Vector3.Distance(_Left.position, _Right.position);
             var originalDistance = Vector3.Distance(_StartLeft.Value, _StartRight.Value);
             var newDirection = _Right.position - _Left.position;

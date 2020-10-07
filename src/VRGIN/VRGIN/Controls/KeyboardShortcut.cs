@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using UnityEngine;
 using VRGIN.Core;
 using VRGIN.Helpers;
@@ -13,7 +11,7 @@ namespace VRGIN.Controls
         public KeyStroke KeyStroke { get; private set; }
         public Action Action { get; private set; }
         public KeyMode CheckMode { get; private set; }
-        
+
         public KeyboardShortcut(KeyStroke keyStroke, Action action, KeyMode checkMode = KeyMode.PressUp)
         {
             KeyStroke = keyStroke;
@@ -49,8 +47,8 @@ namespace VRGIN.Controls
         public Action Action { get; private set; }
         public KeyMode CheckMode { get; private set; }
 
-        int _Index = 0;
-        float _Time = 0f;
+        private int _Index = 0;
+        private float _Time = 0f;
 
         public MultiKeyboardShortcut(KeyStroke[] keyStrokes, Action action, KeyMode checkMode = KeyMode.PressUp)
         {
@@ -84,12 +82,13 @@ namespace VRGIN.Controls
                 ? CheckMode
                 : KeyMode.PressUp;
 
-            if (KeyStrokes[_Index].Check(mode))
+            if(KeyStrokes[_Index].Check(mode))
             {
-                if (isLast)
+                if(isLast)
                 {
                     Action();
-                } else
+                }
+                else
                 {
                     _Index++;
                     _Time = Time.unscaledTime;

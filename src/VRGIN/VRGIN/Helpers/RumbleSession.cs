@@ -1,9 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using UnityEngine;
-using VRGIN.Core;
 
 namespace VRGIN.Helpers
 {
@@ -70,7 +66,7 @@ namespace VRGIN.Helpers
 
         public void Consume()
         {
-            if (Lifetime > 0 && (Time.time - _Time > Lifetime))
+            if(Lifetime > 0 && (Time.time - _Time > Lifetime))
             {
                 IsOver = true;
             }
@@ -84,26 +80,14 @@ namespace VRGIN.Helpers
 
         private bool _Over = false;
 
-        public bool IsOver
-        {
-            get
-            {
-                return _Over;
-            }
-        }
+        public bool IsOver => _Over;
 
         public ushort MicroDuration
         {
             get; set;
         }
 
-        public float MilliInterval
-        {
-            get
-            {
-                return 0;
-            }
-        }
+        public float MilliInterval => 0;
 
         public void Consume()
         {
@@ -130,27 +114,15 @@ namespace VRGIN.Helpers
             get; set;
         }
 
-        public ushort MicroDuration
-        {
-            get
-            {
-                return (ushort)(_MicroDuration + (Device.velocity.magnitude / _MaxVelocity) * (_MaxMicroDuration - _MicroDuration));
-            }
-        }
+        public ushort MicroDuration => (ushort)(_MicroDuration + (Device.velocity.magnitude / _MaxVelocity) * (_MaxMicroDuration - _MicroDuration));
 
-        public float MilliInterval
-        {
-            get
-            {
-                return Mathf.Lerp(_MilliInterval, _MaxMilliInterval, Device.velocity.magnitude / _MaxVelocity);
-            }
-        }
+        public float MilliInterval => Mathf.Lerp(_MilliInterval, _MaxMilliInterval, Device.velocity.magnitude / _MaxVelocity);
 
-        readonly ushort _MicroDuration;
-        readonly float _MilliInterval;
-        readonly float _MaxVelocity;
-        readonly ushort _MaxMicroDuration;
-        readonly float _MaxMilliInterval;
+        private readonly ushort _MicroDuration;
+        private readonly float _MilliInterval;
+        private readonly float _MaxVelocity;
+        private readonly ushort _MaxMicroDuration;
+        private readonly float _MaxMilliInterval;
 
         public SteamVR_Controller.Device Device { get; set; }
 
@@ -184,7 +156,7 @@ namespace VRGIN.Helpers
         protected Vector3 CurrentPosition;
 
         private bool _UseLocalPosition = false;
-        public bool UseLocalPosition { get { return _UseLocalPosition; } set { _UseLocalPosition = value; Reset(); } }
+        public bool UseLocalPosition { get => _UseLocalPosition; set { _UseLocalPosition = value; Reset(); } }
 
         public void Reset()
         {
@@ -206,7 +178,7 @@ namespace VRGIN.Helpers
             {
                 CurrentPosition = _UseLocalPosition ? _Transform.localPosition : _Transform.position;
                 var distance = DistanceTraveled;
-                if (distance > _Distance)
+                if(distance > _Distance)
                 {
                     PrevPosition = CurrentPosition;
 
@@ -227,13 +199,7 @@ namespace VRGIN.Helpers
             PrevPosition = transform.position;
         }
 
-        protected virtual float DistanceTraveled
-        {
-            get
-            {
-                return Vector3.Distance(PrevPosition, CurrentPosition);
-            }
-        }
+        protected virtual float DistanceTraveled => Vector3.Distance(PrevPosition, CurrentPosition);
 
         public int CompareTo(IRumbleSession other)
         {
@@ -258,12 +224,6 @@ namespace VRGIN.Helpers
             _Axis = axis;
         }
 
-        protected override float DistanceTraveled
-        {
-            get
-            {
-                return Mathf.Abs(Vector3.Dot(CurrentPosition - PrevPosition, _Axis));
-            }
-        }
+        protected override float DistanceTraveled => Mathf.Abs(Vector3.Dot(CurrentPosition - PrevPosition, _Axis));
     }
 }

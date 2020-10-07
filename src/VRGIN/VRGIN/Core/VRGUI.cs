@@ -1,10 +1,7 @@
-﻿using System;
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
-using System.Text;
 using UnityEngine;
 using UnityEngine.UI;
 using VRGIN.Helpers;
@@ -68,7 +65,7 @@ namespace VRGIN.Core
         {
             get
             {
-                if (!_Instance)
+                if(!_Instance)
                 {
                     _Instance = new GameObject("VRGIN_GUI").AddComponent<VRGUI>();
 
@@ -77,7 +74,7 @@ namespace VRGIN.Core
                         _Instance.gameObject.AddComponent<CursorBlocker>();
                     }
 #endif
-                    if (VR.Context.SimulateCursor)
+                    if(VR.Context.SimulateCursor)
                     {
                         _Instance.SoftCursor = SimulatedCursor.Create();
                         _Instance.SoftCursor.transform.SetParent(_Instance.transform, false);
@@ -153,7 +150,7 @@ namespace VRGIN.Core
             _VRGUICamera = new GameObject("VRGIN_GUICamera").AddComponent<Camera>();
             _VRGUICamera.transform.SetParent(transform, false);
 
-            if (VR.Context.PreferredGUI == GUIType.IMGUI)
+            if(VR.Context.PreferredGUI == GUIType.IMGUI)
             {
                 _VRGUICamera.transform.position = new Vector3(halfWidth, halfHeight, -1f);
                 _VRGUICamera.transform.rotation = Quaternion.identity;
@@ -169,7 +166,7 @@ namespace VRGIN.Core
             _VRGUICamera.clearFlags = CameraClearFlags.SolidColor;
             _VRGUICamera.orthographic = true;
             _VRGUICamera.useOcclusionCulling = false;
-            
+
             _Graphics = typeof(GraphicRegistry).GetField("m_Graphics", BindingFlags.NonPublic | BindingFlags.Instance);
             _Registry = _Graphics.GetValue(GraphicRegistry.instance) as IDictionary;
 
@@ -178,7 +175,7 @@ namespace VRGIN.Core
 
         private bool IsUnprocessed(Canvas c)
         {
-            return c.renderMode == RenderMode.ScreenSpaceOverlay 
+            return c.renderMode == RenderMode.ScreenSpaceOverlay
                 || (c.renderMode == RenderMode.ScreenSpaceCamera && c.worldCamera != _VRGUICamera && c.worldCamera.targetTexture == null);
         }
 
@@ -187,9 +184,9 @@ namespace VRGIN.Core
             _VRGUICamera.targetTexture = uGuiTexture;
             var canvasList = (_Registry.Keys as ICollection<Canvas>).Where(c => c).ToList();
             //var canvasList = GameObject.FindObjectsOfType<Canvas>();
-            foreach (var canvas in canvasList.Where(IsUnprocessed))
+            foreach(var canvas in canvasList.Where(IsUnprocessed))
             {
-                if (VR.Interpreter.IsIgnoredCanvas(canvas)) continue;
+                if(VR.Interpreter.IsIgnoredCanvas(canvas)) continue;
 
                 VRLog.Info("Add {0} [Layer: {1}, SortingLayer: {2}, SortingOrder: {3}, RenderMode: {4}, Camera: {5}, Position: {6} ]", canvas.name, LayerMask.LayerToName(canvas.gameObject.layer), canvas.sortingLayerName, canvas.sortingOrder, canvas.renderMode, canvas.worldCamera, canvas.transform.position);
 
@@ -198,28 +195,28 @@ namespace VRGIN.Core
                 canvas.worldCamera = _VRGUICamera;
 
                 // Make sure that all Canvas are in the UI layer
-                if (((1 << canvas.gameObject.layer) & VR.Context.UILayerMask) == 0)
+                if(((1 << canvas.gameObject.layer) & VR.Context.UILayerMask) == 0)
                 {
                     var uiLayer = LayerMask.NameToLayer(VR.Context.UILayer);
                     canvas.gameObject.layer = uiLayer;
-                    foreach (var child in canvas.gameObject.GetComponentsInChildren<Transform>())
+                    foreach(var child in canvas.gameObject.GetComponentsInChildren<Transform>())
                     {
                         child.gameObject.layer = uiLayer;
                     }
                 }
 
-                if (VR.Context.EnforceDefaultGUIMaterials)
+                if(VR.Context.EnforceDefaultGUIMaterials)
                 {
-                    foreach (var child in canvas.gameObject.GetComponentsInChildren<Graphic>())
+                    foreach(var child in canvas.gameObject.GetComponentsInChildren<Graphic>())
                     {
                         child.material = child.defaultMaterial;
                     }
                 }
 
-                if (VR.Context.GUIAlternativeSortingMode)
+                if(VR.Context.GUIAlternativeSortingMode)
                 {
                     var raycaster = canvas.GetComponent<GraphicRaycaster>();
-                    if (raycaster)
+                    if(raycaster)
                     {
                         GameObject.DestroyImmediate(raycaster);
                         var newRaycaster = canvas.gameObject.AddComponent<SortingAwareGraphicRaycaster>();
@@ -236,21 +233,21 @@ namespace VRGIN.Core
         protected override void OnUpdate()
         {
 #if !UNITY_4_5
-            if (VR.Context.ConfineMouse)
+            if(VR.Context.ConfineMouse)
             {
                 Cursor.lockState = CursorLockMode.Confined;
             }
 #endif
             EnsureCameraTargets();
 
-            if (_Listeners > 0)
+            if(_Listeners > 0)
             {
                 //Logger.Info(Time.time);
                 //var watch = System.Diagnostics.Stopwatch.StartNew();
                 CatchCanvas();
                 //Logger.Info(watch.ElapsedTicks);
             }
-            if (_Listeners < 0)
+            if(_Listeners < 0)
             {
                 Logger.Warn("Numbers don't add up!");
             }
@@ -259,7 +256,7 @@ namespace VRGIN.Core
         protected override void OnLevel(int level)
         {
             base.OnLevel(level);
-            
+
             _CheckedCameras.Clear();
             _CameraMappings.Clear();
 
@@ -273,7 +270,7 @@ namespace VRGIN.Core
 
         internal void OnAfterGUI()
         {
-            if (Event.current.type == EventType.Repaint)
+            if(Event.current.type == EventType.Repaint)
             {
                 RenderTexture.active = _PrevRT;
             }
@@ -281,7 +278,7 @@ namespace VRGIN.Core
 
         internal void OnBeforeGUI()
         {
-            if (Event.current.type == EventType.Repaint)
+            if(Event.current.type == EventType.Repaint)
             {
                 _PrevRT = RenderTexture.active;
                 RenderTexture.active = IMGuiTexture;
@@ -293,7 +290,7 @@ namespace VRGIN.Core
 
         public void AddGrabber(IScreenGrabber grabber)
         {
-            if (!_ScreenGrabbers.Contains(grabber))
+            if(!_ScreenGrabbers.Contains(grabber))
             {
                 _ScreenGrabbers.Insert(0, grabber);
                 RejudgeAll();
@@ -306,13 +303,7 @@ namespace VRGIN.Core
             RejudgeAll();
         }
 
-        public IEnumerable<IScreenGrabber> ScreenGrabbers
-        {
-            get
-            {
-                return _ScreenGrabbers;
-            }
-        }
+        public IEnumerable<IScreenGrabber> ScreenGrabbers => _ScreenGrabbers;
 
         private void RejudgeAll()
         {
@@ -327,7 +318,7 @@ namespace VRGIN.Core
         {
             VRLog.Info("Trying to find a GUI mapping for camera {0}", camera.name);
             var grabber = FindCameraMapping(camera);
-            if (grabber != null)
+            if(grabber != null)
             {
                 _CameraMappings[camera] = grabber;
                 grabber.OnAssign(camera);
@@ -346,7 +337,8 @@ namespace VRGIN.Core
                 if(!entry.Key)
                 {
                     removalList.Add(entry.Key);
-                } else if(entry.Key.targetTexture != entry.Value.GetTextures().FirstOrDefault())
+                }
+                else if(entry.Key.targetTexture != entry.Value.GetTextures().FirstOrDefault())
                 {
                     entry.Key.targetTexture = entry.Value.GetTextures().FirstOrDefault();
                 }
@@ -368,7 +360,7 @@ namespace VRGIN.Core
                 }
             }
 
-            if (Check(camera)) return this;
+            if(Check(camera)) return this;
             return null;
         }
 
@@ -400,7 +392,7 @@ namespace VRGIN.Core
             {
                 GUI.depth = int.MaxValue;
 
-                if (Event.current.type == EventType.Repaint)
+                if(Event.current.type == EventType.Repaint)
                 {
                     SendMessage("OnBeforeGUI");
                 }
@@ -416,7 +408,7 @@ namespace VRGIN.Core
             {
                 GUI.depth = int.MinValue;
 
-                if (Event.current.type == EventType.Repaint)
+                if(Event.current.type == EventType.Repaint)
                 {
                     SendMessage("OnAfterGUI");
                 }
@@ -433,7 +425,7 @@ namespace VRGIN.Core
             {
                 get
                 {
-                    if (_Canvas != null)
+                    if(_Canvas != null)
                         return _Canvas;
 
                     _Canvas = GetComponent<Canvas>();
@@ -441,28 +433,10 @@ namespace VRGIN.Core
                 }
             }
 
-            public override int priority
-            {
-                get
-                {
-                    return GetOrder();
-                }
-            }
-            public override int sortOrderPriority
-            {
-                get
-                {
-                    return GetOrder();
-                }
-            }
+            public override int priority => GetOrder();
+            public override int sortOrderPriority => GetOrder();
 
-            public override int renderOrderPriority
-            {
-                get
-                {
-                    return GetOrder();
-                }
-            }
+            public override int renderOrderPriority => GetOrder();
 
             private int GetOrder()
             {

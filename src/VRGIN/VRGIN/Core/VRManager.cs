@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-using VRGIN.Controls.Speech;
 using VRGIN.Modes;
 using WindowsInput;
 
@@ -13,17 +12,17 @@ namespace VRGIN.Core
     /// </summary>
     public static class VR
     {
-        public static GameInterpreter Interpreter { get { return VRManager.Instance.Interpreter; } }
-        public static VRCamera Camera { get { return VRCamera.Instance; } }
-        public static VRGUI GUI { get { return VRGUI.Instance; } }
-        public static IVRManagerContext Context { get { return VRManager.Instance.Context; } }
-        public static ControlMode Mode { get { return VRManager.Instance.Mode; } }
-        public static VRSettings Settings { get { return Context.Settings; } }
-        public static Shortcuts Shortcuts { get { return Context.Settings.Shortcuts; } }
-        public static VRManager Manager { get { return VRManager.Instance; } }
-        public static InputSimulator Input { get { return VRManager.Instance.Input; } }
+        public static GameInterpreter Interpreter => VRManager.Instance.Interpreter;
+        public static VRCamera Camera => VRCamera.Instance;
+        public static VRGUI GUI => VRGUI.Instance;
+        public static IVRManagerContext Context => VRManager.Instance.Context;
+        public static ControlMode Mode => VRManager.Instance.Mode;
+        public static VRSettings Settings => Context.Settings;
+        public static Shortcuts Shortcuts => Context.Settings.Shortcuts;
+        public static VRManager Manager => VRManager.Instance;
+        public static InputSimulator Input => VRManager.Instance.Input;
         //public static SpeechManager Speech { get { return VRManager.Instance.Speech; } }
-        public static HMDType HMD { get { return VRManager.Instance.HMD; } }
+        public static HMDType HMD => VRManager.Instance.HMD;
         public static bool Active { get; set; }
     }
 
@@ -55,7 +54,7 @@ namespace VRGIN.Core
         {
             get
             {
-                if (_Instance == null)
+                if(_Instance == null)
                 {
                     throw new InvalidOperationException("VR Manager has not been created yet!");
                 }
@@ -79,7 +78,7 @@ namespace VRGIN.Core
         /// <returns></returns>
         public static VRManager Create<T>(IVRManagerContext context) where T : GameInterpreter
         {
-            if (_Instance == null)
+            if(_Instance == null)
             {
                 VR.Active = true;
 
@@ -95,7 +94,7 @@ namespace VRGIN.Core
                 //    _Instance.Speech = _Instance.gameObject.AddComponent<SpeechManager>();
                 //}
 
-                if (VR.Settings.ApplyEffects)
+                if(VR.Settings.ApplyEffects)
                 {
                     _Instance.EnableEffects();
                 }
@@ -115,12 +114,12 @@ namespace VRGIN.Core
         /// <typeparam name="T"></typeparam>
         public void SetMode<T>() where T : ControlMode
         {
-            if (Mode == null || !(Mode is T))
+            if(Mode == null || !(Mode is T))
             {
                 ModeType = typeof(T);
 
                 // Change!
-                if (Mode != null)
+                if(Mode != null)
                 {
                     // Get on clean grounds
                     Mode.ControllersCreated -= OnControllersCreated;
@@ -176,11 +175,11 @@ namespace VRGIN.Core
                 _CheckedCameras.Add(camera);
                 var judgement = VR.Interpreter.JudgeCamera(camera);
                 VRLog.Info("Detected new camera {0} Action: {1}", camera.name, judgement);
-                switch (judgement)
+                switch(judgement)
                 {
                     case CameraJudgement.MainCamera:
                         VR.Camera.Copy(camera, true);
-                        if (_IsEnabledEffects) { ApplyEffects(); }
+                        if(_IsEnabledEffects) { ApplyEffects(); }
                         break;
                     case CameraJudgement.SubCamera:
                         VR.Camera.Copy(camera, false);
@@ -206,7 +205,7 @@ namespace VRGIN.Core
         public void EnableEffects()
         {
             _IsEnabledEffects = true;
-            if (VR.Camera.Blueprint) { ApplyEffects(); }
+            if(VR.Camera.Blueprint) { ApplyEffects(); }
         }
 
         public void DisableEffects()
@@ -216,7 +215,7 @@ namespace VRGIN.Core
 
         public void ToggleEffects()
         {
-            if (_IsEnabledEffects)
+            if(_IsEnabledEffects)
             {
                 DisableEffects();
             }

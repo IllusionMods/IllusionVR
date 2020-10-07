@@ -1,9 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 using VRGIN.Core;
 
 namespace VRGIN.Controls.Tools
@@ -46,41 +42,23 @@ namespace VRGIN.Controls.Tools
         /// <summary>
         /// Gets whether or not the attached controlller is tracking.
         /// </summary>
-        protected bool IsTracking
-        {
-            get
-            {
-                return Tracking && Tracking.isValid;
-            }
-        }
+        protected bool IsTracking => Tracking && Tracking.isValid;
 
         /// <summary>
         /// Gets the attached controller input object.
         /// </summary>
-        protected SteamVR_Controller.Device Controller
-        {
-            get
-            {
-                return SteamVR_Controller.Input((int)Tracking.index);
-            }
-        }
+        protected SteamVR_Controller.Device Controller => SteamVR_Controller.Input((int)Tracking.index);
 
         /// <summary>
         /// Gets the attached controller input object.
         /// </summary>
-        protected Controller OtherController
-        {
-            get
-            {
-                return Neighbor;
-            }
-        }
+        protected Controller OtherController => Neighbor;
 
 
         protected virtual void OnEnable()
         {
             VRLog.Info("On Enable: {0}", GetType().Name);
-            if (Icon)
+            if(Icon)
             {
                 Icon.SetActive(true);
             }
@@ -94,7 +72,7 @@ namespace VRGIN.Controls.Tools
         protected virtual void OnDisable()
         {
             VRLog.Info("On Disable: {0}", GetType().Name);
-            if (Icon)
+            if(Icon)
             {
                 Icon.SetActive(false);
             }

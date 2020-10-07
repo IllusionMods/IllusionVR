@@ -2,12 +2,10 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using UnityEngine;
 using Valve.VR;
 using VRGIN.Controls;
 //using VRGIN.Controls.LeapMotion;
-using VRGIN.Controls.Speech;
 using VRGIN.Core;
 using VRGIN.Helpers;
 //using VRGIN.U46.Controls.Leap;
@@ -32,7 +30,7 @@ namespace VRGIN.Modes
 
         public virtual void Impersonate(IActor actor, ImpersonationMode mode)
         {
-            if (actor != null)
+            if(actor != null)
             {
                 actor.HasHead = false;
             }
@@ -56,7 +54,7 @@ namespace VRGIN.Modes
             var myPosition = new Vector3(VR.Camera.SteamCam.head.position.x, myY, VR.Camera.SteamCam.head.position.z);
             VR.Camera.SteamCam.origin.position += (targetPosition - myPosition);
         }
-        
+
         public abstract ETrackingUniverseOrigin TrackingOrigin { get; }
 
         /// <summary>
@@ -117,7 +115,7 @@ namespace VRGIN.Modes
             SteamVR_Events.DeviceConnected.Remove(OnDeviceConnected);
         }
 
-        static int cnter = 0;
+        private static int cnter = 0;
 
 #if !UNITY_4_5
         private VRCapturePanorama _CapturePanorama;
@@ -348,7 +346,7 @@ namespace VRGIN.Modes
             Destroy(Right);
 
 #if !UNITY_4_5
-            if (_CapturePanorama)
+            if(_CapturePanorama)
             {
                 Destroy(_CapturePanorama);
             }
@@ -360,9 +358,9 @@ namespace VRGIN.Modes
             //}
 
 
-            if (Shortcuts != null)
+            if(Shortcuts != null)
             {
-                foreach (var shortcut in Shortcuts)
+                foreach(var shortcut in Shortcuts)
                 {
                     shortcut.Dispose();
                 }
@@ -374,7 +372,7 @@ namespace VRGIN.Modes
             // Combine
             var toolTypes = Tools.Concat(isLeft ? LeftTools : RightTools).Distinct();
 
-            foreach (var type in toolTypes)
+            foreach(var type in toolTypes)
             {
                 controller.AddTool(type);
             }
@@ -392,20 +390,11 @@ namespace VRGIN.Modes
             return RightController.Create();
         }
 
-        public virtual IEnumerable<Type> Tools
-        {
-            get { return new List<Type>(); }
-        }
+        public virtual IEnumerable<Type> Tools => new List<Type>();
 
-        public virtual IEnumerable<Type> LeftTools
-        {
-            get { return new List<Type>(); }
-        }
+        public virtual IEnumerable<Type> LeftTools => new List<Type>();
 
-        public virtual IEnumerable<Type> RightTools
-        {
-            get { return new List<Type>(); }
-        }
+        public virtual IEnumerable<Type> RightTools => new List<Type>();
 
         protected virtual IEnumerable<IShortcut> CreateShortcuts()
         {
@@ -436,7 +425,7 @@ namespace VRGIN.Modes
 
         protected virtual void ToggleUserCamera()
         {
-            if (!PlayerCamera.Created)
+            if(!PlayerCamera.Created)
             {
                 VRLog.Info("Create user camera");
 
@@ -470,11 +459,11 @@ namespace VRGIN.Modes
 
             bool allActorsHaveHeads = VR.Interpreter.IsEveryoneHeaded;
 
-            foreach (var actor in VR.Interpreter.Actors)
+            foreach(var actor in VR.Interpreter.Actors)
             {
-                if (actor.HasHead)
+                if(actor.HasHead)
                 {
-                    if (allActorsHaveHeads)
+                    if(allActorsHaveHeads)
                     {
                         var hisPos = actor.Eyes.position;
                         var hisForward = actor.Eyes.forward;
@@ -483,7 +472,7 @@ namespace VRGIN.Modes
                         var myForward = steamCam.head.forward;
 
                         VRLog.Debug("Actor #{0} -- He: {1} -> {2} | Me: {3} -> {4}", i, hisPos, hisForward, myPos, myForward);
-                        if (Vector3.Distance(hisPos, myPos) * VR.Context.UnitToMeter <  0.15f && Vector3.Dot(hisForward, myForward) > 0.6f)
+                        if(Vector3.Distance(hisPos, myPos) * VR.Context.UnitToMeter < 0.15f && Vector3.Dot(hisForward, myForward) > 0.6f)
                         {
                             actor.HasHead = false;
                         }
@@ -491,7 +480,7 @@ namespace VRGIN.Modes
                 }
                 else
                 {
-                    if (Vector3.Distance(actor.Eyes.position, steamCam.head.position) * VR.Context.UnitToMeter > 0.3f)
+                    if(Vector3.Distance(actor.Eyes.position, steamCam.head.position) * VR.Context.UnitToMeter > 0.3f)
                     {
                         actor.HasHead = true;
                     }
@@ -504,7 +493,7 @@ namespace VRGIN.Modes
 
         protected void CheckInput()
         {
-            foreach (var shortcut in Shortcuts)
+            foreach(var shortcut in Shortcuts)
             {
                 shortcut.Evaluate();
             }
@@ -512,15 +501,15 @@ namespace VRGIN.Modes
 
         private void OnDeviceConnected(int idx, bool connected)
         {
-            if (!_ControllerFound)
+            if(!_ControllerFound)
             {
-				uint index = (uint)idx;
+                uint index = (uint)idx;
                 VRLog.Info("Device connected: {0}", index);
 
-                if (connected && index > OpenVR.k_unTrackedDeviceIndex_Hmd)
+                if(connected && index > OpenVR.k_unTrackedDeviceIndex_Hmd)
                 {
                     var system = OpenVR.System;
-                    if (system != null && system.GetTrackedDeviceClass(index) == ETrackedDeviceClass.Controller)
+                    if(system != null && system.GetTrackedDeviceClass(index) == ETrackedDeviceClass.Controller)
                     {
                         _ControllerFound = true;
 

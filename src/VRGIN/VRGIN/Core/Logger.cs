@@ -1,11 +1,8 @@
 ﻿//#define COLOR_SUPPORT
 
 using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
-using System.Linq;
-using System.Text;
 
 namespace VRGIN.Core
 {
@@ -82,7 +79,7 @@ namespace VRGIN.Core
         {
             try
             {
-                if (severity < Level) return;
+                if(severity < Level) return;
 
 #if COLOR_SUPPORT
                 ConsoleColor foregroundColor = ConsoleColor.White;
@@ -105,7 +102,7 @@ namespace VRGIN.Core
                 Console.BackgroundColor = backgroundColor;
 #endif
                 string formatted = String.Format(Format(text, severity), args);
-                lock (_LOCK)
+                lock(_LOCK)
                 {
                     Console.WriteLine(formatted);
                     S_Handle.WriteLine(formatted);
@@ -115,7 +112,7 @@ namespace VRGIN.Core
                 Console.ResetColor();
 #endif
             }
-            catch (Exception e)
+            catch(Exception e)
             {
                 Console.WriteLine(e);
             }

@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using UnityEngine;
-using UnityEngine.UI;
+﻿using UnityEngine;
 using VRGIN.Core;
 using VRGIN.Helpers;
 
@@ -42,18 +37,18 @@ namespace VRGIN.Visuals
             base.OnStart();
         }
 
-        void OnGUI()
+        private void OnGUI()
         {
             // Just before the VRGUI hook kicks in
             GUI.depth = int.MinValue + 1;
 #if UNITY_4_5
             if (Screen.showCursor)
 #else
-            if (Cursor.visible)
+            if(Cursor.visible)
 #endif
             {
                 var pos = new Vector2(Input.mousePosition.x, Screen.height - Input.mousePosition.y);
-                
+
                 GUI.DrawTexture(new Rect(pos.x, pos.y, _Scale.x, _Scale.y), _Sprite ?? _DefaultSprite);
 
                 //_Cursor.GetComponent<RectTransform>().anchoredPosition = Input.mousePosition;

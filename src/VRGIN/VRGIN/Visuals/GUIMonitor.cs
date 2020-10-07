@@ -1,10 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.Linq;
-using System.Text;
 using UnityEngine;
-using VRGIN.Controls;
 using VRGIN.Core;
 
 namespace VRGIN.Visuals
@@ -26,7 +22,7 @@ namespace VRGIN.Visuals
         public float Distance = 0;
 
         private ProceduralPlane _Plane;
-        
+
         protected override void OnStart()
         {
             base.OnStart();
@@ -36,7 +32,8 @@ namespace VRGIN.Visuals
             if(_Plane)
             {
                 VRLog.Info("Plane was added...");
-            } else
+            }
+            else
             {
                 VRLog.Info("No plane either?");
             }
@@ -59,7 +56,7 @@ namespace VRGIN.Visuals
             VR.Settings.PropertyChanged -= OnPropertyChanged;
         }
 
-        new public static GUIMonitor Create()
+        public static new GUIMonitor Create()
         {
             var monitor = new GameObject("GUI Monitor").AddComponent<ProceduralPlane>().gameObject.AddComponent<GUIMonitor>();
             return monitor;
@@ -71,14 +68,15 @@ namespace VRGIN.Visuals
 
         private void OnPropertyChanged(object sender, PropertyChangedEventArgs e)
         {
-            if (_Plane)
+            if(_Plane)
             {
-                switch (e.PropertyName) {
+                switch(e.PropertyName)
+                {
                     case "Angle":
                     case "OffsetY":
                     case "Distance":
                     case "Rotation":
-                         Rebuild();
+                        Rebuild();
                         break;
                     case "Projection":
                         TargetCurviness = VR.Settings.Projection;
@@ -111,10 +109,11 @@ namespace VRGIN.Visuals
                 transform.localRotation = Quaternion.Euler(0f, VR.Settings.Rotation, 0f);
                 _Plane.angleSpan = VR.Settings.Angle;
                 _Plane.curviness = _Curviness;
-                _Plane.height= (VR.Settings.Angle / 100);
+                _Plane.height = (VR.Settings.Angle / 100);
                 _Plane.distance = 1;
                 _Plane.Rebuild();
-            } catch(Exception e)
+            }
+            catch(Exception e)
             {
                 VRLog.Error(e);
             }

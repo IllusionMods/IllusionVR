@@ -13,7 +13,7 @@ namespace CapturePanorama.Internals
 #if UNITY_ANDROID && !UNITY_EDITOR
 	    void OnCustomPostRender()
 #else
-        void OnPostRender()
+        private void OnPostRender()
 #endif
         {
             fadeMaterial.SetPass(0);

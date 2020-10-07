@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using UnityEngine;
+﻿using UnityEngine;
 using Valve.VR;
 using VRGIN.Controls;
 using VRGIN.Core;
@@ -31,13 +27,13 @@ namespace VRGIN.Visuals
 
         internal static void Remove()
         {
-            if (Created)
+            if(Created)
             {
                 Destroy(GameObject.FindObjectOfType<PlayerCamera>().gameObject);
                 Created = false;
             }
         }
-        
+
         protected void OnEnable()
         {
             VRGUI.Instance.Listen();
@@ -91,9 +87,9 @@ namespace VRGIN.Visuals
 
         protected void CheckInput()
         {
-            if (controller)
+            if(controller)
             {
-                if (!tracking && SteamVR_Controller.Input((int)controller.Tracking.index).GetPressDown(EVRButtonId.k_EButton_SteamVR_Trigger))
+                if(!tracking && SteamVR_Controller.Input((int)controller.Tracking.index).GetPressDown(EVRButtonId.k_EButton_SteamVR_Trigger))
                 {
                     tracking = true;
 
@@ -101,9 +97,9 @@ namespace VRGIN.Visuals
                     posOffset = transform.position - controller.transform.position;
                     rotOffset = Quaternion.Inverse(controller.transform.rotation) * transform.rotation;
                 }
-                else if (tracking)
+                else if(tracking)
                 {
-                    if (SteamVR_Controller.Input((int)controller.Tracking.index).GetPressUp(EVRButtonId.k_EButton_SteamVR_Trigger))
+                    if(SteamVR_Controller.Input((int)controller.Tracking.index).GetPressUp(EVRButtonId.k_EButton_SteamVR_Trigger))
                     {
                         tracking = false;
                     }
@@ -128,7 +124,7 @@ namespace VRGIN.Visuals
             GetComponent<Renderer>().material.color = Color.white;
             controller.ToolEnabled = true;
 
-            if (!tracking)
+            if(!tracking)
                 controller = null;
         }
 

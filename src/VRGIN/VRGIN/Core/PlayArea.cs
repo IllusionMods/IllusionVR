@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace VRGIN.Core
 {
@@ -13,21 +9,15 @@ namespace VRGIN.Core
         public float Rotation { get; set; }
         public float Height
         {
-            get
-            {
-                return Position.y;
-            }
-            set
-            {
-                Position = new Vector3(Position.x, value, Position.z);
-            }
+            get => Position.y;
+            set => Position = new Vector3(Position.x, value, Position.z);
         }
 
         public PlayArea()
         {
             Scale = 1;
         }
-        
+
         public void Apply()
         {
             var rotOffset = Quaternion.Euler(0, Rotation, 0);

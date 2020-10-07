@@ -1,15 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using UnityEngine;
 using Valve.VR;
-using VRGIN.Controls;
 using VRGIN.Controls.Tools;
 using VRGIN.Core;
 using VRGIN.Native;
 using VRGIN.Visuals;
-using static VRGIN.Native.WindowsInterop;
 
 namespace VRGIN.Controls.Handlers
 {
@@ -19,14 +15,14 @@ namespace VRGIN.Controls.Handlers
     public class MenuHandler : ProtectedBehaviour
     {
         private Controller _Controller;
-        const float RANGE = 0.25f;
+        private const float RANGE = 0.25f;
         private const int MOUSE_STABILIZER_THRESHOLD = 30; // pixels
         private Controller.Lock _LaserLock = Controller.Lock.Invalid;
         private LineRenderer Laser;
         private Vector2? mouseDownPosition;
         private GUIQuad _Target;
-        MenuHandler _Other;
-        ResizeHandler _ResizeHandler;
+        private MenuHandler _Other;
+        private ResizeHandler _ResizeHandler;
         private Vector3 _ScaleVector;
 
         protected override void OnStart()
@@ -45,7 +41,7 @@ namespace VRGIN.Controls.Handlers
                 if(!_Controller) _Controller = GetComponent<Controller>();
                 var attachPosition = _Controller.FindAttachPosition("tip");
 
-                if (!attachPosition)
+                if(!attachPosition)
                 {
                     VRLog.Error("Attach position not found for laser!");
                     attachPosition = transform;
@@ -56,7 +52,7 @@ namespace VRGIN.Controls.Handlers
                 Laser.material.renderQueue += 5000;
                 Laser.SetColors(Color.cyan, Color.cyan);
 
-                if (SteamVR.instance.hmd_TrackingSystemName == "lighthouse")
+                if(SteamVR.instance.hmd_TrackingSystemName == "lighthouse")
                 {
                     Laser.transform.localRotation = Quaternion.Euler(60, 0, 0);
                     Laser.transform.position += Laser.transform.forward * 0.06f;
@@ -65,7 +61,7 @@ namespace VRGIN.Controls.Handlers
                 Laser.useWorldSpace = true;
                 Laser.SetWidth(0.002f, 0.002f);
             }
-            catch (Exception e)
+            catch(Exception e)
             {
                 VRLog.Error(e);
             }
@@ -74,21 +70,15 @@ namespace VRGIN.Controls.Handlers
         /// <summary>
         /// Gets the attached controller input object.
         /// </summary>
-        protected SteamVR_Controller.Device Device
-        {
-            get
-            {
-                return SteamVR_Controller.Input((int)_Controller.Tracking.index);
-            }
-        }
+        protected SteamVR_Controller.Device Device => SteamVR_Controller.Input((int)_Controller.Tracking.index);
 
         protected override void OnUpdate()
         {
             base.OnUpdate();
 
-            if (LaserVisible)
+            if(LaserVisible)
             {
-                if (IsResizing)
+                if(IsResizing)
                 {
                     Laser.SetPosition(0, Laser.transform.position);
                     Laser.SetPosition(1, Laser.transform.position);
@@ -99,7 +89,7 @@ namespace VRGIN.Controls.Handlers
                 }
 
             }
-            else if (_Controller.CanAcquireFocus())
+            else if(_Controller.CanAcquireFocus())
             {
                 CheckForNearMenu();
             }
@@ -109,7 +99,7 @@ namespace VRGIN.Controls.Handlers
 
         private void OnDisable()
         {
-            if (_LaserLock.IsValid)
+            if(_LaserLock.IsValid)
             {
                 // Release to be sure
                 _LaserLock.Release();
@@ -118,10 +108,10 @@ namespace VRGIN.Controls.Handlers
 
         private void EnsureResizeHandler()
         {
-            if (!_ResizeHandler)
+            if(!_ResizeHandler)
             {
                 _ResizeHandler = _Target.GetComponent<ResizeHandler>();
-                if (!_ResizeHandler)
+                if(!_ResizeHandler)
                 {
                     _ResizeHandler = _Target.gameObject.AddComponent<ResizeHandler>();
                 }
@@ -130,7 +120,7 @@ namespace VRGIN.Controls.Handlers
 
         private void EnsureNoResizeHandler()
         {
-            if (_ResizeHandler)
+            if(_ResizeHandler)
             {
                 DestroyImmediate(_ResizeHandler);
             }
@@ -141,9 +131,9 @@ namespace VRGIN.Controls.Handlers
         {
             IsPressing = false;
 
-            if (LaserVisible && _Target)
+            if(LaserVisible && _Target)
             {
-                if (_Other.LaserVisible && _Other._Target == _Target)
+                if(_Other.LaserVisible && _Other._Target == _Target)
                 {
                     // No double input - this is handled by ResizeHandler
                     EnsureResizeHandler();
@@ -153,29 +143,29 @@ namespace VRGIN.Controls.Handlers
                     EnsureNoResizeHandler();
                 }
 
-                if (!IsResizing)
+                if(!IsResizing)
                 {
-                    if (Device.GetPressDown(EVRButtonId.k_EButton_SteamVR_Trigger))
+                    if(Device.GetPressDown(EVRButtonId.k_EButton_SteamVR_Trigger))
                     {
                         IsPressing = true;
                         VR.Input.Mouse.LeftButtonDown();
                         mouseDownPosition = Vector2.Scale(new Vector2(Input.mousePosition.x, Screen.height - Input.mousePosition.y), _ScaleVector);
                     }
-                    if (Device.GetPress(EVRButtonId.k_EButton_SteamVR_Trigger))
+                    if(Device.GetPress(EVRButtonId.k_EButton_SteamVR_Trigger))
                     {
                         IsPressing = true;
                     }
-                    if (Device.GetPressUp(EVRButtonId.k_EButton_SteamVR_Trigger))
+                    if(Device.GetPressUp(EVRButtonId.k_EButton_SteamVR_Trigger))
                     {
                         IsPressing = true;
                         VR.Input.Mouse.LeftButtonUp();
                         mouseDownPosition = null;
                     }
 
-                    if (Device.GetPressUp(EVRButtonId.k_EButton_Grip))
+                    if(Device.GetPressUp(EVRButtonId.k_EButton_Grip))
                     {
                         var menuTool = _Controller.GetComponent<MenuTool>();
-                        if (menuTool && !menuTool.Gui)
+                        if(menuTool && !menuTool.Gui)
                         {
                             menuTool.TakeGUI(_Target);
                             _Controller.ToolIndex = _Controller.Tools.IndexOf(menuTool);
@@ -184,37 +174,33 @@ namespace VRGIN.Controls.Handlers
                 }
             }
         }
-        bool IsResizing
-        {
-            get
-            {
-                return _ResizeHandler && _ResizeHandler.IsDragging;
-            }
-        }
-        void CheckForNearMenu()
+
+        private bool IsResizing => _ResizeHandler && _ResizeHandler.IsDragging;
+
+        private void CheckForNearMenu()
         {
             _Target = GUIQuadRegistry.Quads.FirstOrDefault(IsLaserable);
-            if (_Target)
+            if(_Target)
             {
                 LaserVisible = true;
             }
         }
 
-        bool IsLaserable(GUIQuad quad)
+        private bool IsLaserable(GUIQuad quad)
         {
-            RaycastHit hit;
-            return IsWithinRange(quad) && Raycast(quad, out hit);
+            return IsWithinRange(quad) && Raycast(quad, out RaycastHit hit);
         }
 
-        float GetRange(GUIQuad quad)
+        private float GetRange(GUIQuad quad)
         {
             return Mathf.Clamp(quad.transform.localScale.magnitude * RANGE, RANGE, RANGE * 5) * VR.Settings.IPDScale;
         }
-        bool IsWithinRange(GUIQuad quad)
+
+        private bool IsWithinRange(GUIQuad quad)
         {
-            if (!Laser) return false;
+            if(!Laser) return false;
             // Needs to be in another hierarchy
-            if (quad.transform.parent == transform) return false;
+            if(quad.transform.parent == transform) return false;
 
             var normal = -quad.transform.forward;
             var otherPos = quad.transform.position;
@@ -226,12 +212,12 @@ namespace VRGIN.Controls.Handlers
                 && Vector3.Dot(normal, laser) < 0; // They have to point the other way
         }
 
-        bool Raycast(GUIQuad quad, out RaycastHit hit)
+        private bool Raycast(GUIQuad quad, out RaycastHit hit)
         {
             var myPos = Laser.transform.position;
             var laser = Laser.transform.forward;
             var collider = quad.GetComponent<Collider>();
-            if (collider)
+            if(collider)
             {
                 var ray = new Ray(myPos, laser);
                 // So far so good. Now raycast!
@@ -244,23 +230,22 @@ namespace VRGIN.Controls.Handlers
             }
         }
 
-        void UpdateLaser()
+        private void UpdateLaser()
         {
             Laser.SetPosition(0, Laser.transform.position);
             Laser.SetPosition(1, Laser.transform.position + Laser.transform.forward);
 
-            if (_Target && _Target.gameObject.activeInHierarchy)
+            if(_Target && _Target.gameObject.activeInHierarchy)
             {
-                RaycastHit hit;
-                if (IsWithinRange(_Target) && Raycast(_Target, out hit))
+                if(IsWithinRange(_Target) && Raycast(_Target, out RaycastHit hit))
                 {
 
                     Laser.SetPosition(1, hit.point);
-                    if (!IsOtherWorkingOn(_Target))
+                    if(!IsOtherWorkingOn(_Target))
                     {
                         var newPos = new Vector2(hit.textureCoord.x * VRGUI.Width, (1 - hit.textureCoord.y) * VRGUI.Height);
                         //VRLog.Info("New Pos: {0}, textureCoord: {1}", newPos, hit.textureCoord);
-                        if (!mouseDownPosition.HasValue || Vector2.Distance(mouseDownPosition.Value, newPos) > MOUSE_STABILIZER_THRESHOLD)
+                        if(!mouseDownPosition.HasValue || Vector2.Distance(mouseDownPosition.Value, newPos) > MOUSE_STABILIZER_THRESHOLD)
                         {
                             MouseOperations.SetClientCursorPosition((int)newPos.x, (int)newPos.y);
                             mouseDownPosition = null;
@@ -287,25 +272,22 @@ namespace VRGIN.Controls.Handlers
 
         public bool LaserVisible
         {
-            get
-            {
-                return Laser && Laser.gameObject.activeSelf;
-            }
+            get => Laser && Laser.gameObject.activeSelf;
             set
             {
-                if (!Laser) return;
+                if(!Laser) return;
 
-                if (value && !_LaserLock.IsValid)
+                if(value && !_LaserLock.IsValid)
                 {
                     // Need to acquire focus!
                     _LaserLock = _Controller.AcquireFocus();
-                    if (!_LaserLock.IsValid)
+                    if(!_LaserLock.IsValid)
                     {
                         // Could not get focus, do nothing.
                         return;
                     }
                 }
-                else if (!value && _LaserLock.IsValid)
+                else if(!value && _LaserLock.IsValid)
                 {
                     // Need to release focus!
                     _LaserLock.Release();
@@ -315,7 +297,7 @@ namespace VRGIN.Controls.Handlers
                 Laser.gameObject.SetActive(value);
 
                 // Initialize start position
-                if (value)
+                if(value)
                 {
                     Laser.SetPosition(0, Laser.transform.position);
                     Laser.SetPosition(1, Laser.transform.position);
@@ -329,16 +311,16 @@ namespace VRGIN.Controls.Handlers
 
         public bool IsPressing { get; private set; }
 
-        class ResizeHandler : ProtectedBehaviour
+        private class ResizeHandler : ProtectedBehaviour
         {
-            GUIQuad _Gui;
-            Vector3? _StartLeft;
-            Vector3? _StartRight;
-            Vector3? _StartScale;
-            Quaternion? _StartRotation;
-            Vector3? _StartPosition;
-            Quaternion _StartRotationController;
-            Vector3? _OffsetFromCenter;
+            private GUIQuad _Gui;
+            private Vector3? _StartLeft;
+            private Vector3? _StartRight;
+            private Vector3? _StartScale;
+            private Quaternion? _StartRotation;
+            private Vector3? _StartPosition;
+            private Quaternion _StartRotationController;
+            private Vector3? _OffsetFromCenter;
 
             public bool IsDragging { get; private set; }
             protected override void OnStart()
@@ -353,9 +335,9 @@ namespace VRGIN.Controls.Handlers
                 IsDragging = GetDevice(VR.Mode.Left).GetPress(EVRButtonId.k_EButton_SteamVR_Trigger) &&
                        GetDevice(VR.Mode.Right).GetPress(EVRButtonId.k_EButton_SteamVR_Trigger);
 
-                if (IsDragging)
+                if(IsDragging)
                 {
-                    if (_StartScale == null)
+                    if(_StartScale == null)
                     {
                         Initialize();
                     }
@@ -402,7 +384,7 @@ namespace VRGIN.Controls.Handlers
                 _StartRotation = _Gui.transform.localRotation;
                 _StartPosition = _Gui.transform.position;
                 _StartRotationController = GetAverageRotation();
-                
+
                 var originalDistance = Vector3.Distance(_StartLeft.Value, _StartRight.Value);
                 var originalDirection = _StartRight.Value - _StartLeft.Value;
                 var originalCenter = _StartLeft.Value + originalDirection * 0.5f;

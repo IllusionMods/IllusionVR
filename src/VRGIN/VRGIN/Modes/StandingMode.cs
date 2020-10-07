@@ -1,10 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using UnityEngine;
 using Valve.VR;
-using VRGIN.Controls;
 using VRGIN.Controls.Tools;
 using VRGIN.Core;
 
@@ -39,7 +37,7 @@ namespace VRGIN.Modes
         {
             base.OnUpdate();
 
-            if (VRCamera.Instance.HasValidBlueprint)
+            if(VRCamera.Instance.HasValidBlueprint)
             {
                 SyncCameras();
             }
@@ -51,20 +49,8 @@ namespace VRGIN.Modes
             VRCamera.Instance.Blueprint.transform.rotation = VR.Camera.SteamCam.head.rotation;
         }
 
-        public override IEnumerable<Type> Tools
-        {
-            get
-            {
-                return base.Tools.Concat(new Type[] { typeof(MenuTool), typeof(WarpTool) });
-            }
-        }
+        public override IEnumerable<Type> Tools => base.Tools.Concat(new Type[] { typeof(MenuTool), typeof(WarpTool) });
 
-        public override ETrackingUniverseOrigin TrackingOrigin
-        {
-            get
-            {
-                return ETrackingUniverseOrigin.TrackingUniverseStanding;
-            }
-        }
+        public override ETrackingUniverseOrigin TrackingOrigin => ETrackingUniverseOrigin.TrackingUniverseStanding;
     }
 }

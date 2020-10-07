@@ -1,8 +1,6 @@
-﻿using UnityEngine;
-using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System;
+using UnityEngine;
 using VRGIN.Core;
 
 namespace VRGIN.Visuals
@@ -22,7 +20,7 @@ namespace VRGIN.Visuals
         private Mesh _mesh;
 
         // Use this for initialization
-        void Awake()
+        private void Awake()
         {
             _MeshFilter = GetComponent<MeshFilter>();
             _Renderer = GetComponent<Renderer>();
@@ -60,7 +58,7 @@ namespace VRGIN.Visuals
 
             float timeStep = totT / VertexCount;
 
-            for (int i = 0; i <= VertexCount; i++)
+            for(int i = 0; i <= VertexCount; i++)
             {
                 float t = Mathf.Clamp(((i / (VertexCount - 1f)) * totT) + ((Time.time * UvSpeed) % 2) * timeStep - timeStep, 0, totT);
                 //Logger.Info(t);
@@ -80,12 +78,12 @@ namespace VRGIN.Visuals
             _MeshFilter.mesh = _mesh;
         }
 
-        void OnEnable()
+        private void OnEnable()
         {
             GetComponent<Renderer>().enabled = true;
         }
 
-        void OnDisable()
+        private void OnDisable()
         {
             GetComponent<Renderer>().enabled = false;
         }

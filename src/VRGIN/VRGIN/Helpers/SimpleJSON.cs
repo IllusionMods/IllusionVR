@@ -67,13 +67,13 @@ namespace VRGIN.Helpers
         {
         }
 
-        public virtual JSONNode this[int aIndex] { get { return null; } set { } }
+        public virtual JSONNode this[int aIndex] { get => null; set { } }
 
-        public virtual JSONNode this[string aKey] { get { return null; } set { } }
+        public virtual JSONNode this[string aKey] { get => null; set { } }
 
-        public virtual string Value { get { return ""; } set { } }
+        public virtual string Value { get => ""; set { } }
 
-        public virtual int Count { get { return 0; } }
+        public virtual int Count => 0;
 
         public virtual void Add(JSONNode aItem)
         {
@@ -107,8 +107,8 @@ namespace VRGIN.Helpers
         {
             get
             {
-                foreach (var C in Children)
-                    foreach (var D in C.DeepChildren)
+                foreach(var C in Children)
+                    foreach(var D in C.DeepChildren)
                         yield return D;
             }
         }
@@ -135,8 +135,7 @@ namespace VRGIN.Helpers
         {
             get
             {
-                int v = 0;
-                if (int.TryParse(Value, out v))
+                if(int.TryParse(Value, out int v))
                     return v;
                 return 0;
             }
@@ -151,8 +150,7 @@ namespace VRGIN.Helpers
         {
             get
             {
-                float v = 0.0f;
-                if (float.TryParse(Value, out v))
+                if(float.TryParse(Value, out float v))
                     return v;
                 return 0.0f;
             }
@@ -167,8 +165,7 @@ namespace VRGIN.Helpers
         {
             get
             {
-                double v = 0.0;
-                if (double.TryParse(Value, out v))
+                if(double.TryParse(Value, out double v))
                     return v;
                 return 0.0;
             }
@@ -184,8 +181,7 @@ namespace VRGIN.Helpers
         {
             get
             {
-                bool v = false;
-                if (bool.TryParse(Value, out v))
+                if(bool.TryParse(Value, out bool v))
                     return v;
                 return !string.IsNullOrEmpty(Value);
             }
@@ -197,21 +193,9 @@ namespace VRGIN.Helpers
             }
         }
 
-        public virtual JSONArray AsArray
-        {
-            get
-            {
-                return this as JSONArray;
-            }
-        }
+        public virtual JSONArray AsArray => this as JSONArray;
 
-        public virtual JSONClass AsObject
-        {
-            get
-            {
-                return this as JSONClass;
-            }
-        }
+        public virtual JSONClass AsObject => this as JSONClass;
 
 
         #endregion typecasting properties
@@ -230,7 +214,7 @@ namespace VRGIN.Helpers
 
         public static bool operator ==(JSONNode a, object b)
         {
-            if (b == null && a is JSONLazyCreator)
+            if(b == null && a is JSONLazyCreator)
                 return true;
             return System.Object.ReferenceEquals(a, b);
         }
@@ -256,9 +240,9 @@ namespace VRGIN.Helpers
         internal static string Escape(string aText)
         {
             string result = "";
-            foreach (char c in aText)
+            foreach(char c in aText)
             {
-                switch (c)
+                switch(c)
                 {
                     case '\\':
                         result += "\\\\";
@@ -289,23 +273,20 @@ namespace VRGIN.Helpers
             return result;
         }
 
-        static JSONData Numberize(string token)
+        private static JSONData Numberize(string token)
         {
-            bool flag = false;
-            int integer = 0;
-            double real = 0;
 
-            if (int.TryParse(token, out integer))
+            if(int.TryParse(token, out int integer))
             {
                 return new JSONData(integer);
             }
 
-            if (double.TryParse(token, out real))
+            if(double.TryParse(token, out double real))
             {
                 return new JSONData(real);
             }
 
-            if (bool.TryParse(token, out flag))
+            if(bool.TryParse(token, out bool flag))
             {
                 return new JSONData(flag);
             }
@@ -313,11 +294,11 @@ namespace VRGIN.Helpers
             throw new NotImplementedException(token);
         }
 
-        static void AddElement(JSONNode ctx, string token, string tokenName, bool tokenIsString)
+        private static void AddElement(JSONNode ctx, string token, string tokenName, bool tokenIsString)
         {
-            if (tokenIsString)
+            if(tokenIsString)
             {
-                if (ctx is JSONArray)
+                if(ctx is JSONArray)
                     ctx.Add(token);
                 else
                     ctx.Add(tokenName, token); // assume dictionary/object
@@ -325,7 +306,7 @@ namespace VRGIN.Helpers
             else
             {
                 JSONData number = Numberize(token);
-                if (ctx is JSONArray)
+                if(ctx is JSONArray)
                     ctx.Add(number);
                 else
                     ctx.Add(tokenName, number);
@@ -342,23 +323,23 @@ namespace VRGIN.Helpers
             string TokenName = "";
             bool QuoteMode = false;
             bool TokenIsString = false;
-            while (i < aJSON.Length)
+            while(i < aJSON.Length)
             {
-                switch (aJSON[i])
+                switch(aJSON[i])
                 {
                     case '{':
-                        if (QuoteMode)
+                        if(QuoteMode)
                         {
                             Token += aJSON[i];
                             break;
                         }
                         stack.Push(new JSONClass());
-                        if (ctx != null)
+                        if(ctx != null)
                         {
                             TokenName = TokenName.Trim();
-                            if (ctx is JSONArray)
+                            if(ctx is JSONArray)
                                 ctx.Add(stack.Peek());
-                            else if (TokenName != "")
+                            else if(TokenName != "")
                                 ctx.Add(TokenName, stack.Peek());
                         }
                         TokenName = "";
@@ -367,20 +348,20 @@ namespace VRGIN.Helpers
                         break;
 
                     case '[':
-                        if (QuoteMode)
+                        if(QuoteMode)
                         {
                             Token += aJSON[i];
                             break;
                         }
 
                         stack.Push(new JSONArray());
-                        if (ctx != null)
+                        if(ctx != null)
                         {
                             TokenName = TokenName.Trim();
 
-                            if (ctx is JSONArray)
+                            if(ctx is JSONArray)
                                 ctx.Add(stack.Peek());
-                            else if (TokenName != "")
+                            else if(TokenName != "")
                                 ctx.Add(TokenName, stack.Peek());
                         }
                         TokenName = "";
@@ -390,16 +371,16 @@ namespace VRGIN.Helpers
 
                     case '}':
                     case ']':
-                        if (QuoteMode)
+                        if(QuoteMode)
                         {
                             Token += aJSON[i];
                             break;
                         }
-                        if (stack.Count == 0)
+                        if(stack.Count == 0)
                             throw new Exception("JSON Parse: Too many closing brackets");
 
                         stack.Pop();
-                        if (Token != "")
+                        if(Token != "")
                         {
                             TokenName = TokenName.Trim();
                             /*
@@ -413,12 +394,12 @@ namespace VRGIN.Helpers
                         }
                         TokenName = "";
                         Token = "";
-                        if (stack.Count > 0)
+                        if(stack.Count > 0)
                             ctx = stack.Peek();
                         break;
 
                     case ':':
-                        if (QuoteMode)
+                        if(QuoteMode)
                         {
                             Token += aJSON[i];
                             break;
@@ -434,12 +415,12 @@ namespace VRGIN.Helpers
                         break;
 
                     case ',':
-                        if (QuoteMode)
+                        if(QuoteMode)
                         {
                             Token += aJSON[i];
                             break;
                         }
-                        if (Token != "")
+                        if(Token != "")
                         {
                             /*
 							if (ctx is JSONArray) {
@@ -463,16 +444,16 @@ namespace VRGIN.Helpers
 
                     case ' ':
                     case '\t':
-                        if (QuoteMode)
+                        if(QuoteMode)
                             Token += aJSON[i];
                         break;
 
                     case '\\':
                         ++i;
-                        if (QuoteMode)
+                        if(QuoteMode)
                         {
                             char C = aJSON[i];
-                            switch (C)
+                            switch(C)
                             {
                                 case 't':
                                     Token += '\t';
@@ -490,14 +471,14 @@ namespace VRGIN.Helpers
                                     Token += '\f';
                                     break;
                                 case 'u':
-                                    {
-                                        string s = aJSON.Substring(i + 1, 4);
-                                        Token += (char)int.Parse(
-                                            s,
-                                            System.Globalization.NumberStyles.AllowHexSpecifier);
-                                        i += 4;
-                                        break;
-                                    }
+                                {
+                                    string s = aJSON.Substring(i + 1, 4);
+                                    Token += (char)int.Parse(
+                                        s,
+                                        System.Globalization.NumberStyles.AllowHexSpecifier);
+                                    i += 4;
+                                    break;
+                                }
                                 default:
                                     Token += C;
                                     break;
@@ -511,7 +492,7 @@ namespace VRGIN.Helpers
                 }
                 ++i;
             }
-            if (QuoteMode)
+            if(QuoteMode)
             {
                 throw new Exception("JSON Parse: Quotation marks seems to be messed up.");
             }
@@ -589,13 +570,13 @@ namespace VRGIN.Helpers
                 SaveToStream(F);
             }
 #else
-			throw new Exception ("Can't use File IO stuff in webplayer");
+            throw new Exception("Can't use File IO stuff in webplayer");
 #endif
         }
 
         public string SaveToBase64()
         {
-            using (var stream = new System.IO.MemoryStream())
+            using(var stream = new System.IO.MemoryStream())
             {
                 SaveToStream(stream);
                 stream.Position = 0;
@@ -606,53 +587,53 @@ namespace VRGIN.Helpers
         public static JSONNode Deserialize(System.IO.BinaryReader aReader)
         {
             JSONBinaryTag type = (JSONBinaryTag)aReader.ReadByte();
-            switch (type)
+            switch(type)
             {
                 case JSONBinaryTag.Array:
-                    {
-                        int count = aReader.ReadInt32();
-                        JSONArray tmp = new JSONArray();
-                        for (int i = 0; i < count; i++)
-                            tmp.Add(Deserialize(aReader));
-                        return tmp;
-                    }
+                {
+                    int count = aReader.ReadInt32();
+                    JSONArray tmp = new JSONArray();
+                    for(int i = 0; i < count; i++)
+                        tmp.Add(Deserialize(aReader));
+                    return tmp;
+                }
                 case JSONBinaryTag.Class:
+                {
+                    int count = aReader.ReadInt32();
+                    JSONClass tmp = new JSONClass();
+                    for(int i = 0; i < count; i++)
                     {
-                        int count = aReader.ReadInt32();
-                        JSONClass tmp = new JSONClass();
-                        for (int i = 0; i < count; i++)
-                        {
-                            string key = aReader.ReadString();
-                            var val = Deserialize(aReader);
-                            tmp.Add(key, val);
-                        }
-                        return tmp;
+                        string key = aReader.ReadString();
+                        var val = Deserialize(aReader);
+                        tmp.Add(key, val);
                     }
+                    return tmp;
+                }
                 case JSONBinaryTag.Value:
-                    {
-                        return new JSONData(aReader.ReadString());
-                    }
+                {
+                    return new JSONData(aReader.ReadString());
+                }
                 case JSONBinaryTag.IntValue:
-                    {
-                        return new JSONData(aReader.ReadInt32());
-                    }
+                {
+                    return new JSONData(aReader.ReadInt32());
+                }
                 case JSONBinaryTag.DoubleValue:
-                    {
-                        return new JSONData(aReader.ReadDouble());
-                    }
+                {
+                    return new JSONData(aReader.ReadDouble());
+                }
                 case JSONBinaryTag.BoolValue:
-                    {
-                        return new JSONData(aReader.ReadBoolean());
-                    }
+                {
+                    return new JSONData(aReader.ReadBoolean());
+                }
                 case JSONBinaryTag.FloatValue:
-                    {
-                        return new JSONData(aReader.ReadSingle());
-                    }
+                {
+                    return new JSONData(aReader.ReadSingle());
+                }
 
                 default:
-                    {
-                        throw new Exception("Error deserializing JSON. Unknown tag: " + type);
-                    }
+                {
+                    throw new Exception("Error deserializing JSON. Unknown tag: " + type);
+                }
             }
         }
 
@@ -699,7 +680,7 @@ namespace VRGIN.Helpers
 
         public static JSONNode LoadFromStream(System.IO.Stream aData)
         {
-            using (var R = new System.IO.BinaryReader(aData))
+            using(var R = new System.IO.BinaryReader(aData))
             {
                 return Deserialize(R);
             }
@@ -713,7 +694,7 @@ namespace VRGIN.Helpers
                 return LoadFromStream(F);
             }
 #else
-			throw new Exception ("Can't use File IO stuff in webplayer");
+            throw new Exception("Can't use File IO stuff in webplayer");
 #endif
         }
 
@@ -735,13 +716,13 @@ namespace VRGIN.Helpers
         {
             get
             {
-                if (aIndex < 0 || aIndex >= m_List.Count)
+                if(aIndex < 0 || aIndex >= m_List.Count)
                     return new JSONLazyCreator(this);
                 return m_List[aIndex];
             }
             set
             {
-                if (aIndex < 0 || aIndex >= m_List.Count)
+                if(aIndex < 0 || aIndex >= m_List.Count)
                     m_List.Add(value);
                 else
                     m_List[aIndex] = value;
@@ -750,14 +731,11 @@ namespace VRGIN.Helpers
 
         public override JSONNode this[string aKey]
         {
-            get { return new JSONLazyCreator(this); }
-            set { m_List.Add(value); }
+            get => new JSONLazyCreator(this);
+            set => m_List.Add(value);
         }
 
-        public override int Count
-        {
-            get { return m_List.Count; }
-        }
+        public override int Count => m_List.Count;
 
         public override void Add(string aKey, JSONNode aItem)
         {
@@ -766,7 +744,7 @@ namespace VRGIN.Helpers
 
         public override JSONNode Remove(int aIndex)
         {
-            if (aIndex < 0 || aIndex >= m_List.Count)
+            if(aIndex < 0 || aIndex >= m_List.Count)
                 return null;
             JSONNode tmp = m_List[aIndex];
             m_List.RemoveAt(aIndex);
@@ -783,23 +761,23 @@ namespace VRGIN.Helpers
         {
             get
             {
-                foreach (JSONNode N in m_List)
+                foreach(JSONNode N in m_List)
                     yield return N;
             }
         }
 
         public IEnumerator GetEnumerator()
         {
-            foreach (JSONNode N in m_List)
+            foreach(JSONNode N in m_List)
                 yield return N;
         }
 
         public override string ToString()
         {
             string result = "[ ";
-            foreach (JSONNode N in m_List)
+            foreach(JSONNode N in m_List)
             {
-                if (result.Length > 2)
+                if(result.Length > 2)
                     result += ", ";
                 result += N.ToString();
             }
@@ -810,9 +788,9 @@ namespace VRGIN.Helpers
         public override string ToString(string aPrefix)
         {
             string result = "[ ";
-            foreach (JSONNode N in m_List)
+            foreach(JSONNode N in m_List)
             {
-                if (result.Length > 3)
+                if(result.Length > 3)
                     result += ", ";
                 result += "\n" + aPrefix + "   ";
                 result += N.ToString(aPrefix + "   ");
@@ -825,9 +803,9 @@ namespace VRGIN.Helpers
         {
             string s = new string(' ', (prefix + 1) * 2);
             string ret = "[ ";
-            foreach (JSONNode n in m_List)
+            foreach(JSONNode n in m_List)
             {
-                if (ret.Length > 3)
+                if(ret.Length > 3)
                     ret += ", ";
                 ret += "\n" + s;
                 ret += n.ToJSON(prefix + 1);
@@ -841,7 +819,7 @@ namespace VRGIN.Helpers
         {
             aWriter.Write((byte)JSONBinaryTag.Array);
             aWriter.Write(m_List.Count);
-            for (int i = 0; i < m_List.Count; i++)
+            for(int i = 0; i < m_List.Count; i++)
             {
                 m_List[i].Serialize(aWriter);
             }
@@ -857,14 +835,14 @@ namespace VRGIN.Helpers
         {
             get
             {
-                if (m_Dict.ContainsKey(aKey))
+                if(m_Dict.ContainsKey(aKey))
                     return m_Dict[aKey];
                 else
                     return new JSONLazyCreator(this, aKey);
             }
             set
             {
-                if (m_Dict.ContainsKey(aKey))
+                if(m_Dict.ContainsKey(aKey))
                     m_Dict[aKey] = value;
                 else
                     m_Dict.Add(aKey, value);
@@ -875,30 +853,27 @@ namespace VRGIN.Helpers
         {
             get
             {
-                if (aIndex < 0 || aIndex >= m_Dict.Count)
+                if(aIndex < 0 || aIndex >= m_Dict.Count)
                     return null;
                 return m_Dict.ElementAt(aIndex).Value;
             }
             set
             {
-                if (aIndex < 0 || aIndex >= m_Dict.Count)
+                if(aIndex < 0 || aIndex >= m_Dict.Count)
                     return;
                 string key = m_Dict.ElementAt(aIndex).Key;
                 m_Dict[key] = value;
             }
         }
 
-        public override int Count
-        {
-            get { return m_Dict.Count; }
-        }
+        public override int Count => m_Dict.Count;
 
 
         public override void Add(string aKey, JSONNode aItem)
         {
-            if (!string.IsNullOrEmpty(aKey))
+            if(!string.IsNullOrEmpty(aKey))
             {
-                if (m_Dict.ContainsKey(aKey))
+                if(m_Dict.ContainsKey(aKey))
                     m_Dict[aKey] = aItem;
                 else
                     m_Dict.Add(aKey, aItem);
@@ -909,7 +884,7 @@ namespace VRGIN.Helpers
 
         public override JSONNode Remove(string aKey)
         {
-            if (!m_Dict.ContainsKey(aKey))
+            if(!m_Dict.ContainsKey(aKey))
                 return null;
             JSONNode tmp = m_Dict[aKey];
             m_Dict.Remove(aKey);
@@ -918,7 +893,7 @@ namespace VRGIN.Helpers
 
         public override JSONNode Remove(int aIndex)
         {
-            if (aIndex < 0 || aIndex >= m_Dict.Count)
+            if(aIndex < 0 || aIndex >= m_Dict.Count)
                 return null;
             var item = m_Dict.ElementAt(aIndex);
             m_Dict.Remove(item.Key);
@@ -943,23 +918,23 @@ namespace VRGIN.Helpers
         {
             get
             {
-                foreach (KeyValuePair<string, JSONNode> N in m_Dict)
+                foreach(KeyValuePair<string, JSONNode> N in m_Dict)
                     yield return N.Value;
             }
         }
 
         public IEnumerator GetEnumerator()
         {
-            foreach (KeyValuePair<string, JSONNode> N in m_Dict)
+            foreach(KeyValuePair<string, JSONNode> N in m_Dict)
                 yield return N;
         }
 
         public override string ToString()
         {
             string result = "{";
-            foreach (KeyValuePair<string, JSONNode> N in m_Dict)
+            foreach(KeyValuePair<string, JSONNode> N in m_Dict)
             {
-                if (result.Length > 2)
+                if(result.Length > 2)
                     result += ", ";
                 result += "\"" + Escape(N.Key) + "\":" + N.Value.ToString();
             }
@@ -970,9 +945,9 @@ namespace VRGIN.Helpers
         public override string ToString(string aPrefix)
         {
             string result = "{ ";
-            foreach (KeyValuePair<string, JSONNode> N in m_Dict)
+            foreach(KeyValuePair<string, JSONNode> N in m_Dict)
             {
-                if (result.Length > 3)
+                if(result.Length > 3)
                     result += ", ";
                 result += "\n" + aPrefix + "   ";
                 result += "\"" + Escape(N.Key) + "\" : " + N.Value.ToString(aPrefix + "   ");
@@ -985,9 +960,9 @@ namespace VRGIN.Helpers
         {
             string s = new string(' ', (prefix + 1) * 2);
             string ret = "{ ";
-            foreach (KeyValuePair<string, JSONNode> n in m_Dict)
+            foreach(KeyValuePair<string, JSONNode> n in m_Dict)
             {
-                if (ret.Length > 3)
+                if(ret.Length > 3)
                     ret += ", ";
                 ret += "\n" + s;
                 ret += string.Format("\"{0}\": {1}", n.Key, n.Value.ToJSON(prefix + 1));
@@ -1000,7 +975,7 @@ namespace VRGIN.Helpers
         {
             aWriter.Write((byte)JSONBinaryTag.Class);
             aWriter.Write(m_Dict.Count);
-            foreach (string K in m_Dict.Keys)
+            foreach(string K in m_Dict.Keys)
             {
                 aWriter.Write(K);
                 m_Dict[K].Serialize(aWriter);
@@ -1016,7 +991,7 @@ namespace VRGIN.Helpers
 
         public override string Value
         {
-            get { return m_Data; }
+            get => m_Data;
             set
             {
                 m_Data = value;
@@ -1062,7 +1037,7 @@ namespace VRGIN.Helpers
 
         public override string ToJSON(int prefix)
         {
-            switch (Tag)
+            switch(Tag)
             {
                 case JSONBinaryTag.DoubleValue:
                 case JSONBinaryTag.FloatValue:
@@ -1080,21 +1055,21 @@ namespace VRGIN.Helpers
             var tmp = new JSONData("");
 
             tmp.AsInt = AsInt;
-            if (tmp.m_Data == this.m_Data)
+            if(tmp.m_Data == this.m_Data)
             {
                 aWriter.Write((byte)JSONBinaryTag.IntValue);
                 aWriter.Write(AsInt);
                 return;
             }
             tmp.AsFloat = AsFloat;
-            if (tmp.m_Data == this.m_Data)
+            if(tmp.m_Data == this.m_Data)
             {
                 aWriter.Write((byte)JSONBinaryTag.FloatValue);
                 aWriter.Write(AsFloat);
                 return;
             }
             tmp.AsDouble = AsDouble;
-            if (tmp.m_Data == this.m_Data)
+            if(tmp.m_Data == this.m_Data)
             {
                 aWriter.Write((byte)JSONBinaryTag.DoubleValue);
                 aWriter.Write(AsDouble);
@@ -1102,7 +1077,7 @@ namespace VRGIN.Helpers
             }
 
             tmp.AsBool = AsBool;
-            if (tmp.m_Data == this.m_Data)
+            if(tmp.m_Data == this.m_Data)
             {
                 aWriter.Write((byte)JSONBinaryTag.BoolValue);
                 aWriter.Write(AsBool);
@@ -1133,7 +1108,7 @@ namespace VRGIN.Helpers
 
         private void Set(JSONNode aVal)
         {
-            if (m_Key == null)
+            if(m_Key == null)
             {
                 m_Node.Add(aVal);
             }
@@ -1146,10 +1121,7 @@ namespace VRGIN.Helpers
 
         public override JSONNode this[int aIndex]
         {
-            get
-            {
-                return new JSONLazyCreator(this);
-            }
+            get => new JSONLazyCreator(this);
             set
             {
                 var tmp = new JSONArray();
@@ -1160,10 +1132,7 @@ namespace VRGIN.Helpers
 
         public override JSONNode this[string aKey]
         {
-            get
-            {
-                return new JSONLazyCreator(this, aKey);
-            }
+            get => new JSONLazyCreator(this, aKey);
             set
             {
                 var tmp = new JSONClass();
@@ -1188,7 +1157,7 @@ namespace VRGIN.Helpers
 
         public static bool operator ==(JSONLazyCreator a, object b)
         {
-            if (b == null)
+            if(b == null)
                 return true;
             return System.Object.ReferenceEquals(a, b);
         }
@@ -1200,7 +1169,7 @@ namespace VRGIN.Helpers
 
         public override bool Equals(object obj)
         {
-            if (obj == null)
+            if(obj == null)
                 return true;
             return System.Object.ReferenceEquals(this, obj);
         }

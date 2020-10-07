@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using System.Text;
 using System.Text.RegularExpressions;
 using UnityEngine;
 
@@ -33,10 +32,10 @@ namespace VRGIN.Helpers
         public static U CopyComponentFrom<T, U>(this GameObject destination, T original) where T : Component where U : T
         {
             var type = typeof(T);
-            U copy = destination.AddComponent<U>() as U;
+            U copy = destination.AddComponent<U>();
             // Copied fields can be restricted with BindingFlags
             FieldInfo[] fields = type.GetFields(BindingFlags.Instance | BindingFlags.Public);
-            foreach (FieldInfo field in fields)
+            foreach(FieldInfo field in fields)
             {
                 field.SetValue(copy, field.GetValue(original));
 
@@ -51,7 +50,7 @@ namespace VRGIN.Helpers
             T copy = destination.AddComponent(type) as T;
             // Copied fields can be restricted with BindingFlags
             FieldInfo[] fields = type.GetFields(BindingFlags.Instance | BindingFlags.Public);
-            foreach (FieldInfo field in fields)
+            foreach(FieldInfo field in fields)
             {
                 field.SetValue(copy, field.GetValue(original));
             }
@@ -68,7 +67,7 @@ namespace VRGIN.Helpers
 
         public static IEnumerable<GameObject> Children(this GameObject gameObject)
         {
-            for (int i = 0; i < gameObject.transform.childCount; i++)
+            for(int i = 0; i < gameObject.transform.childCount; i++)
             {
                 yield return gameObject.transform.GetChild(i).gameObject;
             }
@@ -76,7 +75,7 @@ namespace VRGIN.Helpers
 
         public static IEnumerable<Transform> Children(this Transform transform)
         {
-            for (int i = 0; i < transform.childCount; i++)
+            for(int i = 0; i < transform.childCount; i++)
             {
                 yield return transform.GetChild(i);
             }
@@ -86,7 +85,7 @@ namespace VRGIN.Helpers
         {
             var t = transform;
 
-            while (t.parent)
+            while(t.parent)
             {
                 t = t.parent;
                 yield return t;
@@ -103,13 +102,13 @@ namespace VRGIN.Helpers
             Queue<GameObject> queue = new Queue<GameObject>();
             queue.Enqueue(gameObject);
 
-            while (queue.Count > 0)
+            while(queue.Count > 0)
             {
                 var obj = queue.Dequeue();
 
 
                 // Enqueue children
-                foreach (var child in obj.Children())
+                foreach(var child in obj.Children())
                 {
                     yield return child;
                     queue.Enqueue(child);

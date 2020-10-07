@@ -1,7 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using UnityEngine;
 
 namespace VRGIN.Core
@@ -24,19 +22,15 @@ namespace VRGIN.Core
         /// <summary>
         /// Gets a list of actors in the game. Used frequently.
         /// </summary>
-        public virtual IEnumerable<IActor> Actors { get
+        public virtual IEnumerable<IActor> Actors
+        {
+            get
             {
                 yield break;
             }
         }
 
-        public virtual bool IsEveryoneHeaded
-        {
-            get
-            {
-                return Actors.All(a => a.HasHead);
-            }
-        }
+        public virtual bool IsEveryoneHeaded => Actors.All(a => a.HasHead);
 
         protected override void OnLevel(int level)
         {
@@ -58,7 +52,7 @@ namespace VRGIN.Core
         {
             var actors = Actors.ToList();
             var currentlyImpersonated = FindImpersonatedActor();
-            
+
             if(currentlyImpersonated != null)
             {
                 actors.Remove(currentlyImpersonated);
@@ -97,7 +91,8 @@ namespace VRGIN.Core
             if(camera.name.Contains("VRGIN") || camera.name == "poseUpdater")
             {
                 return CameraJudgement.Ignore;
-            } else
+            }
+            else
             {
                 return JudgeCameraInternal(camera);
             }
@@ -106,13 +101,13 @@ namespace VRGIN.Core
         protected virtual CameraJudgement JudgeCameraInternal(Camera camera)
         {
             bool guiInterested = VR.GUI.IsInterested(camera);
-            if (camera.targetTexture == null)
+            if(camera.targetTexture == null)
             {
-                if (guiInterested)
+                if(guiInterested)
                 {
                     return CameraJudgement.GUIAndCamera;
                 }
-                else if (camera.CompareTag("MainCamera"))
+                else if(camera.CompareTag("MainCamera"))
                 {
                     return CameraJudgement.MainCamera;
                 }
@@ -156,13 +151,7 @@ namespace VRGIN.Core
         /// <summary>
         /// Gets the default culling mask that is always shown. Use <see cref="VRCamera.UpdateCameraConfig"/> to enforce a refresh.
         /// </summary>
-        public virtual int DefaultCullingMask
-        {
-            get
-            {
-                return LayerMask.GetMask("Default");
-            }
-        }
+        public virtual int DefaultCullingMask => LayerMask.GetMask("Default");
 
         /// <summary>
         /// Whether or not it's save to disable this camera.

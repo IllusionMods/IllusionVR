@@ -11,8 +11,8 @@ namespace VRGIN.Helpers
     /// </summary>
     public class DefaultContext : IVRManagerContext
     {
-        IMaterialPalette _Materials;
-        VRSettings _Settings;
+        private IMaterialPalette _Materials;
+        private VRSettings _Settings;
 
         public DefaultContext()
         {

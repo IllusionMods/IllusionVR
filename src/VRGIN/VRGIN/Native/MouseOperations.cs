@@ -1,6 +1,4 @@
-﻿using System;
-using System.Runtime.InteropServices;
-using static VRGIN.Native.WindowsInterop;
+﻿using static VRGIN.Native.WindowsInterop;
 
 namespace VRGIN.Native
 {
@@ -33,9 +31,8 @@ namespace VRGIN.Native
 
         public static POINT GetCursorPosition()
         {
-            POINT currentMousePoint;
-            var gotPoint = GetCursorPos(out currentMousePoint);
-            if (!gotPoint) { currentMousePoint = new POINT(0, 0); }
+            var gotPoint = GetCursorPos(out POINT currentMousePoint);
+            if(!gotPoint) { currentMousePoint = new POINT(0, 0); }
             return currentMousePoint;
         }
 

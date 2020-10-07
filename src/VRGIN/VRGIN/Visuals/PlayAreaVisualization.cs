@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using UnityEngine;
+﻿using UnityEngine;
 using Valve.VR;
 using VRGIN.Core;
 
@@ -11,17 +7,17 @@ namespace VRGIN.U46.Visuals
     public class PlayAreaVisualization : ProtectedBehaviour
     {
         public PlayArea Area = new PlayArea();
-        SteamVR_PlayArea PlayArea;
-        Transform Indicator;
-        Transform DirectionIndicator;
-        Transform HeightIndicator;
+        private SteamVR_PlayArea PlayArea;
+        private Transform Indicator;
+        private Transform DirectionIndicator;
+        private Transform HeightIndicator;
 
         protected override void OnAwake()
         {
             base.OnAwake();
 
             CreateArea();
-            
+
             Indicator = GameObject.CreatePrimitive(PrimitiveType.Sphere).transform;
             Indicator.SetParent(transform, false);
 
@@ -29,7 +25,7 @@ namespace VRGIN.U46.Visuals
             HeightIndicator.SetParent(transform, false);
 
 
-            foreach (var indicator in new Transform[] { Indicator, HeightIndicator })
+            foreach(var indicator in new Transform[] { Indicator, HeightIndicator })
             {
                 var renderer = indicator.GetComponent<Renderer>();
                 renderer.material = Resources.GetBuiltinResource<Material>("Sprites-Default.mat");
@@ -66,10 +62,10 @@ namespace VRGIN.U46.Visuals
             return model.transform;
         }
 
-        internal static PlayAreaVisualization Create(PlayArea playArea=null)
+        internal static PlayAreaVisualization Create(PlayArea playArea = null)
         {
             var visualization = new GameObject("Play Area Viszalization").AddComponent<PlayAreaVisualization>();
-            if (playArea != null)
+            if(playArea != null)
             {
                 visualization.Area = playArea;
             }
@@ -81,8 +77,9 @@ namespace VRGIN.U46.Visuals
             base.OnStart();
 
         }
-        
-        protected virtual void OnEnable() {
+
+        protected virtual void OnEnable()
+        {
             PlayArea.BuildMesh();
         }
 
@@ -150,14 +147,14 @@ namespace VRGIN.U46.Visuals
             {
                 base.OnUpdate();
 
-                if (!NewParent && !this.enabled)
+                if(!NewParent && !this.enabled)
                 {
                     DestroyImmediate(gameObject);
                 }
 
-                if (GetComponent<Renderer>())
+                if(GetComponent<Renderer>())
                 {
-                    if (NewParent)
+                    if(NewParent)
                     {
                         // Done loading!
                         transform.SetParent(NewParent, false);

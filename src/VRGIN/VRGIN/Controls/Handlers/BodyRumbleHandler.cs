@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using UnityEngine;
+﻿using UnityEngine;
 using VRGIN.Core;
 using VRGIN.Helpers;
 
@@ -45,12 +41,12 @@ namespace VRGIN.Controls.Handlers
 
         protected void OnTriggerEnter(Collider collider)
         {
-            if (VR.Interpreter.IsBody(collider))
+            if(VR.Interpreter.IsBody(collider))
             {
                 _TouchCounter++;
 
                 _Controller.StartRumble(_Rumble);
-                if (_TouchCounter == 1)
+                if(_TouchCounter == 1)
                 {
                     _Controller.StartRumble(new RumbleImpulse(1000));
                 }
@@ -59,11 +55,11 @@ namespace VRGIN.Controls.Handlers
 
         protected void OnTriggerExit(Collider collider)
         {
-            if (VR.Interpreter.IsBody(collider))
+            if(VR.Interpreter.IsBody(collider))
             {
                 _TouchCounter--;
 
-                if (_TouchCounter == 0)
+                if(_TouchCounter == 0)
                 {
                     _Controller.StopRumble(_Rumble);
                 }
@@ -73,7 +69,7 @@ namespace VRGIN.Controls.Handlers
         protected void OnStop()
         {
             _TouchCounter = 0;
-            if (_Controller)
+            if(_Controller)
             {
                 _Controller.StopRumble(_Rumble);
             }

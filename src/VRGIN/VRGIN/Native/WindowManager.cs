@@ -4,7 +4,6 @@ using System.Diagnostics;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
-using UnityEngine;
 using VRGIN.Core;
 using static VRGIN.Native.WindowsInterop;
 
@@ -16,11 +15,10 @@ namespace VRGIN.Native
         {
             List<IntPtr> rootWindows = GetChildWindows(IntPtr.Zero);
             List<IntPtr> dsProcRootWindows = new List<IntPtr>();
-            foreach (IntPtr hWnd in rootWindows)
+            foreach(IntPtr hWnd in rootWindows)
             {
-                uint lpdwProcessId;
-                WindowsInterop.GetWindowThreadProcessId(hWnd, out lpdwProcessId);
-                if (lpdwProcessId == pid)
+                WindowsInterop.GetWindowThreadProcessId(hWnd, out uint lpdwProcessId);
+                if(lpdwProcessId == pid)
                     dsProcRootWindows.Add(hWnd);
             }
             return dsProcRootWindows;
@@ -37,7 +35,7 @@ namespace VRGIN.Native
             }
             finally
             {
-                if (listHandle.IsAllocated)
+                if(listHandle.IsAllocated)
                     listHandle.Free();
             }
             return result;
@@ -47,7 +45,7 @@ namespace VRGIN.Native
         {
             GCHandle gch = GCHandle.FromIntPtr(pointer);
             List<IntPtr> list = gch.Target as List<IntPtr>;
-            if (list == null)
+            if(list == null)
             {
                 throw new InvalidCastException("GCHandle Target could not be cast as List<IntPtr>");
             }
@@ -67,7 +65,7 @@ namespace VRGIN.Native
                     RECT rect = new RECT();
                     var name = Process.GetCurrentProcess().ProcessName;
                     var handles = GetRootWindowsOfProcess(Process.GetCurrentProcess().Id);
-                    foreach (var handle in handles)
+                    foreach(var handle in handles)
                     {
                         if(GetWindowRect(handle, ref rect) && (rect.Right - rect.Left) > currentWidth)
                         {
@@ -86,7 +84,7 @@ namespace VRGIN.Native
                 return _Handle.Value;
             }
         }
-        
+
         public static string GetWindowText(IntPtr hWnd)
         {
             // Allocate correct string length first

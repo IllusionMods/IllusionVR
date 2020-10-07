@@ -15,7 +15,7 @@ namespace CapturePanorama
         public static Mesh BuildIcosphere(float radius, int iterations)
         {
             Mesh result = BuildIcosahedron(radius);
-            for (int i = 0; i < iterations; i++)
+            for(int i = 0; i < iterations; i++)
                 Refine(result);
             return result;
         }
@@ -33,20 +33,20 @@ namespace CapturePanorama
                 new Vector3( 1.0f,     t,  0.0f),
                 new Vector3(-1.0f,    -t,  0.0f),
                 new Vector3( 1.0f,    -t,  0.0f),
-	
-    	        new Vector3( 0.0f, -1.0f,     t),
+
+                new Vector3( 0.0f, -1.0f,     t),
                 new Vector3( 0.0f,  1.0f,     t),
                 new Vector3( 0.0f, -1.0f,    -t),
                 new Vector3( 0.0f,  1.0f,    -t),
-	
-	            new Vector3(    t,  0.0f, -1.0f),
+
+                new Vector3(    t,  0.0f, -1.0f),
                 new Vector3(    t,  0.0f,  1.0f),
                 new Vector3(   -t,  0.0f, -1.0f),
                 new Vector3(   -t,  0.0f,  1.0f),
             };
 
             float scale = radius / new Vector3(1.0f, t, 0.0f).magnitude;
-            for (int i = 0; i < vertices.Length; i++)
+            for(int i = 0; i < vertices.Length; i++)
                 vertices[i] *= scale;
 
             result.vertices = vertices;

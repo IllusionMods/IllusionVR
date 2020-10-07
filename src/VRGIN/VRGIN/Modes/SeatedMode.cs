@@ -1,15 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Linq;
-using System.Text;
 //using Leap;
 using UnityEngine;
 using Valve.VR;
 using VRGIN.Controls;
 using VRGIN.Controls.Tools;
 using VRGIN.Core;
-using VRGIN.Helpers;
 using VRGIN.Visuals;
 using static VRGIN.Visuals.GUIMonitor;
 
@@ -33,8 +30,8 @@ namespace VRGIN.Modes
         protected override void OnStart()
         {
             base.OnStart();
-            
-            if (_IsFirstStart)
+
+            if(_IsFirstStart)
             {
                 VR.Camera.SteamCam.origin.transform.position = new Vector3(0, 0, 0);
                 Recenter();
@@ -43,7 +40,7 @@ namespace VRGIN.Modes
 
             Monitor = GUIMonitor.Create();
             Monitor.transform.SetParent(VR.Camera.SteamCam.origin, false);
-            
+
             OpenVR.ChaperoneSetup.SetWorkingPlayAreaSize(1000, 1000); // Make it really big
             //OpenVR.Chaperone.ForceBoundsVisible(false);
         }
@@ -73,13 +70,13 @@ namespace VRGIN.Modes
             base.OnUpdate();
 
             // Move origin
-            if (VR.Camera.HasValidBlueprint && VR.Camera.Blueprint)
+            if(VR.Camera.HasValidBlueprint && VR.Camera.Blueprint)
             {
-                if (LockTarget != null && LockTarget.IsValid)
+                if(LockTarget != null && LockTarget.IsValid)
                 {
                     VR.Camera.Blueprint.transform.position = LockTarget.Eyes.position;
 
-                    if (LockMode == ImpersonationMode.Approximately)
+                    if(LockMode == ImpersonationMode.Approximately)
                     {
                         VR.Camera.Blueprint.transform.eulerAngles = new Vector3(0, LockTarget.Eyes.eulerAngles.y, 0);
                     }
@@ -91,7 +88,7 @@ namespace VRGIN.Modes
 
                 VR.Camera.SteamCam.origin.transform.position = VR.Camera.Blueprint.transform.position;
 
-                if ((VR.Settings.PitchLock && LockTarget == null))
+                if((VR.Settings.PitchLock && LockTarget == null))
                 {
                     VR.Camera.SteamCam.origin.transform.eulerAngles = new Vector3(0, VR.Camera.Blueprint.transform.eulerAngles.y, 0);
 
@@ -130,21 +127,9 @@ namespace VRGIN.Modes
             Destroy(Monitor.gameObject);
         }
 
-        public override IEnumerable<Type> Tools
-        {
-            get
-            {
-                return base.Tools.Concat(new Type[] { typeof(MenuTool) });
-            }
-        }
+        public override IEnumerable<Type> Tools => base.Tools.Concat(new Type[] { typeof(MenuTool) });
 
-        public override ETrackingUniverseOrigin TrackingOrigin
-        {
-            get
-            {
-                return ETrackingUniverseOrigin.TrackingUniverseSeated;
-            }
-        }
+        public override ETrackingUniverseOrigin TrackingOrigin => ETrackingUniverseOrigin.TrackingUniverseSeated;
 
 
         protected override IEnumerable<IShortcut> CreateShortcuts()

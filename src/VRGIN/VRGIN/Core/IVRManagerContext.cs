@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using UnityEngine;
 using VRGIN.Visuals;
 
@@ -70,7 +67,7 @@ namespace VRGIN.Core
         /// Gets an enum type that contains a list of voice commands that you can listen to. Return <see cref="VRGIN.Controls.Speech.VoiceCommand"/> if not used.
         /// </summary>
         Type VoiceCommandType { get; }
-        
+
         /// <summary>
         /// Gets the near clip plane for the GUI camera. [e.g. 0]
         /// </summary>

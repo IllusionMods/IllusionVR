@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using UnityEngine;
 using Valve.VR;
 using VRGIN.Controls;
@@ -29,11 +26,11 @@ namespace VRGIN.Helpers
             _Shortcut = new MultiKeyboardShortcut(VR.Settings.Capture.Shortcut, delegate
             {
 
-                if (!Capturing)
+                if(!Capturing)
                 {
                     string filenameBase = String.Format("{0}_{1:yyyy-MM-dd_HH-mm-ss-fff}", Application.productName, DateTime.Now);
                     VRLog.Info("Panorama capture key pressed, capturing " + filenameBase);
-                    CaptureScreenshotAsync(filenameBase);;
+                    CaptureScreenshotAsync(filenameBase); ;
                 }
             });
 
@@ -57,7 +54,7 @@ namespace VRGIN.Helpers
         {
             base.OnDestroy();
 
-            if (_Camera)
+            if(_Camera)
             {
                 Destroy(_Camera.gameObject);
             }
@@ -65,7 +62,7 @@ namespace VRGIN.Helpers
 
         public override bool OnCaptureStart()
         {
-            if (!_Camera)
+            if(!_Camera)
             {
                 // Clone camera if need be
                 _Camera = VR.Camera.Clone(VR.Settings.Capture.WithEffects);
@@ -80,15 +77,16 @@ namespace VRGIN.Helpers
             // Set camera position & orientation
             _Camera.transform.position = VR.Camera.Head.position;
 
-            if (VR.Settings.Capture.SetCameraUpright)
+            if(VR.Settings.Capture.SetCameraUpright)
             {
                 var forward = Vector3.ProjectOnPlane(VR.Camera.Head.forward, Vector3.up).normalized;
-                if (forward.magnitude < 0.1)
+                if(forward.magnitude < 0.1)
                 {
                     forward = Vector3.forward;
                 }
                 _Camera.transform.rotation = Quaternion.LookRotation(forward);
-            } else
+            }
+            else
             {
                 _Camera.transform.rotation = VR.Camera.Head.rotation;
             }
@@ -96,7 +94,7 @@ namespace VRGIN.Helpers
             //if(VR.Settings.Capture.HideControllers)
             //{
             //}
-            
+
             return true;
         }
 

@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using UnityEngine;
 
 namespace VRGIN.Core
@@ -9,7 +8,7 @@ namespace VRGIN.Core
     /// <summary>
     /// Keeps all Behaviours on a GameObject disabled except for Transform.
     /// </summary>
-    class WhitelistThrottler : ProtectedBehaviour
+    internal class WhitelistThrottler : ProtectedBehaviour
     {
         /// <summary>
         /// Components that should not be disabled.
@@ -25,7 +24,7 @@ namespace VRGIN.Core
 
         protected override void OnUpdate()
         {
-            foreach (var behaviour in GetComponents<Behaviour>().Where(c => !Exceptions.Contains(c.GetType())))
+            foreach(var behaviour in GetComponents<Behaviour>().Where(c => !Exceptions.Contains(c.GetType())))
             {
                 behaviour.enabled = false;
             }
@@ -33,7 +32,7 @@ namespace VRGIN.Core
         }
     }
 
-    class BlacklistThrottler : ProtectedBehaviour
+    internal class BlacklistThrottler : ProtectedBehaviour
     {
         /// <summary>
         /// Components that should be disabled.
@@ -48,7 +47,7 @@ namespace VRGIN.Core
 
         protected override void OnUpdate()
         {
-            foreach (var behaviour in GetComponents<Behaviour>().Where(c => Targets.Contains(c.GetType())))
+            foreach(var behaviour in GetComponents<Behaviour>().Where(c => Targets.Contains(c.GetType())))
             {
                 behaviour.enabled = false;
             }

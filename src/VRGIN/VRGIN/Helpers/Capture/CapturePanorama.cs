@@ -20,7 +20,6 @@ using ImageLockMode = System.Drawing.Imaging.ImageLockMode;
 using PixelFormat = System.Drawing.Imaging.PixelFormat;
 using Process = System.Diagnostics.Process;
 using Rectangle = System.Drawing.Rectangle;
-using VRGIN.Helpers;
 //#if UNITY_5_1
 //using UnityEngine.VR;
 //#endif
@@ -64,47 +63,44 @@ namespace CapturePanorama
         public enum ImageFormat { PNG, JPEG, BMP };
         public enum AntiAliasing { _1 = 1, _2 = 2, _4 = 4, _8 = 8 };
 
-        string apiUrl = "http://alpha.vrchive.com/api/1/";
-        string apiKey = "0b26e4dca20793a83fd92ad83e3e859e";
-
-        GameObject[] camGos;
-        Camera cam;
-        ImageEffectCopyCamera copyCameraScript;
-
-        bool capturingEveryFrame = false;
-        bool usingGpuTransform;
-        CubemapFace[] faces;
-        int panoramaHeight, cameraWidth, cameraHeight;
-        RenderTexture cubemapRenderTexture = null;
-        Texture2D forceWaitTexture;
-        int convertPanoramaKernelIdx = -1, convertPanoramaYPositiveKernelIdx = -1, convertPanoramaYNegativeKernelIdx = -1, textureToBufferIdx = -1, renderStereoIdx = -1;
-        int[] convertPanoramaKernelIdxs;
-        byte[] imageFileBytes;
-        string videoBaseName = "";
+        private string apiUrl = "http://alpha.vrchive.com/api/1/";
+        private string apiKey = "0b26e4dca20793a83fd92ad83e3e859e";
+        private GameObject[] camGos;
+        private Camera cam;
+        private ImageEffectCopyCamera copyCameraScript;
+        private bool capturingEveryFrame = false;
+        private bool usingGpuTransform;
+        private CubemapFace[] faces;
+        private int panoramaHeight, cameraWidth, cameraHeight;
+        private RenderTexture cubemapRenderTexture = null;
+        private Texture2D forceWaitTexture;
+        private int convertPanoramaKernelIdx = -1, convertPanoramaYPositiveKernelIdx = -1, convertPanoramaYNegativeKernelIdx = -1, textureToBufferIdx = -1, renderStereoIdx = -1;
+        private int[] convertPanoramaKernelIdxs;
+        private byte[] imageFileBytes;
+        private string videoBaseName = "";
         private int frameNumber;
-        const int ResultBufferSlices = 8; // Makes result buffer same pixel count as a cubemap texture
-        float hFov = -1.0f, vFov = -1.0f, hFovAdjustDegrees = -1.0f, vFovAdjustDegrees = -1.0f, circleRadius = -1.0f;
-        int threadsX = 32, threadsY = 32; // Must match all shaders
-        int numCameras;
-        const int CamerasPerCirclePoint = 4;
-        uint[] cameraPixels = null;
-        uint[] resultPixels = null;
-        float tanHalfHFov, tanHalfVFov, hFovAdjust, vFovAdjust;
-        int overlapTextures;
-        bool initializeFailed = true;
-        AudioSource audioSource;
-
-        const uint BufferSentinelValue = 1419455993; // Must match value in TextureToBufferShader.compute
+        private const int ResultBufferSlices = 8; // Makes result buffer same pixel count as a cubemap texture
+        private float hFov = -1.0f, vFov = -1.0f, hFovAdjustDegrees = -1.0f, vFovAdjustDegrees = -1.0f, circleRadius = -1.0f;
+        private int threadsX = 32, threadsY = 32; // Must match all shaders
+        private int numCameras;
+        private const int CamerasPerCirclePoint = 4;
+        private uint[] cameraPixels = null;
+        private uint[] resultPixels = null;
+        private float tanHalfHFov, tanHalfVFov, hFovAdjust, vFovAdjust;
+        private int overlapTextures;
+        private bool initializeFailed = true;
+        private AudioSource audioSource;
+        private const uint BufferSentinelValue = 1419455993; // Must match value in TextureToBufferShader.compute
 
         // If any of these change, have to call Reinitialize()
-        int lastConfiguredPanoramaWidth, lastConfiguredNumCirclePoints, lastConfiguredSsaaFactor;
-        float lastConfiguredInterpupillaryDistance;
-        bool lastConfiguredCaptureStereoscopic, lastConfiguredSaveCubemap, lastConfiguredUseGpuTransform;
-        AntiAliasing lastConfiguredAntiAliasing = AntiAliasing._1;
+        private int lastConfiguredPanoramaWidth, lastConfiguredNumCirclePoints, lastConfiguredSsaaFactor;
+        private float lastConfiguredInterpupillaryDistance;
+        private bool lastConfiguredCaptureStereoscopic, lastConfiguredSaveCubemap, lastConfiguredUseGpuTransform;
+        private AntiAliasing lastConfiguredAntiAliasing = AntiAliasing._1;
 
-        DrawingImageFormat FormatToDrawingFormat(ImageFormat format)
+        private DrawingImageFormat FormatToDrawingFormat(ImageFormat format)
         {
-            switch (format)
+            switch(format)
             {
                 case ImageFormat.PNG: return DrawingImageFormat.Png;
                 case ImageFormat.JPEG: return DrawingImageFormat.Jpeg;
@@ -113,9 +109,9 @@ namespace CapturePanorama
             }
         }
 
-        string FormatMimeType(ImageFormat format)
+        private string FormatMimeType(ImageFormat format)
         {
-            switch (format)
+            switch(format)
             {
                 case ImageFormat.PNG: return "image/png";
                 case ImageFormat.JPEG: return "image/jpeg";
@@ -124,9 +120,9 @@ namespace CapturePanorama
             }
         }
 
-        string FormatToExtension(ImageFormat format)
+        private string FormatToExtension(ImageFormat format)
         {
-            switch (format)
+            switch(format)
             {
                 case ImageFormat.PNG: return "png";
                 case ImageFormat.JPEG: return "jpg";
@@ -135,11 +131,11 @@ namespace CapturePanorama
             }
         }
 
-        static CapturePanorama instance;
+        private static CapturePanorama instance;
 
         protected override void OnAwake()
         {
-            if (instance == null)
+            if(instance == null)
                 instance = this;
             else
                 Debug.LogError("More than one CapturePanorama instance detected.");
@@ -158,7 +154,7 @@ namespace CapturePanorama
 
         // A function from [-1, 1] to [0, 1] which has f(0)=1, f(-1)=f(1)=0,
         // is symmetric around the y axis, and is smooth near x=0
-        float IpdScaleFunction(float latitudeNormalized)
+        private float IpdScaleFunction(float latitudeNormalized)
         {
             // return 1.0f; // Most basic, has discontinuities at poles
             // return 1 - latitudeNormalized * latitudeNormalized;
@@ -182,16 +178,16 @@ namespace CapturePanorama
 
             Destroy(copyCameraScript);
             Destroy(cam);
-            if (camGos != null)
-                for (int i = camGos.Length - 1; i >= 0; i--)
-                    if (camGos[i] != null)
+            if(camGos != null)
+                for(int i = camGos.Length - 1; i >= 0; i--)
+                    if(camGos[i] != null)
                         Destroy(camGos[i]);
             camGos = null;
 
             numCameras = -1;
             hFov = vFov = -1.0f;
 
-            if (cubemapRenderTexture != null)
+            if(cubemapRenderTexture != null)
                 Destroy(cubemapRenderTexture);
             cubemapRenderTexture = null;
 
@@ -200,31 +196,31 @@ namespace CapturePanorama
 
             resultPixels = cameraPixels = null;
 
-            if (forceWaitTexture != null)
+            if(forceWaitTexture != null)
                 Destroy(forceWaitTexture);
             forceWaitTexture = new Texture2D(1, 1);
         }
 
-        void Reinitialize()
+        private void Reinitialize()
         {
             try
             {
                 ReinitializeBody();
             }
-            catch (Exception)
+            catch(Exception)
             {
                 Cleanup();
                 throw;
             }
         }
 
-        void ReinitializeBody()
+        private void ReinitializeBody()
         {
             Log("Settings changed, calling Reinitialize()");
 
             initializeFailed = true;
 
-            if (!SystemInfo.supportsComputeShaders)
+            if(!SystemInfo.supportsComputeShaders)
             {
                 Debug.LogWarning("CapturePanorama requires compute shaders. Your system does not support them. " +
                     "On PC, compute shaders require DirectX 11, Windows Vista or later, and a GPU capable of Shader Model 5.0.");
@@ -255,11 +251,11 @@ namespace CapturePanorama
             // We have a tower of 3 nested GameObjects. First gets the original camera position,
             // second gets the eye rotation/position relative to it, and third holds the camera with default position/rotation.
             camGos = new GameObject[3];
-            for (int i = 0; i < 3; i++)
+            for(int i = 0; i < 3; i++)
             {
                 camGos[i] = new GameObject("PanoramaCaptureCamera" + i);
                 camGos[i].hideFlags = HideFlags.HideAndDontSave;
-                if (i > 0) camGos[i].transform.parent = camGos[i - 1].transform;
+                if(i > 0) camGos[i].transform.parent = camGos[i - 1].transform;
             }
 
             camGos[2].AddComponent<Camera>();
@@ -271,7 +267,7 @@ namespace CapturePanorama
 
             numCameras = faces.Length;
             hFov = vFov = 90.0f;
-            if (captureStereoscopic)
+            if(captureStereoscopic)
             {
                 // For stereoscopic rendering, there are a set of points lying on a horizontal circle around the origin.
                 // Will have four cameras per circle point, one turned left 45 deg, one turned right 45 deg,
@@ -308,7 +304,7 @@ namespace CapturePanorama
             cubemapRenderTexture.antiAliasing = (int)antiAliasing;
             cubemapRenderTexture.Create();
 
-            if (usingGpuTransform)
+            if(usingGpuTransform)
             {
                 convertPanoramaKernelIdx = convertPanoramaShader.FindKernel("CubeMapToEquirectangular");
                 convertPanoramaYPositiveKernelIdx = convertPanoramaShader.FindKernel("CubeMapToEquirectangularPositiveY");
@@ -333,7 +329,7 @@ namespace CapturePanorama
 
             renderStereoIdx = convertPanoramaStereoShader.FindKernel("RenderStereo");
 
-            if ((saveCubemap || !usingGpuTransform) &&
+            if((saveCubemap || !usingGpuTransform) &&
                 (cameraPixels == null || cameraPixels.Length != numCameras * cameraWidth * cameraHeight))
             {
                 // Allocate once to avoid GC fragmentation
@@ -345,7 +341,7 @@ namespace CapturePanorama
             hFovAdjust = hFovAdjustDegrees * (2 * Mathf.PI) / 360.0f;
             vFovAdjust = vFovAdjustDegrees * (2 * Mathf.PI) / 360.0f;
 
-            if (captureStereoscopic && usingGpuTransform)
+            if(captureStereoscopic && usingGpuTransform)
             {
                 convertPanoramaStereoShader.SetFloat("tanHalfHFov", tanHalfHFov);
                 convertPanoramaStereoShader.SetFloat("tanHalfVFov", tanHalfVFov);
@@ -364,11 +360,11 @@ namespace CapturePanorama
             initializeFailed = false;
         }
 
-        void Log(string s)
+        private void Log(string s)
         {
             VRLog.Info(s);
 
-            if (enableDebugging)
+            if(enableDebugging)
                 Debug.Log(s, this);
         }
 
@@ -376,22 +372,22 @@ namespace CapturePanorama
         {
             bool captureKeyPressed = Input.GetKeyDown(captureKey);
             //VRLog.Info("{0}:{1}", captureKey, captureKeyPressed);
-            if (initializeFailed || panoramaWidth < 4 || (captureStereoscopic && numCirclePoints < 8)) // Can occur temporarily while modifying properties in editor
+            if(initializeFailed || panoramaWidth < 4 || (captureStereoscopic && numCirclePoints < 8)) // Can occur temporarily while modifying properties in editor
             {
-                if (captureKeyPressed)
+                if(captureKeyPressed)
                 {
-                    if (panoramaWidth < 4)
+                    if(panoramaWidth < 4)
                         Debug.LogError("Panorama Width must be at least 4. No panorama captured.");
-                    if (captureStereoscopic && numCirclePoints < 8)
+                    if(captureStereoscopic && numCirclePoints < 8)
                         Debug.LogError("Num Circle Points must be at least 8. No panorama captured.");
-                    if (initializeFailed)
+                    if(initializeFailed)
                         Debug.LogError("Initialization of Capture Panorama script failed. Cannot capture content.");
-                    if (failSound != null && Camera.main != null)
+                    if(failSound != null && Camera.main != null)
                         audioSource.PlayOneShot(failSound);
                 }
                 return;
             }
-            if (captureStereoscopic != lastConfiguredCaptureStereoscopic ||
+            if(captureStereoscopic != lastConfiguredCaptureStereoscopic ||
                 panoramaWidth != lastConfiguredPanoramaWidth ||
                 interpupillaryDistance != lastConfiguredInterpupillaryDistance ||
                 numCirclePoints != lastConfiguredNumCirclePoints ||
@@ -403,9 +399,9 @@ namespace CapturePanorama
                 Reinitialize();
             }
 
-            if (capturingEveryFrame)
+            if(capturingEveryFrame)
             {
-                if (captureKey != KeyCode.None && captureKeyPressed || (maxFramesToRecord > 0 && frameNumber >= maxFramesToRecord))
+                if(captureKey != KeyCode.None && captureKeyPressed || (maxFramesToRecord > 0 && frameNumber >= maxFramesToRecord))
                 {
                     StopCaptureEveryFrame();
                 }
@@ -415,9 +411,9 @@ namespace CapturePanorama
                     frameNumber += 1;
                 }
             }
-            else if (captureKey != KeyCode.None && captureKeyPressed && !Capturing)
+            else if(captureKey != KeyCode.None && captureKeyPressed && !Capturing)
             {
-                if (captureEveryFrame)
+                if(captureEveryFrame)
                 {
                     StartCaptureEveryFrame();
                 }
@@ -448,7 +444,7 @@ namespace CapturePanorama
         public void CaptureScreenshotSync(string filenameBase)
         {
             var enumerator = CaptureScreenshotAsyncHelper(filenameBase, /*async*/false);
-            while (enumerator.MoveNext()) { }
+            while(enumerator.MoveNext()) { }
         }
 
 
@@ -459,13 +455,12 @@ namespace CapturePanorama
         }
 
         internal bool Capturing;
+        private static List<Process> resizingProcessList = new List<Process>();
+        private static List<string> resizingFilenames = new List<string>();
 
-        static List<Process> resizingProcessList = new List<Process>();
-        static List<string> resizingFilenames = new List<string>();
-
-        void SetFadersEnabled(IEnumerable<ScreenFadeControl> fadeControls, bool value)
+        private void SetFadersEnabled(IEnumerable<ScreenFadeControl> fadeControls, bool value)
         {
-            foreach (ScreenFadeControl fadeControl in fadeControls)
+            foreach(ScreenFadeControl fadeControl in fadeControls)
                 fadeControl.enabled = value;
         }
 
@@ -478,7 +473,7 @@ namespace CapturePanorama
             color.a = 0.0f;
             fadeMaterial.color = color;
             SetFadersEnabled(fadeControls, true);
-            while (elapsedTime < fadeTime)
+            while(elapsedTime < fadeTime)
             {
                 yield return new WaitForEndOfFrame();
                 elapsedTime += Time.deltaTime;
@@ -492,7 +487,7 @@ namespace CapturePanorama
             Log("Fading back in");
             float elapsedTime = 0.0f;
             Color color = fadeMaterial.color = fadeColor;
-            while (elapsedTime < fadeTime)
+            while(elapsedTime < fadeTime)
             {
                 yield return new WaitForEndOfFrame();
                 elapsedTime += Time.deltaTime;
@@ -505,12 +500,12 @@ namespace CapturePanorama
 
         public IEnumerator CaptureScreenshotAsyncHelper(string filenameBase, bool async)
         {
-            if (async)
-                while (Capturing)
+            if(async)
+                while(Capturing)
                     yield return null; // If CaptureScreenshot() was called programmatically multiple times, serialize the coroutines
             Capturing = true;
 
-            if (!OnCaptureStart())
+            if(!OnCaptureStart())
             {
                 audioSource.PlayOneShot(failSound);
                 Capturing = false;
@@ -521,7 +516,7 @@ namespace CapturePanorama
             Camera[] cameras = GetCaptureCameras();
             Array.Sort(cameras, (x, y) => x.depth.CompareTo(y.depth));
 
-            if (cameras.Length == 0)
+            if(cameras.Length == 0)
             {
                 Debug.LogWarning("No cameras found to capture");
                 audioSource.PlayOneShot(failSound);
@@ -531,11 +526,11 @@ namespace CapturePanorama
 
 
             // Need to do this first in case we need to reinitialize
-            if (antiAliasing != AntiAliasing._1)
+            if(antiAliasing != AntiAliasing._1)
             {
-                foreach (Camera c in cameras)
+                foreach(Camera c in cameras)
                 {
-                    if (c.actualRenderingPath == RenderingPath.DeferredLighting ||
+                    if(c.actualRenderingPath == RenderingPath.DeferredLighting ||
                         c.actualRenderingPath == RenderingPath.DeferredShading)
                     {
                         Debug.LogWarning("CapturePanorama: Setting Anti Aliasing=1 because at least one camera in deferred mode. Use SSAA setting or Antialiasing image effect if needed.");
@@ -547,15 +542,15 @@ namespace CapturePanorama
             }
 
             Log("Starting panorama capture");
-            if (!captureEveryFrame && startSound != null && Camera.main != null)
+            if(!captureEveryFrame && startSound != null && Camera.main != null)
             {
                 audioSource.PlayOneShot(startSound);
             }
 
             List<ScreenFadeControl> fadeControls = new List<ScreenFadeControl>();
-            foreach (Camera c in Camera.allCameras)
+            foreach(Camera c in Camera.allCameras)
             {
-                if (c.isActiveAndEnabled && c.targetTexture == null) // Is a camera visible to the player
+                if(c.isActiveAndEnabled && c.targetTexture == null) // Is a camera visible to the player
                 {
                     var fadeControl = c.gameObject.AddComponent<ScreenFadeControl>();
                     fadeControl.fadeMaterial = fadeMaterial;
@@ -564,19 +559,19 @@ namespace CapturePanorama
             }
             SetFadersEnabled(fadeControls, false);
 
-            if (fadeDuringCapture && async)
+            if(fadeDuringCapture && async)
                 yield return StartCoroutine(FadeOut(fadeControls));
 
             // Make sure black is shown before we start - sometimes two frames are needed
-            for (int i = 0; i < 2; i++)
+            for(int i = 0; i < 2; i++)
                 yield return new WaitForEndOfFrame();
 
             // Initialize compute buffers - do here instead of in Reinitialize() to work around error on Destroy()
             ComputeBuffer convertPanoramaResultBuffer = null;
             ComputeBuffer forceWaitResultConvertPanoramaStereoBuffer = null;
-            if (usingGpuTransform)
+            if(usingGpuTransform)
             {
-                if (captureStereoscopic)
+                if(captureStereoscopic)
                 {
                     convertPanoramaResultBuffer =
                         new ComputeBuffer(/*count*/panoramaWidth * panoramaHeight * 2 + 1, /*stride*/4); // + 1 for sentinel
@@ -590,14 +585,14 @@ namespace CapturePanorama
                     int sliceHeight = (panoramaHeight + ResultBufferSlices - 1) / ResultBufferSlices;
                     convertPanoramaResultBuffer =
                         new ComputeBuffer(/*count*/panoramaWidth * sliceHeight + 1, /*stride*/4); // + 1 for sentinel
-                    foreach (int kernelIdx in convertPanoramaKernelIdxs)
+                    foreach(int kernelIdx in convertPanoramaKernelIdxs)
                         convertPanoramaShader.SetBuffer(kernelIdx, "result", convertPanoramaResultBuffer);
                 }
             }
             int cameraPixelsBufferNumTextures = numCameras;
             overlapTextures = 0;
             int circlePointCircularBufferSize = 0;
-            if (captureStereoscopic && usingGpuTransform)
+            if(captureStereoscopic && usingGpuTransform)
             {
                 overlapTextures = ssaaFactor == 1 ? 1 : 2;  // Overlap of 1 supports blending between circle points, overlap of 2 supports it even with SSAA at boundaries
                 circlePointCircularBufferSize = 1 + overlapTextures;
@@ -609,14 +604,14 @@ namespace CapturePanorama
 
             // Set up sentinels to detect out of graphics memory
             textureToBufferShader.SetInt("sentinelIdx", cameraPixelsBuffer.count - 1);
-            if (usingGpuTransform && !captureStereoscopic)
+            if(usingGpuTransform && !captureStereoscopic)
             {
                 convertPanoramaShader.SetInt("cameraPixelsSentinelIdx", cameraPixelsBuffer.count - 1);
                 convertPanoramaShader.SetInt("sentinelIdx", convertPanoramaResultBuffer.count - 1);
-                foreach (int kernelIdx in convertPanoramaKernelIdxs)
+                foreach(int kernelIdx in convertPanoramaKernelIdxs)
                     convertPanoramaShader.SetBuffer(kernelIdx, "cameraPixels", cameraPixelsBuffer);
             }
-            if (usingGpuTransform && captureStereoscopic)
+            if(usingGpuTransform && captureStereoscopic)
             {
                 convertPanoramaStereoShader.SetInt("cameraPixelsSentinelIdx", cameraPixelsBuffer.count - 1);
                 convertPanoramaStereoShader.SetBuffer(renderStereoIdx, "cameraPixels", cameraPixelsBuffer);
@@ -634,19 +629,19 @@ namespace CapturePanorama
                 headOrientation = OVRManager.display.GetHeadPose(0.0).orientation;
             }
 #endif
-//#if UNITY_5_1
-//            if (UnityEngine.VR.VRSettings.enabled && UnityEngine.VR.VRSettings.loadedDevice != VRDeviceType.None)
-//            {
-//                headOrientation = InputTracking.GetLocalRotation(0);
-//            }
-//#endif
+            //#if UNITY_5_1
+            //            if (UnityEngine.VR.VRSettings.enabled && UnityEngine.VR.VRSettings.loadedDevice != VRDeviceType.None)
+            //            {
+            //                headOrientation = InputTracking.GetLocalRotation(0);
+            //            }
+            //#endif
 
             Log("Rendering camera views");
-            foreach (Camera c in cameras)
+            foreach(Camera c in cameras)
                 Log("Camera name: " + c.gameObject.name);
 
             var methodMap = new Dictionary<Camera, List<ImageEffectCopyCamera.InstanceMethodPair>>();
-            foreach (Camera c in cameras)
+            foreach(Camera c in cameras)
                 methodMap[c] = ImageEffectCopyCamera.GenerateMethodList(c);
 
             // Need to extract each cubemap into a Texture2D so we can read the pixels, but Unity bug
@@ -657,7 +652,7 @@ namespace CapturePanorama
             string filePath = "";
             // Save in separate thread to avoid hiccups
             string imagePath = saveImagePath;
-            if (imagePath == null || imagePath == "")
+            if(imagePath == null || imagePath == "")
             {
                 imagePath = Application.dataPath + "/..";
             }
@@ -673,18 +668,18 @@ namespace CapturePanorama
             int saveQualityLevel = QualitySettings.GetQualityLevel();
             bool qualitySettingWasChanged = false;
             string[] qualitySettingNames = QualitySettings.names;
-            if (qualitySetting != qualitySettingNames[saveQualityLevel]) // Don't change if already set to it
+            if(qualitySetting != qualitySettingNames[saveQualityLevel]) // Don't change if already set to it
             {
-                for (int i = 0; i < qualitySettingNames.Length; i++)
+                for(int i = 0; i < qualitySettingNames.Length; i++)
                 {
                     string name = qualitySettingNames[i];
-                    if (name == qualitySetting)
+                    if(name == qualitySetting)
                     {
                         QualitySettings.SetQualityLevel(i, /*applyExpensiveChanges*/false); // applyExpensiveChanges causes trouble
                         qualitySettingWasChanged = true;
                     }
                 }
-                if (qualitySetting != "" && !qualitySettingWasChanged)
+                if(qualitySetting != "" && !qualitySettingWasChanged)
                 {
                     Debug.LogError("Quality setting specified for CapturePanorama is invalid, ignoring.", this);
                 }
@@ -693,13 +688,13 @@ namespace CapturePanorama
             BeforeRenderPanorama();
 
             RenderTexture.active = null;
-            for (int i = 0; i < ilimit; i++)
+            for(int i = 0; i < ilimit; i++)
             {
                 // Don't use RenderToCubemap - it causes problems with compositing multiple cameras, and requires
                 // more temporary VRAM. Just render cube map manually.
-                if (captureStereoscopic)
+                if(captureStereoscopic)
                 {
-                    if (i < 2)
+                    if(i < 2)
                     {
                         // 0, 1 are top/bottom caps
                         camGos[1].transform.localPosition = Vector3.zero;
@@ -709,7 +704,7 @@ namespace CapturePanorama
                     {
                         // Do all left/right textures first then all up/down textures
                         int iAdjusted, numInGroupBias;
-                        if (i < leftRightPhaseEnd)
+                        if(i < leftRightPhaseEnd)
                         {
                             iAdjusted = i - 2;
                             numInGroupBias = 0;
@@ -726,17 +721,17 @@ namespace CapturePanorama
                         float circleAngle = 360.0f * circlePointNum / numCirclePoints;
                         camGos[1].transform.localPosition = Quaternion.Euler(0.0f, circleAngle, 0.0f) * Vector3.forward * circleRadius;
 
-                        if (numInGroup < 2)
+                        if(numInGroup < 2)
                             camGos[1].transform.localRotation = Quaternion.Euler(0.0f, circleAngle + (numInGroup == 0 ? -hFovAdjustDegrees : hFovAdjustDegrees), 0.0f);
                         else
                             camGos[1].transform.localRotation = Quaternion.Euler((numInGroup == 2 ? -vFovAdjustDegrees : vFovAdjustDegrees), circleAngle, 0.0f);
 
-                        if (numInGroup == 1 || numInGroup == 3) circlePointsRendered++;
+                        if(numInGroup == 1 || numInGroup == 3) circlePointsRendered++;
                     }
                 }
                 else
                 {
-                    switch ((CubemapFace)i)
+                    switch((CubemapFace)i)
                     {
                         case CubemapFace.PositiveX: camGos[1].transform.localRotation = Quaternion.Euler(0.0f, 90.0f, 0.0f); break;
                         case CubemapFace.NegativeX: camGos[1].transform.localRotation = Quaternion.Euler(0.0f, -90.0f, 0.0f); break;
@@ -747,7 +742,7 @@ namespace CapturePanorama
                     }
                 }
 
-                foreach (Camera c in cameras)
+                foreach(Camera c in cameras)
                 {
                     // To get the camera in the right eye position, migrate the camera transform to camGos[0]
                     camGos[2].transform.parent = null;
@@ -769,7 +764,7 @@ namespace CapturePanorama
                     // (avoids clipping that doesn't occur in normal camera view but might lead to unexpected bad effects)
 
                     camGos[0].transform.rotation *= Quaternion.Inverse(headOrientation);
-                    if (useDefaultOrientation)
+                    if(useDefaultOrientation)
                         camGos[0].transform.rotation = Quaternion.identity;
 
                     cam.targetTexture = cubemapRenderTexture;
@@ -809,17 +804,17 @@ namespace CapturePanorama
 
                 uint[] forceWaitResult = new uint[1];
                 forceWaitResultTextureToBufferBuffer.GetData(forceWaitResult);
-                if (forceWaitResult[0] != forceWaitValue)
+                if(forceWaitResult[0] != forceWaitValue)
                     Debug.LogError("TextureToBufferShader: Unexpected forceWaitResult value " + forceWaitResult[0] + ", should be " + forceWaitValue);
 
-                if (saveCubemap &&
+                if(saveCubemap &&
                     ((i < 2) ||
                      (i >= 2 && i < 2 + numCirclePoints * 2) ||
                      (i >= leftRightPhaseEnd && i < leftRightPhaseEnd + numCirclePoints * 2)))
                 {
                     // This is really slow - retrieving all cameraPixels data for just a portion of it. But this is mainly useful for debugging anyway.
                     cameraPixelsBuffer.GetData(cameraPixels);
-                    if (cameraPixels[cameraPixelsBuffer.count - 1] != BufferSentinelValue)
+                    if(cameraPixels[cameraPixelsBuffer.count - 1] != BufferSentinelValue)
                         ReportOutOfGraphicsMemory();
 
                     SaveCubemapImage(cameraPixels, filenameBase, suffix, imagePath, saveCubemapImageNum, writeIdx);
@@ -827,10 +822,10 @@ namespace CapturePanorama
                 }
 
                 writeIdx++;
-                if (writeIdx >= cameraPixelsBufferNumTextures) writeIdx = 2; // Leave top/bottom in indexes 0/1
+                if(writeIdx >= cameraPixelsBufferNumTextures) writeIdx = 2; // Leave top/bottom in indexes 0/1
 
                 // For stereoscopic GPU transform, interleave capture and rendering to decrease VRAM consumption
-                if (captureStereoscopic && usingGpuTransform &&
+                if(captureStereoscopic && usingGpuTransform &&
                     ((i - 2) + 1) % (CamerasPerCirclePoint / 2) == 0 &&
                     (circlePointsRendered - nextCirclePointStart >= circlePointCircularBufferSize || i + 1 == 2 + (ilimit - 2) / 2 || i + 1 == ilimit))
                 {
@@ -843,10 +838,10 @@ namespace CapturePanorama
                     convertPanoramaStereoShader.Dispatch(renderStereoIdx, (panoramaWidth + threadsX - 1) / threadsX, (panoramaHeight + threadsY - 1) / threadsY, 2);
 
                     forceWaitResultConvertPanoramaStereoBuffer.GetData(forceWaitResult);
-                    if (forceWaitResult[0] != forceWaitValue)
+                    if(forceWaitResult[0] != forceWaitValue)
                         Debug.LogError("ConvertPanoramaStereoShader: Unexpected forceWaitResult value " + forceWaitResult[0] + ", should be " + forceWaitValue);
 
-                    if (i + 1 == leftRightPhaseEnd)
+                    if(i + 1 == leftRightPhaseEnd)
                     {
                         nextCirclePointCircularBufferStart = (nextCirclePointCircularBufferStart + circlePointCircularBufferSize) % circlePointCircularBufferSize;
                         nextCirclePointStart = 0;
@@ -865,24 +860,24 @@ namespace CapturePanorama
             AfterRenderPanorama();
 
             Log("Resetting quality level");
-            if (qualitySettingWasChanged)
+            if(qualitySettingWasChanged)
                 QualitySettings.SetQualityLevel(saveQualityLevel, /*applyExpensiveChanges*/false);
 
             // If we need to access the cubemap pixels on the CPU, retrieve them now
-            if (saveCubemap || !usingGpuTransform)
+            if(saveCubemap || !usingGpuTransform)
             {
                 cameraPixelsBuffer.GetData(cameraPixels);
-                if (cameraPixels[cameraPixelsBuffer.count - 1] != BufferSentinelValue)
+                if(cameraPixels[cameraPixelsBuffer.count - 1] != BufferSentinelValue)
                     ReportOutOfGraphicsMemory();
             }
 
             RenderTexture.active = null;
 
-            if (saveCubemap &&
+            if(saveCubemap &&
                 !(captureStereoscopic && usingGpuTransform)) // In this mode images are saved during capture
             {
                 // Save cubemap while still faded, as fast as possible - should be pretty quick
-                for (int i = 0; i < numCameras; i++)
+                for(int i = 0; i < numCameras; i++)
                 {
                     int bufferIdx = i;
                     SaveCubemapImage(cameraPixels, filenameBase, suffix, imagePath, i, bufferIdx);
@@ -890,10 +885,10 @@ namespace CapturePanorama
             }
 
             // If this is not here, the fade-in will drop frames.
-            for (int i = 0; i < 2; i++)
+            for(int i = 0; i < 2; i++)
                 yield return new WaitForEndOfFrame();
 
-            if (async && !usingGpuTransform && fadeDuringCapture)
+            if(async && !usingGpuTransform && fadeDuringCapture)
                 yield return StartCoroutine(FadeIn(fadeControls));
 
             filePath = imagePath + "/" + filenameBase + suffix;
@@ -910,12 +905,12 @@ namespace CapturePanorama
 
                 // Convert to equirectangular projection - use compute shader for better performance if supported by platform
 
-                if (async)
+                if(async)
                     yield return StartCoroutine(CubemapToEquirectangular(cameraPixelsBuffer, cameraPixels, convertPanoramaResultBuffer, cameraWidth, cameraHeight, pixelValues, bmpData.Stride, panoramaWidth, panoramaHeight, ssaaFactor, async));
                 else
                 {
                     var enumerator = CubemapToEquirectangular(cameraPixelsBuffer, cameraPixels, convertPanoramaResultBuffer, cameraWidth, cameraHeight, pixelValues, bmpData.Stride, panoramaWidth, panoramaHeight, ssaaFactor, async);
-                    while (enumerator.MoveNext()) { }
+                    while(enumerator.MoveNext()) { }
                 }
 
                 producedImageSuccess = (pixelValues[3] == 255);
@@ -927,7 +922,7 @@ namespace CapturePanorama
 
                 Log("Time to take panorama screenshot: " + (Time.realtimeSinceStartup - startTime) + " sec");
 
-                if (producedImageSuccess)
+                if(producedImageSuccess)
                 {
                     var thread = new Thread(() =>
                     {
@@ -936,8 +931,8 @@ namespace CapturePanorama
                         bitmap.Save(filePath, FormatToDrawingFormat(imageFormat));
                     });
                     thread.Start();
-                    while (thread.ThreadState == ThreadState.Running)
-                        if (async)
+                    while(thread.ThreadState == ThreadState.Running)
+                        if(async)
                             yield return null;
                         else
                             Thread.Sleep(0);
@@ -947,45 +942,45 @@ namespace CapturePanorama
             }
 
             // Release ComputeBuffers - all done with these
-            foreach (var buffer in new ComputeBuffer[] {
+            foreach(var buffer in new ComputeBuffer[] {
                 convertPanoramaResultBuffer,
                 cameraPixelsBuffer,
                 forceWaitResultConvertPanoramaStereoBuffer,
                 forceWaitResultTextureToBufferBuffer })
-                if (buffer != null)
+                if(buffer != null)
                     buffer.Release();
             convertPanoramaResultBuffer = cameraPixelsBuffer = null;
 
-            if (async && usingGpuTransform && fadeDuringCapture)
+            if(async && usingGpuTransform && fadeDuringCapture)
                 yield return StartCoroutine(FadeIn(fadeControls));
 
-            foreach (ScreenFadeControl fadeControl in fadeControls)
+            foreach(ScreenFadeControl fadeControl in fadeControls)
             {
                 Destroy(fadeControl);
             }
             fadeControls.Clear();
 
-            if (producedImageSuccess && uploadImages && !captureEveryFrame)
+            if(producedImageSuccess && uploadImages && !captureEveryFrame)
             {
                 Log("Uploading image");
                 imageFileBytes = File.ReadAllBytes(filePath);
                 string mimeType = FormatMimeType(imageFormat);
-                if (async)
+                if(async)
                     yield return StartCoroutine(UploadImage(imageFileBytes, filenameBase + suffix, mimeType, async));
                 else
                 {
                     var enumerator = UploadImage(imageFileBytes, filenameBase + suffix, mimeType, async);
-                    while (enumerator.MoveNext()) { }
+                    while(enumerator.MoveNext()) { }
                 }
             }
             else
             {
-                if (!producedImageSuccess)
+                if(!producedImageSuccess)
                 {
-                    if (failSound != null && Camera.main != null)
+                    if(failSound != null && Camera.main != null)
                         audioSource.PlayOneShot(failSound);
                 }
-                else if (!captureEveryFrame && doneSound != null && Camera.main != null)
+                else if(!captureEveryFrame && doneSound != null && Camera.main != null)
                 {
                     audioSource.PlayOneShot(doneSound);
                 }
@@ -999,7 +994,8 @@ namespace CapturePanorama
             return true;
         }
 
-        public virtual Camera[] GetCaptureCameras() {
+        public virtual Camera[] GetCaptureCameras()
+        {
 
             //if (!GetComponent<Camera>())
             //{
@@ -1007,9 +1003,9 @@ namespace CapturePanorama
             //}
 
             Camera[] cameras = Camera.allCameras;
-            
+
             var finalCameras = new List<Camera>();
-            foreach (Camera c in cameras)
+            foreach(Camera c in cameras)
             {
                 VRLog.Info("Camera found: " + c.name);
 #if OVR_SUPPORT
@@ -1047,10 +1043,10 @@ namespace CapturePanorama
             int stride = bmpData.Stride;
             int height = bmpData.Height;
             int inputIdx = bufferIdx * cameraWidth * cameraHeight;
-            for (int y = 0; y < cameraHeight; y++)
+            for(int y = 0; y < cameraHeight; y++)
             {
                 int outputIdx = stride * (height - 1 - y);
-                for (int x = 0; x < cameraWidth; x++)
+                for(int x = 0; x < cameraWidth; x++)
                 {
                     uint c = cameraPixels[inputIdx];
                     pixelValues[outputIdx + 0] = (byte)(c & 0xFF);
@@ -1065,7 +1061,7 @@ namespace CapturePanorama
             bitmap.UnlockBits(bmpData);
 
             string cameraId;
-            if (captureStereoscopic)
+            if(captureStereoscopic)
             {
                 cameraId = i.ToString();
                 Log("Saving lightfield camera image number " + cameraId);
@@ -1086,9 +1082,9 @@ namespace CapturePanorama
             u *= cameraWidth;
             v *= cameraHeight;
             int left = (int)Math.Floor(u);
-            int right = (int)Math.Min(cameraWidth - 1, left + 1);
+            int right = Math.Min(cameraWidth - 1, left + 1);
             int top = (int)Math.Floor(v);
-            int bottom = (int)Math.Min(cameraHeight - 1, top + 1);
+            int bottom = Math.Min(cameraHeight - 1, top + 1);
             float uFrac = u - left;
             float vFrac = v - top;
 
@@ -1112,7 +1108,7 @@ namespace CapturePanorama
 
         internal void ClearProcessQueue()
         {
-            while (resizingProcessList.Count > 0)
+            while(resizingProcessList.Count > 0)
             {
                 resizingProcessList[0].WaitForExit();
                 File.Delete(resizingFilenames[0]);
@@ -1123,7 +1119,7 @@ namespace CapturePanorama
 
         // Based on http://docs.unity3d.com/ScriptReference/WWWForm.html and
         // http://answers.unity3d.com/questions/48686/uploading-photo-and-video-on-a-web-server.html
-        IEnumerator UploadImage(byte[] imageFileBytes, string filename, string mimeType, bool async)
+        private IEnumerator UploadImage(byte[] imageFileBytes, string filename, string mimeType, bool async)
         {
             float startTime = Time.realtimeSinceStartup;
 
@@ -1135,16 +1131,16 @@ namespace CapturePanorama
 
             WWW w = new WWW(apiUrl + "upload", form);
             yield return w;
-            if (!string.IsNullOrEmpty(w.error))
+            if(!string.IsNullOrEmpty(w.error))
             {
                 Debug.LogError("Panorama upload failed: " + w.error, this);
-                if (failSound != null && Camera.main != null)
+                if(failSound != null && Camera.main != null)
                     audioSource.PlayOneShot(failSound);
             }
             else
             {
                 Log("Time to upload panorama screenshot: " + (Time.realtimeSinceStartup - startTime) + " sec");
-                if (!captureEveryFrame && doneSound != null && Camera.main != null)
+                if(!captureEveryFrame && doneSound != null && Camera.main != null)
                 {
                     audioSource.PlayOneShot(doneSound);
                 }
@@ -1152,26 +1148,26 @@ namespace CapturePanorama
             Capturing = false;
         }
 
-        IEnumerator CubemapToEquirectangular(ComputeBuffer cameraPixelsBuffer, uint[] cameraPixels, ComputeBuffer convertPanoramaResultBuffer, int cameraWidth, int cameraHeight, byte[] pixelValues,
+        private IEnumerator CubemapToEquirectangular(ComputeBuffer cameraPixelsBuffer, uint[] cameraPixels, ComputeBuffer convertPanoramaResultBuffer, int cameraWidth, int cameraHeight, byte[] pixelValues,
             int stride, int panoramaWidth, int panoramaHeight, int ssaaFactor, bool async)
         {
-            if (captureStereoscopic && usingGpuTransform)
+            if(captureStereoscopic && usingGpuTransform)
             {
                 // Was already done earlier, just grab the result
                 convertPanoramaResultBuffer.GetData(resultPixels);
-                if (resultPixels[convertPanoramaResultBuffer.count - 1] != BufferSentinelValue)
+                if(resultPixels[convertPanoramaResultBuffer.count - 1] != BufferSentinelValue)
                     ReportOutOfGraphicsMemory();
 
                 writeOutputPixels(pixelValues, stride, panoramaWidth, panoramaHeight * 2, panoramaHeight * 2, /*yStart*/0);
             }
-            else if (captureStereoscopic && !usingGpuTransform)
+            else if(captureStereoscopic && !usingGpuTransform)
             {
                 // TODO: Factor out into separate method
                 float startTime = Time.realtimeSinceStartup;
                 float processingTimePerFrame = cpuMillisecondsPerFrame / 1000.0f;
 
-                for (int y = 0; y < panoramaHeight; y++)
-                    for (int x = 0; x < panoramaWidth; x++)
+                for(int y = 0; y < panoramaHeight; y++)
+                    for(int x = 0; x < panoramaWidth; x++)
                     {
                         float xcoord = (float)x / panoramaWidth;
                         float ycoord = (float)y / panoramaHeight;
@@ -1194,14 +1190,14 @@ namespace CapturePanorama
                         float ipdScaleLerp = 1.0f - ipdScale * 5.0f; // Scale [0, 0.2] to [0, 1] and reverse
                                                                      // Top/bottom cap
                         Color colorCap = new Color(0.0f, 0.0f, 0.0f, 0.0f);
-                        if (ipdScaleLerp > 0.0f)
+                        if(ipdScaleLerp > 0.0f)
                         {
                             Vector3 equirectRayDirection = new Vector3(cosLat * sinLong, sinLat, cosLat * cosLong);
                             float distance = 1.0f / equirectRayDirection.y;
                             u = equirectRayDirection.x * distance; v = equirectRayDirection.z * distance;
-                            if (u * u <= 1 && v * v <= 1)
+                            if(u * u <= 1 && v * v <= 1)
                             {
-                                if (equirectRayDirection.y > 0.0f)
+                                if(equirectRayDirection.y > 0.0f)
                                 {
                                     cameraNum = 0;
                                 }
@@ -1218,7 +1214,7 @@ namespace CapturePanorama
                             }
                         }
 
-                        for (int i = 0; i < 2; i++)
+                        for(int i = 0; i < 2; i++)
                         {
                             // The following is equivalent to:
                             // Quaternion eyesRotation = Quaternion.Euler(0.0f, longitude * 360.0f / (2 * Mathf.PI), 0.0f);
@@ -1229,10 +1225,10 @@ namespace CapturePanorama
                             Vector3 dir = new Vector3(sinLong, 0.0f, cosLong);
 
                             float angle = (Mathf.PI / 2.0f - Mathf.Acos(scaledEyeRadius / circleRadius));
-                            if (i == 0) angle = -angle;
+                            if(i == 0) angle = -angle;
                             float circlePointAngle = longitude + angle;
-                            if (circlePointAngle < 0.0f) circlePointAngle += 2 * Mathf.PI;
-                            if (circlePointAngle >= 2 * Mathf.PI) circlePointAngle -= 2 * Mathf.PI;
+                            if(circlePointAngle < 0.0f) circlePointAngle += 2 * Mathf.PI;
+                            if(circlePointAngle >= 2 * Mathf.PI) circlePointAngle -= 2 * Mathf.PI;
                             // Debug.Assert(circlePointAngle >= 0.0f && circlePointAngle < 2 * Mathf.PI);
 
                             float circlePointNumber = circlePointAngle / (2 * Mathf.PI) * numCirclePoints;
@@ -1240,7 +1236,7 @@ namespace CapturePanorama
 
                             // Get color from each adjacent circle point
                             Color color0 = new Color(), color1 = new Color();
-                            for (int j = 0; j < 2; j++)
+                            for(int j = 0; j < 2; j++)
                             {
                                 int circlePointIdx = (j == 0 ? circlePoint0 : (circlePoint0 + 1) % numCirclePoints);
                                 float cameraPointAngle = 2 * Mathf.PI * circlePointIdx / numCirclePoints;
@@ -1272,7 +1268,7 @@ namespace CapturePanorama
                                 v = -textureRayDirAdjusted.y / textureRayDirAdjusted.z / tanHalfVFov;
 
                                 // There's a lot of vertical overlap so don't accept v near the edge of the left/right cameras, to avoid artifact pixels
-                                if (!(textureRayDirAdjusted.z > 0.0f && u * u <= 1.0f && v * v <= 1.0f - 0.1f))
+                                if(!(textureRayDirAdjusted.z > 0.0f && u * u <= 1.0f && v * v <= 1.0f - 0.1f))
                                 {
                                     cameraNum = 2 + numCirclePoints * (CamerasPerCirclePoint / 2) + circlePointIdx * (CamerasPerCirclePoint / 2) + (latitude >= 0.0f ? 1 : 0);
                                     float latitudeAdjust = (latitude >= 0.0f ? vFovAdjust : -vFovAdjust);
@@ -1294,11 +1290,11 @@ namespace CapturePanorama
                                 v = (v + 1.0f) * 0.5f;
 
                                 Color col = GetCameraPixelBilinear(cameraPixels, cameraNum, u, v);
-                                if (j == 0) color0 = col; else color1 = col;
+                                if(j == 0) color0 = col; else color1 = col;
                             }
 
                             Color32 c = Color.Lerp(color0, color1, circlePointNumber - Mathf.Floor(circlePointNumber));
-                            if (colorCap.a > 0.0f && ipdScaleLerp > 0.0f)
+                            if(colorCap.a > 0.0f && ipdScaleLerp > 0.0f)
                                 c = Color.Lerp(c, colorCap, ipdScaleLerp);
 
                             int outputIdx = stride * (y + panoramaHeight * i) + x * 4;
@@ -1308,35 +1304,35 @@ namespace CapturePanorama
                             pixelValues[outputIdx + 3] = 255;
                         }
 
-                        if ((x & 0xFF) == 0 && Time.realtimeSinceStartup - startTime > processingTimePerFrame)
+                        if((x & 0xFF) == 0 && Time.realtimeSinceStartup - startTime > processingTimePerFrame)
                         {
                             yield return null; // Wait until next frame
                             startTime = Time.realtimeSinceStartup;
                         }
                     }
             }
-            else if (!captureStereoscopic && usingGpuTransform)
+            else if(!captureStereoscopic && usingGpuTransform)
             {
                 int sliceHeight = (panoramaHeight + ResultBufferSlices - 1) / ResultBufferSlices;
 
                 Log("Invoking GPU shader for equirectangular reprojection");
                 int endYNegative = (int)Mathf.Floor(panoramaHeight * 0.25f);
                 int startYPositive = (int)Mathf.Ceil(panoramaHeight * 0.75f);
-                for (int sliceNum = 0; sliceNum < ResultBufferSlices; sliceNum++)
+                for(int sliceNum = 0; sliceNum < ResultBufferSlices; sliceNum++)
                 {
                     int startSlice = sliceNum * sliceHeight;
                     int endSlice = Math.Min(startSlice + sliceHeight, panoramaHeight);
                     convertPanoramaShader.SetInt("startY", sliceNum * sliceHeight);
                     convertPanoramaShader.SetInt("sliceHeight", endSlice - startSlice);
-                    if (endSlice <= endYNegative)
+                    if(endSlice <= endYNegative)
                         convertPanoramaShader.Dispatch(convertPanoramaYNegativeKernelIdx, (panoramaWidth + threadsX - 1) / threadsX, (sliceHeight + threadsY - 1) / threadsY, 1);
-                    else if (startSlice >= startYPositive)
+                    else if(startSlice >= startYPositive)
                         convertPanoramaShader.Dispatch(convertPanoramaYPositiveKernelIdx, (panoramaWidth + threadsX - 1) / threadsX, (sliceHeight + threadsY - 1) / threadsY, 1);
                     else
                         convertPanoramaShader.Dispatch(convertPanoramaKernelIdx, (panoramaWidth + threadsX - 1) / threadsX, (panoramaHeight + threadsY - 1) / threadsY, 1);
 
                     convertPanoramaResultBuffer.GetData(resultPixels);
-                    if (resultPixels[convertPanoramaResultBuffer.count - 1] != BufferSentinelValue)
+                    if(resultPixels[convertPanoramaResultBuffer.count - 1] != BufferSentinelValue)
                         ReportOutOfGraphicsMemory();
 
                     writeOutputPixels(pixelValues, stride, panoramaWidth, sliceHeight, panoramaHeight, startSlice);
@@ -1344,14 +1340,14 @@ namespace CapturePanorama
             }
             else // if (!captureStereoscopic && !usingGpuTransform)
             {
-                if (async)
+                if(async)
                     yield return StartCoroutine(CubemapToEquirectangularCpu(cameraPixels, cameraWidth, cameraHeight, pixelValues,
                         stride, panoramaWidth, panoramaHeight, ssaaFactor, async));
                 else
                 {
                     var enumerator = CubemapToEquirectangularCpu(cameraPixels, cameraWidth, cameraHeight, pixelValues,
                         stride, panoramaWidth, panoramaHeight, ssaaFactor, async);
-                    while (enumerator.MoveNext()) { }
+                    while(enumerator.MoveNext()) { }
                 }
             }
         }
@@ -1359,10 +1355,10 @@ namespace CapturePanorama
         private void writeOutputPixels(byte[] pixelValues, int stride, int bitmapWidth, int inHeight, int outHeight, int yStart)
         {
             int inputIdx = 0;
-            for (int y = yStart; y < yStart + inHeight && y < outHeight; y++)
+            for(int y = yStart; y < yStart + inHeight && y < outHeight; y++)
             {
                 int outputIdx = stride * y;
-                for (int x = 0; x < bitmapWidth; x++)
+                for(int x = 0; x < bitmapWidth; x++)
                 {
                     uint packedCol = resultPixels[inputIdx];
                     pixelValues[outputIdx + 0] = (byte)((packedCol >> 0) & 0xFF);
@@ -1375,7 +1371,7 @@ namespace CapturePanorama
             }
         }
 
-        IEnumerator CubemapToEquirectangularCpu(uint[] cameraPixels, int cameraWidth, int cameraHeight, byte[] pixelValues,
+        private IEnumerator CubemapToEquirectangularCpu(uint[] cameraPixels, int cameraWidth, int cameraHeight, byte[] pixelValues,
             int stride, int panoramaWidth, int panoramaHeight, int ssaaFactor, bool async)
         {
             Log("Converting to equirectangular");
@@ -1410,7 +1406,7 @@ namespace CapturePanorama
             int startZNegative = (int)Mathf.Ceil(panoramaWidth * 7.0f / 8.0f);
             int endZNegative = (int)Mathf.Floor(panoramaWidth * 1.0f / 8.0f); // z negative wraps/loops around
 
-            if (async)
+            if(async)
             {
                 yield return StartCoroutine(CubemapToEquirectangularCpuPositiveY(cameraPixels, pixelValues, stride, panoramaWidth, panoramaHeight, ssaaFactor, startTime, processingTimePerFrame, numPixelsAveraged,
                     0, 0, panoramaWidth, endYPositive));
@@ -1437,16 +1433,16 @@ namespace CapturePanorama
                     0, startBottomMixedRegion, panoramaWidth, startYNegative));
 
                 // If width is not multiple of 8, due to rounding, there may be one-column strips where the X/Z textures mix together
-                if (endZNegative < startXNegative)
+                if(endZNegative < startXNegative)
                     yield return StartCoroutine(CubemapToEquirectangularCpuGeneralCase(cameraPixels, pixelValues, stride, panoramaWidth, panoramaHeight, ssaaFactor, startTime, processingTimePerFrame, maxWidth, maxHeight, numPixelsAveraged,
                         endZNegative, endTopMixedRegion, startXNegative, startBottomMixedRegion));
-                if (endXNegative < startZPositive)
+                if(endXNegative < startZPositive)
                     yield return StartCoroutine(CubemapToEquirectangularCpuGeneralCase(cameraPixels, pixelValues, stride, panoramaWidth, panoramaHeight, ssaaFactor, startTime, processingTimePerFrame, maxWidth, maxHeight, numPixelsAveraged,
                         endXNegative, endTopMixedRegion, startZPositive, startBottomMixedRegion));
-                if (endZPositive < startXPositive)
+                if(endZPositive < startXPositive)
                     yield return StartCoroutine(CubemapToEquirectangularCpuGeneralCase(cameraPixels, pixelValues, stride, panoramaWidth, panoramaHeight, ssaaFactor, startTime, processingTimePerFrame, maxWidth, maxHeight, numPixelsAveraged,
                         endZPositive, endTopMixedRegion, startXPositive, startBottomMixedRegion));
-                if (endXPositive < startZNegative)
+                if(endXPositive < startZNegative)
                     yield return StartCoroutine(CubemapToEquirectangularCpuGeneralCase(cameraPixels, pixelValues, stride, panoramaWidth, panoramaHeight, ssaaFactor, startTime, processingTimePerFrame, maxWidth, maxHeight, numPixelsAveraged,
                         endXPositive, endTopMixedRegion, startZNegative, startBottomMixedRegion));
             }
@@ -1455,61 +1451,61 @@ namespace CapturePanorama
                 IEnumerator enumerator;
                 enumerator = CubemapToEquirectangularCpuPositiveY(cameraPixels, pixelValues, stride, panoramaWidth, panoramaHeight, ssaaFactor, startTime, processingTimePerFrame, numPixelsAveraged,
                     0, 0, panoramaWidth, endYPositive);
-                while (enumerator.MoveNext()) { }
+                while(enumerator.MoveNext()) { }
                 enumerator = CubemapToEquirectangularCpuNegativeY(cameraPixels, pixelValues, stride, panoramaWidth, panoramaHeight, ssaaFactor, startTime, processingTimePerFrame, numPixelsAveraged,
                     0, startYNegative, panoramaWidth, panoramaHeight);
-                while (enumerator.MoveNext()) { }
+                while(enumerator.MoveNext()) { }
 
                 enumerator = CubemapToEquirectangularCpuPositiveX(cameraPixels, pixelValues, stride, panoramaWidth, panoramaHeight, ssaaFactor, startTime, processingTimePerFrame, numPixelsAveraged,
                     startXPositive, endTopMixedRegion, endXPositive, startBottomMixedRegion);
-                while (enumerator.MoveNext()) { }
+                while(enumerator.MoveNext()) { }
                 enumerator = CubemapToEquirectangularCpuNegativeX(cameraPixels, pixelValues, stride, panoramaWidth, panoramaHeight, ssaaFactor, startTime, processingTimePerFrame, numPixelsAveraged,
                     startXNegative, endTopMixedRegion, endXNegative, startBottomMixedRegion);
-                while (enumerator.MoveNext()) { }
+                while(enumerator.MoveNext()) { }
                 enumerator = CubemapToEquirectangularCpuPositiveZ(cameraPixels, pixelValues, stride, panoramaWidth, panoramaHeight, ssaaFactor, startTime, processingTimePerFrame, numPixelsAveraged,
                     startZPositive, endTopMixedRegion, endZPositive, startBottomMixedRegion);
-                while (enumerator.MoveNext()) { }
+                while(enumerator.MoveNext()) { }
 
                 // Do in two pieces since z negative wraps/loops around
                 enumerator = CubemapToEquirectangularCpuNegativeZ(cameraPixels, pixelValues, stride, panoramaWidth, panoramaHeight, ssaaFactor, startTime, processingTimePerFrame, numPixelsAveraged,
                     startZNegative, endTopMixedRegion, panoramaWidth, startBottomMixedRegion);
-                while (enumerator.MoveNext()) { }
+                while(enumerator.MoveNext()) { }
                 enumerator = CubemapToEquirectangularCpuNegativeZ(cameraPixels, pixelValues, stride, panoramaWidth, panoramaHeight, ssaaFactor, startTime, processingTimePerFrame, numPixelsAveraged,
                     0, endTopMixedRegion, endZNegative, startBottomMixedRegion);
-                while (enumerator.MoveNext()) { }
+                while(enumerator.MoveNext()) { }
 
                 // Handle all remaining image areas with the general case
                 enumerator = CubemapToEquirectangularCpuGeneralCase(cameraPixels, pixelValues, stride, panoramaWidth, panoramaHeight, ssaaFactor, startTime, processingTimePerFrame, maxWidth, maxHeight, numPixelsAveraged,
                     0, endYPositive, panoramaWidth, endTopMixedRegion);
-                while (enumerator.MoveNext()) { }
+                while(enumerator.MoveNext()) { }
                 enumerator = CubemapToEquirectangularCpuGeneralCase(cameraPixels, pixelValues, stride, panoramaWidth, panoramaHeight, ssaaFactor, startTime, processingTimePerFrame, maxWidth, maxHeight, numPixelsAveraged,
                     0, startBottomMixedRegion, panoramaWidth, startYNegative);
-                while (enumerator.MoveNext()) { }
+                while(enumerator.MoveNext()) { }
 
                 // If width is not multiple of 8, due to rounding, there may be one-column strips where the X/Z textures mix together
-                if (endZNegative < startXNegative)
+                if(endZNegative < startXNegative)
                 {
                     enumerator = CubemapToEquirectangularCpuGeneralCase(cameraPixels, pixelValues, stride, panoramaWidth, panoramaHeight, ssaaFactor, startTime, processingTimePerFrame, maxWidth, maxHeight, numPixelsAveraged,
                         endZNegative, endTopMixedRegion, startXNegative, startBottomMixedRegion);
-                    while (enumerator.MoveNext()) { }
+                    while(enumerator.MoveNext()) { }
                 }
-                if (endXNegative < startZPositive)
+                if(endXNegative < startZPositive)
                 {
                     enumerator = CubemapToEquirectangularCpuGeneralCase(cameraPixels, pixelValues, stride, panoramaWidth, panoramaHeight, ssaaFactor, startTime, processingTimePerFrame, maxWidth, maxHeight, numPixelsAveraged,
                         endXNegative, endTopMixedRegion, startZPositive, startBottomMixedRegion);
-                    while (enumerator.MoveNext()) { }
+                    while(enumerator.MoveNext()) { }
                 }
-                if (endZPositive < startXPositive)
+                if(endZPositive < startXPositive)
                 {
                     enumerator = CubemapToEquirectangularCpuGeneralCase(cameraPixels, pixelValues, stride, panoramaWidth, panoramaHeight, ssaaFactor, startTime, processingTimePerFrame, maxWidth, maxHeight, numPixelsAveraged,
                         endZPositive, endTopMixedRegion, startXPositive, startBottomMixedRegion);
-                    while (enumerator.MoveNext()) { }
+                    while(enumerator.MoveNext()) { }
                 }
-                if (endXPositive < startZNegative)
+                if(endXPositive < startZNegative)
                 {
                     enumerator = CubemapToEquirectangularCpuGeneralCase(cameraPixels, pixelValues, stride, panoramaWidth, panoramaHeight, ssaaFactor, startTime, processingTimePerFrame, maxWidth, maxHeight, numPixelsAveraged,
                         endXPositive, endTopMixedRegion, startZNegative, startBottomMixedRegion);
-                    while (enumerator.MoveNext()) { }
+                    while(enumerator.MoveNext()) { }
                 }
             }
 
@@ -1519,12 +1515,12 @@ namespace CapturePanorama
         private IEnumerator CubemapToEquirectangularCpuPositiveY(uint[] cameraPixels, byte[] pixelValues, int stride, int panoramaWidth, int panoramaHeight, int ssaaFactor, float startTime, float processingTimePerFrame, int numPixelsAveraged,
             int startX, int startY, int endX, int endY)
         {
-            for (int y = startY; y < endY; y++)
-                for (int x = startX; x < endX; x++)
+            for(int y = startY; y < endY; y++)
+                for(int x = startX; x < endX; x++)
                 {
                     int rTotal = 0, gTotal = 0, bTotal = 0, aTotal = 0;
-                    for (int ySsaa = y * ssaaFactor; ySsaa < (y + 1) * ssaaFactor; ySsaa++)
-                        for (int xSsaa = x * ssaaFactor; xSsaa < (x + 1) * ssaaFactor; xSsaa++)
+                    for(int ySsaa = y * ssaaFactor; ySsaa < (y + 1) * ssaaFactor; ySsaa++)
+                        for(int xSsaa = x * ssaaFactor; xSsaa < (x + 1) * ssaaFactor; xSsaa++)
                         {
                             float xcoord = (float)xSsaa / (panoramaWidth * ssaaFactor);
                             float ycoord = (float)ySsaa / (panoramaHeight * ssaaFactor);
@@ -1554,7 +1550,7 @@ namespace CapturePanorama
                     pixelValues[baseIdx + 2] = (byte)(rTotal / numPixelsAveraged);
                     pixelValues[baseIdx + 3] = (byte)(aTotal / numPixelsAveraged);
 
-                    if ((x & 0xFF) == 0 && Time.realtimeSinceStartup - startTime > processingTimePerFrame)
+                    if((x & 0xFF) == 0 && Time.realtimeSinceStartup - startTime > processingTimePerFrame)
                     {
                         yield return null; // Wait until next frame
                         startTime = Time.realtimeSinceStartup;
@@ -1565,12 +1561,12 @@ namespace CapturePanorama
         private IEnumerator CubemapToEquirectangularCpuNegativeY(uint[] cameraPixels, byte[] pixelValues, int stride, int panoramaWidth, int panoramaHeight, int ssaaFactor, float startTime, float processingTimePerFrame, int numPixelsAveraged,
             int startX, int startY, int endX, int endY)
         {
-            for (int y = startY; y < endY; y++)
-                for (int x = startX; x < endX; x++)
+            for(int y = startY; y < endY; y++)
+                for(int x = startX; x < endX; x++)
                 {
                     int rTotal = 0, gTotal = 0, bTotal = 0, aTotal = 0;
-                    for (int ySsaa = y * ssaaFactor; ySsaa < (y + 1) * ssaaFactor; ySsaa++)
-                        for (int xSsaa = x * ssaaFactor; xSsaa < (x + 1) * ssaaFactor; xSsaa++)
+                    for(int ySsaa = y * ssaaFactor; ySsaa < (y + 1) * ssaaFactor; ySsaa++)
+                        for(int xSsaa = x * ssaaFactor; xSsaa < (x + 1) * ssaaFactor; xSsaa++)
                         {
                             float xcoord = (float)xSsaa / (panoramaWidth * ssaaFactor);
                             float ycoord = (float)ySsaa / (panoramaHeight * ssaaFactor);
@@ -1601,7 +1597,7 @@ namespace CapturePanorama
                     pixelValues[baseIdx + 2] = (byte)(rTotal / numPixelsAveraged);
                     pixelValues[baseIdx + 3] = (byte)(aTotal / numPixelsAveraged);
 
-                    if ((x & 0xFF) == 0 && Time.realtimeSinceStartup - startTime > processingTimePerFrame)
+                    if((x & 0xFF) == 0 && Time.realtimeSinceStartup - startTime > processingTimePerFrame)
                     {
                         yield return null; // Wait until next frame
                         startTime = Time.realtimeSinceStartup;
@@ -1612,12 +1608,12 @@ namespace CapturePanorama
         private IEnumerator CubemapToEquirectangularCpuPositiveX(uint[] cameraPixels, byte[] pixelValues, int stride, int panoramaWidth, int panoramaHeight, int ssaaFactor, float startTime, float processingTimePerFrame, int numPixelsAveraged,
             int startX, int startY, int endX, int endY)
         {
-            for (int y = startY; y < endY; y++)
-                for (int x = startX; x < endX; x++)
+            for(int y = startY; y < endY; y++)
+                for(int x = startX; x < endX; x++)
                 {
                     int rTotal = 0, gTotal = 0, bTotal = 0, aTotal = 0;
-                    for (int ySsaa = y * ssaaFactor; ySsaa < (y + 1) * ssaaFactor; ySsaa++)
-                        for (int xSsaa = x * ssaaFactor; xSsaa < (x + 1) * ssaaFactor; xSsaa++)
+                    for(int ySsaa = y * ssaaFactor; ySsaa < (y + 1) * ssaaFactor; ySsaa++)
+                        for(int xSsaa = x * ssaaFactor; xSsaa < (x + 1) * ssaaFactor; xSsaa++)
                         {
                             float xcoord = (float)xSsaa / (panoramaWidth * ssaaFactor);
                             float ycoord = (float)ySsaa / (panoramaHeight * ssaaFactor);
@@ -1648,7 +1644,7 @@ namespace CapturePanorama
                     pixelValues[baseIdx + 2] = (byte)(rTotal / numPixelsAveraged);
                     pixelValues[baseIdx + 3] = (byte)(aTotal / numPixelsAveraged);
 
-                    if ((x & 0xFF) == 0 && Time.realtimeSinceStartup - startTime > processingTimePerFrame)
+                    if((x & 0xFF) == 0 && Time.realtimeSinceStartup - startTime > processingTimePerFrame)
                     {
                         yield return null; // Wait until next frame
                         startTime = Time.realtimeSinceStartup;
@@ -1659,12 +1655,12 @@ namespace CapturePanorama
         private IEnumerator CubemapToEquirectangularCpuNegativeX(uint[] cameraPixels, byte[] pixelValues, int stride, int panoramaWidth, int panoramaHeight, int ssaaFactor, float startTime, float processingTimePerFrame, int numPixelsAveraged,
             int startX, int startY, int endX, int endY)
         {
-            for (int y = startY; y < endY; y++)
-                for (int x = startX; x < endX; x++)
+            for(int y = startY; y < endY; y++)
+                for(int x = startX; x < endX; x++)
                 {
                     int rTotal = 0, gTotal = 0, bTotal = 0, aTotal = 0;
-                    for (int ySsaa = y * ssaaFactor; ySsaa < (y + 1) * ssaaFactor; ySsaa++)
-                        for (int xSsaa = x * ssaaFactor; xSsaa < (x + 1) * ssaaFactor; xSsaa++)
+                    for(int ySsaa = y * ssaaFactor; ySsaa < (y + 1) * ssaaFactor; ySsaa++)
+                        for(int xSsaa = x * ssaaFactor; xSsaa < (x + 1) * ssaaFactor; xSsaa++)
                         {
                             float xcoord = (float)xSsaa / (panoramaWidth * ssaaFactor);
                             float ycoord = (float)ySsaa / (panoramaHeight * ssaaFactor);
@@ -1694,7 +1690,7 @@ namespace CapturePanorama
                     pixelValues[baseIdx + 2] = (byte)(rTotal / numPixelsAveraged);
                     pixelValues[baseIdx + 3] = (byte)(aTotal / numPixelsAveraged);
 
-                    if ((x & 0xFF) == 0 && Time.realtimeSinceStartup - startTime > processingTimePerFrame)
+                    if((x & 0xFF) == 0 && Time.realtimeSinceStartup - startTime > processingTimePerFrame)
                     {
                         yield return null; // Wait until next frame
                         startTime = Time.realtimeSinceStartup;
@@ -1705,12 +1701,12 @@ namespace CapturePanorama
         private IEnumerator CubemapToEquirectangularCpuPositiveZ(uint[] cameraPixels, byte[] pixelValues, int stride, int panoramaWidth, int panoramaHeight, int ssaaFactor, float startTime, float processingTimePerFrame, int numPixelsAveraged,
             int startX, int startY, int endX, int endY)
         {
-            for (int y = startY; y < endY; y++)
-                for (int x = startX; x < endX; x++)
+            for(int y = startY; y < endY; y++)
+                for(int x = startX; x < endX; x++)
                 {
                     int rTotal = 0, gTotal = 0, bTotal = 0, aTotal = 0;
-                    for (int ySsaa = y * ssaaFactor; ySsaa < (y + 1) * ssaaFactor; ySsaa++)
-                        for (int xSsaa = x * ssaaFactor; xSsaa < (x + 1) * ssaaFactor; xSsaa++)
+                    for(int ySsaa = y * ssaaFactor; ySsaa < (y + 1) * ssaaFactor; ySsaa++)
+                        for(int xSsaa = x * ssaaFactor; xSsaa < (x + 1) * ssaaFactor; xSsaa++)
                         {
                             float xcoord = (float)xSsaa / (panoramaWidth * ssaaFactor);
                             float ycoord = (float)ySsaa / (panoramaHeight * ssaaFactor);
@@ -1741,7 +1737,7 @@ namespace CapturePanorama
                     pixelValues[baseIdx + 2] = (byte)(rTotal / numPixelsAveraged);
                     pixelValues[baseIdx + 3] = (byte)(aTotal / numPixelsAveraged);
 
-                    if ((x & 0xFF) == 0 && Time.realtimeSinceStartup - startTime > processingTimePerFrame)
+                    if((x & 0xFF) == 0 && Time.realtimeSinceStartup - startTime > processingTimePerFrame)
                     {
                         yield return null; // Wait until next frame
                         startTime = Time.realtimeSinceStartup;
@@ -1752,12 +1748,12 @@ namespace CapturePanorama
         private IEnumerator CubemapToEquirectangularCpuNegativeZ(uint[] cameraPixels, byte[] pixelValues, int stride, int panoramaWidth, int panoramaHeight, int ssaaFactor, float startTime, float processingTimePerFrame, int numPixelsAveraged,
             int startX, int startY, int endX, int endY)
         {
-            for (int y = startY; y < endY; y++)
-                for (int x = startX; x < endX; x++)
+            for(int y = startY; y < endY; y++)
+                for(int x = startX; x < endX; x++)
                 {
                     int rTotal = 0, gTotal = 0, bTotal = 0, aTotal = 0;
-                    for (int ySsaa = y * ssaaFactor; ySsaa < (y + 1) * ssaaFactor; ySsaa++)
-                        for (int xSsaa = x * ssaaFactor; xSsaa < (x + 1) * ssaaFactor; xSsaa++)
+                    for(int ySsaa = y * ssaaFactor; ySsaa < (y + 1) * ssaaFactor; ySsaa++)
+                        for(int xSsaa = x * ssaaFactor; xSsaa < (x + 1) * ssaaFactor; xSsaa++)
                         {
                             float xcoord = (float)xSsaa / (panoramaWidth * ssaaFactor);
                             float ycoord = (float)ySsaa / (panoramaHeight * ssaaFactor);
@@ -1787,7 +1783,7 @@ namespace CapturePanorama
                     pixelValues[baseIdx + 2] = (byte)(rTotal / numPixelsAveraged);
                     pixelValues[baseIdx + 3] = (byte)(aTotal / numPixelsAveraged);
 
-                    if ((x & 0xFF) == 0 && Time.realtimeSinceStartup - startTime > processingTimePerFrame)
+                    if((x & 0xFF) == 0 && Time.realtimeSinceStartup - startTime > processingTimePerFrame)
                     {
                         yield return null; // Wait until next frame
                         startTime = Time.realtimeSinceStartup;
@@ -1798,12 +1794,12 @@ namespace CapturePanorama
         private IEnumerator CubemapToEquirectangularCpuGeneralCase(uint[] cameraPixels, byte[] pixelValues, int stride, int panoramaWidth, int panoramaHeight, int ssaaFactor, float startTime, float processingTimePerFrame, float maxWidth, float maxHeight, int numPixelsAveraged,
             int startX, int startY, int endX, int endY)
         {
-            for (int y = startY; y < endY; y++)
-                for (int x = startX; x < endX; x++)
+            for(int y = startY; y < endY; y++)
+                for(int x = startX; x < endX; x++)
                 {
                     int rTotal = 0, gTotal = 0, bTotal = 0, aTotal = 0;
-                    for (int ySsaa = y * ssaaFactor; ySsaa < (y + 1) * ssaaFactor; ySsaa++)
-                        for (int xSsaa = x * ssaaFactor; xSsaa < (x + 1) * ssaaFactor; xSsaa++)
+                    for(int ySsaa = y * ssaaFactor; ySsaa < (y + 1) * ssaaFactor; ySsaa++)
+                        for(int xSsaa = x * ssaaFactor; xSsaa < (x + 1) * ssaaFactor; xSsaa++)
                         {
                             float xcoord = (float)xSsaa / (panoramaWidth * ssaaFactor);
                             float ycoord = (float)ySsaa / (panoramaHeight * ssaaFactor);
@@ -1824,7 +1820,7 @@ namespace CapturePanorama
                             {
                                 distance = 1.0f / equirectRayDirection.y;
                                 u = equirectRayDirection.x * distance; v = equirectRayDirection.z * distance;
-                                if (equirectRayDirection.y > 0.0f)
+                                if(equirectRayDirection.y > 0.0f)
                                 {
                                     face = CubemapFace.PositiveY;
                                 }
@@ -1835,11 +1831,11 @@ namespace CapturePanorama
                                 }
                             }
 
-                            if (Mathf.Abs(u) > 1.0f || Mathf.Abs(v) > 1.0f)
+                            if(Mathf.Abs(u) > 1.0f || Mathf.Abs(v) > 1.0f)
                             {
                                 distance = 1.0f / equirectRayDirection.x;
                                 u = -equirectRayDirection.z * distance; v = equirectRayDirection.y * distance;
-                                if (equirectRayDirection.x > 0.0f)
+                                if(equirectRayDirection.x > 0.0f)
                                 {
                                     face = CubemapFace.PositiveX;
                                     v = -v;
@@ -1849,11 +1845,11 @@ namespace CapturePanorama
                                     face = CubemapFace.NegativeX;
                                 }
                             }
-                            if (Mathf.Abs(u) > 1.0f || Mathf.Abs(v) > 1.0f)
+                            if(Mathf.Abs(u) > 1.0f || Mathf.Abs(v) > 1.0f)
                             {
                                 distance = 1.0f / equirectRayDirection.z;
                                 u = equirectRayDirection.x * distance; v = equirectRayDirection.y * distance;
-                                if (equirectRayDirection.z > 0.0f)
+                                if(equirectRayDirection.z > 0.0f)
                                 {
                                     face = CubemapFace.PositiveZ;
                                     v = -v;
@@ -1882,7 +1878,7 @@ namespace CapturePanorama
                     pixelValues[baseIdx + 2] = (byte)(rTotal / numPixelsAveraged);
                     pixelValues[baseIdx + 3] = (byte)(aTotal / numPixelsAveraged);
 
-                    if ((x & 0xFF) == 0 && Time.realtimeSinceStartup - startTime > processingTimePerFrame)
+                    if((x & 0xFF) == 0 && Time.realtimeSinceStartup - startTime > processingTimePerFrame)
                     {
                         yield return null; // Wait until next frame
                         startTime = Time.realtimeSinceStartup;

@@ -1,12 +1,9 @@
-﻿using System;
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using System.Text;
 using UnityEngine;
 using VRGIN.Core;
-using VRGIN.Helpers;
 
 namespace VRGIN.Helpers
 {
@@ -23,7 +20,7 @@ namespace VRGIN.Helpers
 
         public static void FindHotPaths(Callback callback)
         {
-            if (!GameObject.Find("Profiler"))
+            if(!GameObject.Find("Profiler"))
             {
                 var profiler = new GameObject("Profiler").AddComponent<Profiler>();
                 profiler._Callback = callback;
@@ -49,13 +46,13 @@ namespace VRGIN.Helpers
 
             VRLog.Info("Starting to profile! This might take a while...");
 
-            while (queue.Count > 0)
+            while(queue.Count > 0)
             {
                 var obj = queue.First();
                 queue.RemoveAt(0);
 
                 // Ignore
-                if (!obj.activeInHierarchy) continue;
+                if(!obj.activeInHierarchy) continue;
 
                 obj.SetActive(false);
                 yield return StartCoroutine(MeasureFramerate(DEFAULT_SAMPLE_COUNT));
@@ -65,12 +62,12 @@ namespace VRGIN.Helpers
                 double impact = startInterval / _CurrentInterval;
                 VRLog.Info("{0}{1}: {2:0.00}", string.Join("", Enumerable.Repeat(" ", obj.transform.Depth()).ToArray()), obj.name, impact);
 
-                if (impact > 1.15f)
+                if(impact > 1.15f)
                 {
                     queue.InsertRange(0, obj.Children());
 
                     // Do the same for components
-                    foreach (var component in obj.GetComponents<Behaviour>().Where(c => c.enabled))
+                    foreach(var component in obj.GetComponents<Behaviour>().Where(c => c.enabled))
                     {
                         component.enabled = false;
                         yield return StartCoroutine(MeasureFramerate(DEFAULT_SAMPLE_COUNT));
@@ -100,7 +97,7 @@ namespace VRGIN.Helpers
             Stopwatch stopwatch = new Stopwatch();
             stopwatch.Start();
 
-            for (int i = 0; i < sampleCount; i++)
+            for(int i = 0; i < sampleCount; i++)
             {
                 stopwatch.Reset();
                 stopwatch.Start();

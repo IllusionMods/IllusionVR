@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
 using VRGIN.Core;
 
@@ -30,7 +26,7 @@ namespace VRGIN.Controls
             ht._Target = target;
 
             // Normalize coordinates
-            ht._TextOffset =  textOffset;
+            ht._TextOffset = textOffset;
             ht._LineOffset = lineOffset.HasValue ? lineOffset.Value : Vector3.zero;
 
             var difference = lineOffset.HasValue

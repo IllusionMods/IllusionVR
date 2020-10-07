@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using UnityEngine;
-using Valve.VR;
 using VRGIN.Core;
 using VRGIN.Helpers;
 using VRGIN.Native;
@@ -30,7 +28,7 @@ namespace VRGIN.Controls.Tools
 
         public void TakeGUI(GUIQuad quad)
         {
-            if (quad && !Gui && !quad.IsOwned)
+            if(quad && !Gui && !quad.IsOwned)
             {
                 Gui = quad;
                 Gui.transform.parent = transform;
@@ -44,7 +42,7 @@ namespace VRGIN.Controls.Tools
 
         public void AbandonGUI()
         {
-            if (Gui)
+            if(Gui)
             {
                 timeAbandoned = Time.unscaledTime;
                 Gui.IsOwned = false;
@@ -53,13 +51,7 @@ namespace VRGIN.Controls.Tools
             }
         }
 
-        public override Texture2D Image
-        {
-            get
-            {
-                return UnityHelper.LoadImage("icon_settings.png");
-            }
-        }
+        public override Texture2D Image => UnityHelper.LoadImage("icon_settings.png");
 
         protected override void OnAwake()
         {
@@ -90,7 +82,7 @@ namespace VRGIN.Controls.Tools
         {
             base.OnDisable();
 
-            if (Gui)
+            if(Gui)
             {
                 Gui.gameObject.SetActive(false);
             }
@@ -100,7 +92,7 @@ namespace VRGIN.Controls.Tools
         {
             base.OnEnable();
 
-            if (Gui)
+            if(Gui)
             {
                 Gui.gameObject.SetActive(true);
             }
@@ -112,15 +104,15 @@ namespace VRGIN.Controls.Tools
 
             var device = this.Controller;
 
-            if (device.GetPressDown(ButtonMask.Touchpad | ButtonMask.Trigger))
+            if(device.GetPressDown(ButtonMask.Touchpad | ButtonMask.Trigger))
             {
                 VR.Input.Mouse.LeftButtonDown();
                 pressDownTime = Time.unscaledTime;
             }
 
-            if (device.GetPressUp(ButtonMask.Grip))
+            if(device.GetPressUp(ButtonMask.Grip))
             {
-                if (Gui)
+                if(Gui)
                 {
                     AbandonGUI();
                 }
@@ -130,12 +122,12 @@ namespace VRGIN.Controls.Tools
                 }
             }
 
-            if (device.GetTouchDown(ButtonMask.Touchpad))
+            if(device.GetTouchDown(ButtonMask.Touchpad))
             {
                 touchDownPosition = device.GetAxis();
                 touchDownMousePosition = MouseOperations.GetClientCursorPosition();
             }
-            if (device.GetTouch(ButtonMask.Touchpad) && (Time.unscaledTime - pressDownTime) > 0.3f)
+            if(device.GetTouch(ButtonMask.Touchpad) && (Time.unscaledTime - pressDownTime) > 0.3f)
             {
                 var pos = device.GetAxis();
                 var diff = pos - (VR.HMD == HMDType.Oculus ? Vector2.zero : touchDownPosition);
@@ -143,7 +135,7 @@ namespace VRGIN.Controls.Tools
                 // We can only move by integral number of pixels, so accumulate them until we have an integral value
                 _DeltaX += (diff.x * VRGUI.Width * 0.1 * factor);
                 _DeltaY += (-diff.y * VRGUI.Height * 0.2 * factor);
-                
+
                 int deltaX = (int)(_DeltaX > 0 ? Math.Floor(_DeltaX) : Math.Ceiling(_DeltaX));
                 int deltaY = (int)(_DeltaY > 0 ? Math.Floor(_DeltaY) : Math.Ceiling(_DeltaY));
 
@@ -154,7 +146,7 @@ namespace VRGIN.Controls.Tools
                 touchDownPosition = pos;
             }
 
-            if (device.GetPressUp(ButtonMask.Touchpad | ButtonMask.Trigger))
+            if(device.GetPressUp(ButtonMask.Touchpad | ButtonMask.Trigger))
             {
                 VR.Input.Mouse.LeftButtonUp();
                 pressDownTime = 0;

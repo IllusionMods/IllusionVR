@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using System.Text;
 using UnityEngine;
 using VRGIN.Core;
 
@@ -50,14 +49,14 @@ namespace VRGIN.Helpers
             return obj;
 #else
             var key = GetKey(assetBundleBytes);
-            if (!_AssetBundles.ContainsKey(key))
+            if(!_AssetBundles.ContainsKey(key))
             {
                 _AssetBundles[key] = LoadAssetBundle(assetBundleBytes);
                 if(_AssetBundles[key] == null)
                 {
                     VRLog.Error("Looks like the asset bundle failed to load?");
                 }
-            } 
+            }
 
             try
             {
@@ -69,13 +68,14 @@ namespace VRGIN.Helpers
 
                 name = name.Replace("Custom/", "");
                 var loadedAsset = _AssetBundles[key].LoadAsset<T>(name);
-                if (!loadedAsset)
+                if(!loadedAsset)
                 {
                     VRLog.Error("Failed to load {0}", name);
                 }
 
                 return !typeof(Shader).IsAssignableFrom(typeof(T)) && !typeof(ComputeShader).IsAssignableFrom(typeof(T)) ? UnityEngine.Object.Instantiate<T>(loadedAsset) : loadedAsset;
-            } catch(Exception e)
+            }
+            catch(Exception e)
             {
                 VRLog.Error(e);
                 return null;
@@ -85,13 +85,15 @@ namespace VRGIN.Helpers
 
         private static AssetBundle LoadAssetBundle(byte[] bytes)
         {
-            if (_LoadFromMemory != null)
+            if(_LoadFromMemory != null)
             {
                 return _LoadFromMemory.Invoke(null, new object[] { bytes }) as AssetBundle;
-            } else if(_CreateFromMemory != null)
+            }
+            else if(_CreateFromMemory != null)
             {
                 return _CreateFromMemory.Invoke(null, new object[] { bytes }) as AssetBundle;
-            } else
+            }
+            else
             {
                 VRLog.Error("Could not find a way to load AssetBundles!");
                 return null;
@@ -101,7 +103,7 @@ namespace VRGIN.Helpers
         private static string CalculateChecksum(byte[] byteToCalculate)
         {
             int checksum = 0;
-            foreach (byte chData in byteToCalculate)
+            foreach(byte chData in byteToCalculate)
             {
                 checksum += chData;
             }
@@ -117,8 +119,7 @@ namespace VRGIN.Helpers
         private static Dictionary<string, Transform> _DebugBalls = new Dictionary<string, Transform>();
         public static Transform GetDebugBall(string name)
         {
-            Transform debugBall;
-            if (!_DebugBalls.TryGetValue(name, out debugBall) || !debugBall)
+            if(!_DebugBalls.TryGetValue(name, out Transform debugBall) || !debugBall)
             {
                 debugBall = GameObject.CreatePrimitive(PrimitiveType.Sphere).transform;
                 debugBall.transform.localScale *= 0.03f;
@@ -140,8 +141,7 @@ namespace VRGIN.Helpers
 
         public static void DrawRay(Color color, Ray ray)
         {
-            RayDrawer drawer;
-            if(!_Rays.TryGetValue(color, out drawer) || !drawer)
+            if(!_Rays.TryGetValue(color, out RayDrawer drawer) || !drawer)
             {
                 drawer = RayDrawer.Create(color, ray);
                 _Rays[color] = drawer;
@@ -155,7 +155,7 @@ namespace VRGIN.Helpers
             var go = new GameObject(name);
             go.transform.SetParent(parent, false);
 
-            if (dontDestroy)
+            if(dontDestroy)
             {
                 GameObject.DontDestroyOnLoad(go);
             }
@@ -176,7 +176,7 @@ namespace VRGIN.Helpers
             Texture2D tex = null;
             byte[] fileData;
 
-            if (File.Exists(filePath))
+            if(File.Exists(filePath))
             {
                 fileData = File.ReadAllBytes(filePath);
                 tex = new Texture2D(2, 2);
@@ -192,9 +192,9 @@ namespace VRGIN.Helpers
         public static string[] GetLayerNames(int mask)
         {
             List<string> masks = new List<string>();
-            for (int i = 0; i <= 31; i++) //user defined layers start with layer 8 and unity supports 31 layers
+            for(int i = 0; i <= 31; i++) //user defined layers start with layer 8 and unity supports 31 layers
             {
-                if ((mask & (1 << i)) != 0) masks.Add(LayerMask.LayerToName(i));
+                if((mask & (1 << i)) != 0) masks.Add(LayerMask.LayerToName(i));
             }
             return masks.Select(m => m.Trim()).Where(m => m.Length > 0).ToArray();
         }
@@ -205,7 +205,7 @@ namespace VRGIN.Helpers
             System.Type type = original.GetType();
             Component copy = destination.AddComponent(type);
             System.Reflection.FieldInfo[] fields = type.GetFields();
-            foreach (System.Reflection.FieldInfo field in fields)
+            foreach(System.Reflection.FieldInfo field in fields)
             {
                 field.SetValue(copy, field.GetValue(original));
             }
@@ -217,7 +217,7 @@ namespace VRGIN.Helpers
             VRLog.Info("Dumping scene...");
 
             var rootArray = new JSONArray();
-            foreach (var gameObject in UnityEngine.Object.FindObjectsOfType<GameObject>().Where(go => go.transform.parent == null))
+            foreach(var gameObject in UnityEngine.Object.FindObjectsOfType<GameObject>().Where(go => go.transform.parent == null))
             {
                 rootArray.Add(AnalyzeNode(gameObject, onlyActive));
             }
@@ -244,36 +244,36 @@ namespace VRGIN.Helpers
         {
             var comp = new JSONClass();
 
-            foreach (var field in c.GetType().GetFields(BindingFlags.Instance | BindingFlags.Public))
+            foreach(var field in c.GetType().GetFields(BindingFlags.Instance | BindingFlags.Public))
             {
                 try
                 {
                     var val = FieldToString(field.Name, field.GetValue(c));
-                    if (val != null)
+                    if(val != null)
                     {
                         comp[field.Name] = val;
                     }
                 }
-                catch (Exception e)
+                catch(Exception e)
                 {
                     VRLog.Warn("Failed to get field {0}", field.Name);
                 }
             }
 
-            foreach (var prop in c.GetType().GetProperties(BindingFlags.Instance | BindingFlags.Public))
+            foreach(var prop in c.GetType().GetProperties(BindingFlags.Instance | BindingFlags.Public))
             {
                 try
                 {
-                    if (prop.GetIndexParameters().Length == 0)
+                    if(prop.GetIndexParameters().Length == 0)
                     {
                         var val = FieldToString(prop.Name, prop.GetValue(c, null));
-                        if (val != null)
+                        if(val != null)
                         {
                             comp[prop.Name] = val;
                         }
                     }
                 }
-                catch (Exception e)
+                catch(Exception e)
                 {
                     VRLog.Warn("Failed to get prop {0}", prop.Name);
                 }
@@ -295,22 +295,22 @@ namespace VRGIN.Helpers
             obj["scale"] = go.transform.localScale.ToString();
 
             var components = new JSONClass();
-            foreach (var c in go.GetComponents<Component>())
+            foreach(var c in go.GetComponents<Component>())
             {
-                if (c == null)
+                if(c == null)
                 {
                     VRLog.Warn("NULL component: " + c);
                     continue;
                 }
-               
+
                 components[c.GetType().Name] = AnalyzeComponent(c);
             }
 
 
             var children = new JSONArray();
-            foreach (var child in go.Children())
+            foreach(var child in go.Children())
             {
-                if (!onlyActive || child.activeInHierarchy)
+                if(!onlyActive || child.activeInHierarchy)
                 {
                     children.Add(AnalyzeNode(child, onlyActive));
                 }
@@ -324,21 +324,21 @@ namespace VRGIN.Helpers
 
         private static string FieldToString(string memberName, object value)
         {
-            if (value == null) return null;
+            if(value == null) return null;
 
-            switch (memberName)
+            switch(memberName)
             {
                 case "cullingMask":
                     return string.Join(", ", GetLayerNames((int)value));
                 case "renderer":
                     return ((Renderer)value).material.shader.name;
                 default:
-                    if (value is Vector3)
+                    if(value is Vector3)
                     {
                         var v = (Vector3)value;
                         return String.Format("({0:0.000}, {1:0.000}, {2:0.000})", v.x, v.y, v.z);
                     }
-                    if (value is Vector2)
+                    if(value is Vector2)
                     {
                         var v = (Vector2)value;
                         return String.Format("({0:0.000}, {1:0.000})", v.x, v.y);
@@ -354,11 +354,11 @@ namespace VRGIN.Helpers
             var prop = typeof(T).GetProperty(name, BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public);
             var field = typeof(T).GetField(name, BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public);
 
-            if (prop != null)
+            if(prop != null)
             {
                 prop.SetValue(obj, value, null);
             }
-            else if (field != null)
+            else if(field != null)
             {
                 field.SetValue(obj, value);
             }
@@ -373,11 +373,11 @@ namespace VRGIN.Helpers
             var prop = typeof(T).GetProperty(name, BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public);
             var field = typeof(T).GetField(name, BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public);
 
-            if (prop != null)
+            if(prop != null)
             {
                 return prop.GetValue(obj, null);
             }
-            else if (field != null)
+            else if(field != null)
             {
                 return field.GetValue(obj);
             }
@@ -406,7 +406,7 @@ namespace VRGIN.Helpers
                 RenderTexture.active = oldRT;
             }
         }
-        
+
         private class RayDrawer : ProtectedBehaviour
         {
 

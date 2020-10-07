@@ -6,8 +6,6 @@
 //
 
 using UnityEngine;
-using System.Collections;
-using System;
 
 namespace VRGIN.Visuals
 {
@@ -44,7 +42,7 @@ namespace VRGIN.Visuals
         public void AssignDefaultShader()
         {
             //assign it an unlit shader, common if used for digital keystoning of render texture
-            MeshRenderer meshRenderer = (MeshRenderer)gameObject.GetComponent<MeshRenderer>();
+            MeshRenderer meshRenderer = gameObject.GetComponent<MeshRenderer>();
             meshRenderer.sharedMaterial = new Material(Shader.Find("Unlit/Texture"));
             meshRenderer.sharedMaterial.color = Color.white;
         }
@@ -57,12 +55,12 @@ namespace VRGIN.Visuals
             //create the mesh
             modelMesh = new Mesh();
             modelMesh.name = "ProceduralPlaneMesh";
-            meshFilter = (MeshFilter)gameObject.GetComponent<MeshFilter>();
+            meshFilter = gameObject.GetComponent<MeshFilter>();
             meshFilter.mesh = modelMesh;
 
             //sanity check
-            if (xSegments < MIN_X_SEGMENTS) xSegments = MIN_X_SEGMENTS;
-            if (ySegments < MIN_Y_SEGMENTS) ySegments = MIN_Y_SEGMENTS;
+            if(xSegments < MIN_X_SEGMENTS) xSegments = MIN_X_SEGMENTS;
+            if(ySegments < MIN_Y_SEGMENTS) ySegments = MIN_Y_SEGMENTS;
 
             //calculate how many vertices we need
             numVertexColumns = xSegments + 1;
@@ -95,9 +93,9 @@ namespace VRGIN.Visuals
             float m2rad = radSpan / mSpan;
 
 
-            for (int j = 0; j < numVertexRows; j++)
+            for(int j = 0; j < numVertexRows; j++)
             {
-                for (int i = 0; i < numVertexColumns; i++)
+                for(int i = 0; i < numVertexColumns; i++)
                 {
                     // calculate some weights for the "keystone" vertex pull
                     // for some reason this doesn't work
@@ -135,7 +133,7 @@ namespace VRGIN.Visuals
                                                  p.y,
                                                   z);
 
-                    if (curviness > 1)
+                    if(curviness > 1)
                     {
                         float roundness = curviness - 1;
                         Vertices[index] = Vector3.Lerp(Vertices[index], Vertices[index].normalized * distance, Mathf.Clamp01(roundness));
@@ -146,7 +144,7 @@ namespace VRGIN.Visuals
                     UVs[index] = new Vector2(i * uvStepH, j * uvStepV);
 
                     //create the tris				
-                    if (j == 0 || i >= numVertexColumns - 1)
+                    if(j == 0 || i >= numVertexColumns - 1)
                     {
                         continue;
                     }

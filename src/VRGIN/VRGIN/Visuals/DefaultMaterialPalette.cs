@@ -1,15 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using UnityEngine;
+﻿using UnityEngine;
 using VRGIN.Core;
 using VRGIN.Helpers;
 
 namespace VRGIN.Visuals
 {
     public class DefaultMaterialPalette : IMaterialPalette
-    { 
+    {
         public DefaultMaterialPalette()
         {
             Unlit = CreateUnlit();
@@ -18,12 +14,12 @@ namespace VRGIN.Visuals
             StandardShader = CreateStandardShader();
             Sprite = CreateSprite();
 
-            if (!Unlit || !Unlit.shader) VRLog.Error("Could not load Unlit material!");
-            if (!UnlitTransparent || !UnlitTransparent.shader) VRLog.Error("Could not load UnlitTransparent material!");
-            if (!UnlitTransparentCombined || !UnlitTransparentCombined.shader) VRLog.Error("Could not load UnlitTransparentCombined material!");
-            if (!StandardShader) VRLog.Error("Could not load StandardShader material!");
+            if(!Unlit || !Unlit.shader) VRLog.Error("Could not load Unlit material!");
+            if(!UnlitTransparent || !UnlitTransparent.shader) VRLog.Error("Could not load UnlitTransparent material!");
+            if(!UnlitTransparentCombined || !UnlitTransparentCombined.shader) VRLog.Error("Could not load UnlitTransparentCombined material!");
+            if(!StandardShader) VRLog.Error("Could not load StandardShader material!");
 
-            if (!Sprite || !Sprite.shader)
+            if(!Sprite || !Sprite.shader)
             {
                 VRLog.Error("Could not load Sprite material!");
 
@@ -31,7 +27,7 @@ namespace VRGIN.Visuals
                 Sprite = UnlitTransparent;
             }
         }
-        
+
         private Material CreateUnlitTransparentCombined()
         {
 #if UNITY_4_5

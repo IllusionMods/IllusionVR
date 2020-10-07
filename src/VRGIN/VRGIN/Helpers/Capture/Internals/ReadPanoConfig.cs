@@ -11,77 +11,77 @@ namespace CapturePanorama
     {
         public string iniPath;
 
-        void Start()
+        private void Start()
         {
-            if (Application.isEditor)
+            if(Application.isEditor)
                 return;
 
             CapturePanorama pano = GetComponent<CapturePanorama>();
             string path = iniPath;
-            if (path == "")
+            if(path == "")
             {
                 string filename = "CapturePanorama.ini";
                 path = Application.dataPath + "/" + filename;
             }
-            if (!File.Exists(path))
+            if(!File.Exists(path))
             {
                 // INI file does not exist, creating instead
                 WriteConfig(path, pano);
                 return;
             }
 
-            foreach (string line in File.ReadAllLines(path))
+            foreach(string line in File.ReadAllLines(path))
             {
-                if (line.Trim() == "")
+                if(line.Trim() == "")
                     continue;
 
                 string[] splitLine = line.Split(new char[] { '=' }, 2);
                 string key = splitLine[0].Trim();
                 string val = splitLine[1].Trim();
 
-                if (key == "Panorama Name")
+                if(key == "Panorama Name")
                     pano.panoramaName = val;
-                else if (key == "Capture Key")
+                else if(key == "Capture Key")
                     pano.captureKey = (KeyCode)Enum.Parse(typeof(KeyCode), val);
-                else if (key == "Image Format")
+                else if(key == "Image Format")
                     pano.imageFormat = (CapturePanorama.ImageFormat)Enum.Parse(typeof(CapturePanorama.ImageFormat), val);
-                else if (key == "Capture Stereoscopic")
+                else if(key == "Capture Stereoscopic")
                     pano.captureStereoscopic = bool.Parse(val);
-                else if (key == "Interpupillary Distance")
+                else if(key == "Interpupillary Distance")
                     pano.interpupillaryDistance = float.Parse(val);
-                else if (key == "Num Circle Points")
+                else if(key == "Num Circle Points")
                     pano.numCirclePoints = int.Parse(val);
-                else if (key == "Panorama Width")
+                else if(key == "Panorama Width")
                     pano.panoramaWidth = int.Parse(val);
-                else if (key == "Anti Aliasing")
+                else if(key == "Anti Aliasing")
                     pano.antiAliasing = (CapturePanorama.AntiAliasing)int.Parse(val);
-                else if (key == "Ssaa Factor")
+                else if(key == "Ssaa Factor")
                     pano.ssaaFactor = int.Parse(val);
-                else if (key == "Save Image Path")
+                else if(key == "Save Image Path")
                     pano.saveImagePath = val;
-                else if (key == "Save Cubemap")
+                else if(key == "Save Cubemap")
                     pano.saveCubemap = bool.Parse(val);
-                else if (key == "Upload Images")
+                else if(key == "Upload Images")
                     pano.uploadImages = bool.Parse(val);
-                else if (key == "Use Default Orientation")
+                else if(key == "Use Default Orientation")
                     pano.useDefaultOrientation = bool.Parse(val);
-                else if (key == "Use Gpu Transform")
+                else if(key == "Use Gpu Transform")
                     pano.useGpuTransform = bool.Parse(val);
-                else if (key == "Cpu Milliseconds Per Frame")
+                else if(key == "Cpu Milliseconds Per Frame")
                     pano.cpuMillisecondsPerFrame = (float)double.Parse(val);
-                else if (key == "Capture Every Frame")
+                else if(key == "Capture Every Frame")
                     pano.captureEveryFrame = bool.Parse(val);
-                else if (key == "Frame Rate")
+                else if(key == "Frame Rate")
                     pano.frameRate = int.Parse(val);
-                else if (key == "Max Frames To Record")
+                else if(key == "Max Frames To Record")
                     pano.maxFramesToRecord = val == "" ? 0 : int.Parse(val);
-                else if (key == "Frame Number Digits")
+                else if(key == "Frame Number Digits")
                     pano.frameNumberDigits = int.Parse(val);
-                else if (key == "Fade During Capture")
+                else if(key == "Fade During Capture")
                     pano.fadeDuringCapture = bool.Parse(val);
-                else if (key == "Fade Time")
+                else if(key == "Fade Time")
                     pano.fadeTime = float.Parse(val);
-                else if (key == "Enable Debugging")
+                else if(key == "Enable Debugging")
                     pano.enableDebugging = bool.Parse(val);
                 else
                     Debug.LogError("Unrecognized key in line in CapturePanorama.ini: " + line);
@@ -90,7 +90,7 @@ namespace CapturePanorama
 
         private void WriteConfig(string path, CapturePanorama pano)
         {
-            using (var writer = new StreamWriter(path))
+            using(var writer = new StreamWriter(path))
             {
                 writer.WriteLine("Panorama Name" + "=" + pano.panoramaName);
                 writer.WriteLine("Capture Key" + "=" + pano.captureKey);

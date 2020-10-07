@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Linq;
 using UnityEngine;
 using VRGIN.Core;
 
@@ -18,7 +15,7 @@ namespace VRGIN.Helpers
         {
             return worldValue / VR.Settings.IPDScale * VR.Context.UnitToMeter;
         }
-        
+
 
         /// <summary>
         /// Gets the signed angle between two vectors

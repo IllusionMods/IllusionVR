@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace VRGIN.Core
 {
@@ -15,24 +11,18 @@ namespace VRGIN.Core
     /// <typeparam name="T">Type of the MonoBehaviour</typeparam>
     public abstract class DefaultActor<T> : IActor where T : MonoBehaviour
     {
-        
+
 
         public T Actor { get; protected set; }
-        
+
         public DefaultActor(T nativeActor)
         {
             Actor = nativeActor;
 
             this.Initialize(nativeActor);
         }
-        
-        public virtual bool IsValid
-        {
-            get
-            {
-                return Actor;
-            }
-        }
+
+        public virtual bool IsValid => Actor;
 
         public abstract Transform Eyes
         {

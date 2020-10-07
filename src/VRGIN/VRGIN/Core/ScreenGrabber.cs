@@ -1,12 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using UnityEngine;
 
 namespace VRGIN.Core
 {
-    
+
     public interface IScreenGrabber
     {
         bool Check(Camera camera);
@@ -19,9 +18,15 @@ namespace VRGIN.Core
         public delegate bool JudgingMethod(Camera camera);
 
         // Predefined functions
-        public static JudgingMethod FromList(IEnumerable<Camera> allowedCameras) => (Camera camera) => allowedCameras.Contains(camera);
-        public static JudgingMethod FromList(params String[] allowedCameraNames) => (Camera camera) => allowedCameraNames.Contains(camera.name);
+        public static JudgingMethod FromList(IEnumerable<Camera> allowedCameras)
+        {
+            return (Camera camera) => allowedCameras.Contains(camera);
+        }
 
+        public static JudgingMethod FromList(params String[] allowedCameraNames)
+        {
+            return (Camera camera) => allowedCameraNames.Contains(camera.name);
+        }
 
         private IList<Camera> _Cameras = new List<Camera>();
         private HashSet<Camera> _CheckedCameras = new HashSet<Camera>();

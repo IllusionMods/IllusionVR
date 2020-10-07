@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
 
@@ -69,11 +67,11 @@ namespace VRGIN.Native
 
         [DllImport("USER32.dll", CallingConvention = CallingConvention.StdCall, CharSet = CharSet.None, ExactSpelling = false)]
         public static extern void SetCursorPos(int X, int Y);
-        
+
         [DllImport("user32.dll")]
         [return: MarshalAs(UnmanagedType.Bool)]
         public static extern bool GetCursorPos(out POINT lpMousePoint);
-        
+
         [DllImport("USER32.dll", CharSet = CharSet.None, ExactSpelling = false)]
         public static extern bool ClientToScreen(IntPtr hWnd, ref POINT lpPoint);
 

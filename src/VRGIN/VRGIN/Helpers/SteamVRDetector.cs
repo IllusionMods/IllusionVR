@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using System.Linq;
-using System.Text;
 
 namespace VRGIN.Helpers
 {
@@ -20,12 +17,6 @@ namespace VRGIN.Helpers
             }
         }
 
-        public static bool IsRunning
-        {
-            get
-            {
-                return Process.GetProcesses().Where(FilterInvalidProcesses).Any(process => process.ProcessName == "vrcompositor");
-            }
-        }
+        public static bool IsRunning => Process.GetProcesses().Where(FilterInvalidProcesses).Any(process => process.ProcessName == "vrcompositor");
     }
 }
