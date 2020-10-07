@@ -8,7 +8,7 @@ using VRGIN.Core;
 using VRGIN.Helpers;
 using VRGIN.Modes;
 
-namespace KoikatuVR
+namespace IllusionVR.Koikatu
 {
     class GenericSeatedMode : SeatedMode
     {

@@ -1,5 +1,5 @@
 ﻿
-namespace KoikatuVR.Interpreters
+namespace IllusionVR.Koikatu.Interpreters
 {
     class OtherSceneInterpreter : SceneInterpreter
     {

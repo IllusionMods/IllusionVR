@@ -4,10 +4,10 @@ using System.Xml.Serialization;
 using UnityEngine;
 using System.Collections;
 using VRGIN.Core;
-using KoikatuVR.Interpreters;
+using IllusionVR.Koikatu.Interpreters;
 using BepInEx;
 
-namespace KoikatuVR
+namespace IllusionVR.Koikatu
 {
 	class VRLoader : ProtectedBehaviour
 	{

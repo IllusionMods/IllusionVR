@@ -13,7 +13,7 @@ using VRGIN.Core;
 using VRGIN.Helpers;
 using static VRGIN.Visuals.GUIMonitor;
 
-namespace KoikatuVR
+namespace IllusionVR.Koikatu
 {
     /// <summary>
     /// Class that holds settings for VR. Saved as an XML file.

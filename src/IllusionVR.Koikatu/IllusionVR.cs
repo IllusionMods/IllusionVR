@@ -2,7 +2,7 @@
 using System;
 using VRGIN.Helpers;
 
-namespace KoikatuVR
+namespace IllusionVR.Koikatu
 {
     [BepInPlugin("keelhauled.illusionvr.koikatu", "IllusionVR", "1.0.0")]
     public class IllusionVR : BaseUnityPlugin

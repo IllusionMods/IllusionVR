@@ -7,9 +7,9 @@ using VRGIN.Core;
 using VRGIN.Helpers;
 using static SteamVR_Controller;
 using WindowsInput.Native;
-using KoikatuVR.Interpreters;
+using IllusionVR.Koikatu.Interpreters;
 
-namespace KoikatuVR
+namespace IllusionVR.Koikatu
 {
     public class SchoolTool : Tool
     {

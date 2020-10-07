@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using VRGIN.Core;
 
-namespace KoikatuVR.Interpreters
+namespace IllusionVR.Koikatu.Interpreters
 {
     class HSceneInterpreter : SceneInterpreter
     {
