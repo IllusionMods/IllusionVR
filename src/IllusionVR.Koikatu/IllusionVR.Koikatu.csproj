@@ -63,6 +63,7 @@
     <Compile Include="Interpreters\ActionSceneInterpreter.cs" />
     <Compile Include="Interpreters\HSceneInterpreter.cs" />
     <Compile Include="Interpreters\KoikatuInterpreter.cs" />
+    <Compile Include="Interpreters\MakerInterpreter.cs" />
     <Compile Include="Interpreters\NightMenuSceneInterpreter.cs" />
     <Compile Include="Interpreters\OtherSceneInterpreter.cs" />
     <Compile Include="Interpreters\SceneInterpreter.cs" />

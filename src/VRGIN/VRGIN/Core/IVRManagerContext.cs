@@ -105,5 +105,10 @@ namespace VRGIN.Core
         /// For which kind of GUI VRGIN should be optimized. [uGUI]
         /// </summary>
         GUIType PreferredGUI { get; }
+
+        /// <summary>
+        /// lel
+        /// </summary>
+        CameraClearFlags CameraClearFlags { get; }
     }
 }

@@ -42,6 +42,7 @@ namespace IllusionVR.Koikatu
             UnitToMeter = 1f;
             NearClipPlane = 0.001f;
             PreferredGUI = GUIType.uGUI;
+            CameraClearFlags = CameraClearFlags.Skybox;
         }
 
         [XmlIgnore]
@@ -82,5 +83,7 @@ namespace IllusionVR.Koikatu
         public float NearClipPlane { get; set; }
 
         public GUIType PreferredGUI { get; set; }
+
+        public CameraClearFlags CameraClearFlags { get; set; }
     }
 }

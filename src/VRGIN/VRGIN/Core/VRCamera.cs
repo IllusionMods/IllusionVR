@@ -276,6 +276,8 @@ namespace VRGIN.Core
 
                         vrSkybox.material = skybox.material;
                     }
+
+                    targetCamera.clearFlags = VR.Context.CameraClearFlags;
                 });
 
             }

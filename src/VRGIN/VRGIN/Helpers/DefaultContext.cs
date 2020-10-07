@@ -173,5 +173,7 @@ namespace VRGIN.Helpers
                 return typeof(VoiceCommand);
             }
         }
+
+        public CameraClearFlags CameraClearFlags => CameraClearFlags.Skybox;
     }
 }

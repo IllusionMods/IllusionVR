@@ -11,6 +11,7 @@ namespace IllusionVR.Koikatu.Interpreters
         public const int TalkScene = 2;
         public const int HScene = 3;
         public const int NightMenuScene = 4;
+        public const int MakerScene = 5;
 
         private int _SceneType;
         public SceneInterpreter SceneInterpreter;
@@ -74,6 +75,16 @@ namespace IllusionVR.Koikatu.Interpreters
                     nextSceneType = ActionScene;
                     nextInterpreter = new ActionSceneInterpreter();
                     VRLog.Info("Start ActionScene");
+                }
+            }
+
+            else if(GameObject.Find("CustomScene") != null)
+            {
+                if(_SceneType != MakerScene)
+                {
+                    nextSceneType = MakerScene;
+                    nextInterpreter = new MakerInterpreter();
+                    VRLog.Info("Start MakerScene");
                 }
             }
 
