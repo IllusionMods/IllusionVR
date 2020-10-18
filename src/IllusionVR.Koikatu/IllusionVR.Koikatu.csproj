@@ -60,13 +60,13 @@
     <Compile Include="GenericSeatedMode.cs" />
     <Compile Include="GenericStandingMode.cs" />
     <Compile Include="IllusionVR.cs" />
-    <Compile Include="Interpreters\ActionSceneInterpreter.cs" />
-    <Compile Include="Interpreters\HSceneInterpreter.cs" />
-    <Compile Include="Interpreters\KoikatuInterpreter.cs" />
-    <Compile Include="Interpreters\MakerInterpreter.cs" />
-    <Compile Include="Interpreters\NightMenuSceneInterpreter.cs" />
-    <Compile Include="Interpreters\OtherSceneInterpreter.cs" />
-    <Compile Include="Interpreters\SceneInterpreter.cs" />
+    <Compile Include="MainGame\Interpreters\ActionSceneInterpreter.cs" />
+    <Compile Include="MainGame\Interpreters\HSceneInterpreter.cs" />
+    <Compile Include="MainGame\Interpreters\KoikatuInterpreter.cs" />
+    <Compile Include="MainGame\Interpreters\MakerInterpreter.cs" />
+    <Compile Include="MainGame\Interpreters\NightMenuSceneInterpreter.cs" />
+    <Compile Include="MainGame\Interpreters\OtherSceneInterpreter.cs" />
+    <Compile Include="MainGame\Interpreters\SceneInterpreter.cs" />
     <Compile Include="KoikatuSettings.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
@@ -74,7 +74,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <Compile Include="SchoolTool.cs" />
+    <Compile Include="MainGame\SchoolTool.cs" />
     <Compile Include="VRLoader.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -100,6 +100,12 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <Analyzer Include="..\..\packages\Microsoft.Unity.Analyzers.1.8.2\analyzers\dotnet\cs\Microsoft.Unity.Analyzers.dll" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="CharaStudio\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

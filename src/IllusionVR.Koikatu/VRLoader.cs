@@ -5,24 +5,25 @@ using System.IO;
 using System.Xml.Serialization;
 using UnityEngine;
 using VRGIN.Core;
+using BepInEx;
 
 namespace IllusionVR.Koikatu
 {
     internal class VRLoader : ProtectedBehaviour
     {
-        private static string DeviceOpenVR = "OpenVR";
-        private static string DeviceNone = "None";
+        private const string DeviceOpenVR = "OpenVR";
+        private const string DeviceNone = "None";
 
         private static bool _isVREnable = false;
+
         private static VRLoader _Instance;
         public static VRLoader Instance
         {
             get
             {
                 if(_Instance == null)
-                {
                     throw new InvalidOperationException("VR Loader has not been created yet!");
-                }
+
                 return _Instance;
             }
         }
@@ -38,16 +39,42 @@ namespace IllusionVR.Koikatu
         protected override void OnAwake()
         {
             if(_isVREnable)
-            {
                 StartCoroutine(LoadDevice(DeviceOpenVR));
-            }
             else
-            {
                 StartCoroutine(LoadDevice(DeviceNone));
-            }
         }
 
-        #region Helper code
+        private IEnumerator LoadDevice(string newDevice)
+        {
+            bool vrMode = newDevice != DeviceNone;
+
+            UnityEngine.VR.VRSettings.LoadDeviceByName(newDevice);
+            yield return null;
+            UnityEngine.VR.VRSettings.enabled = vrMode;
+            yield return null;
+
+            while(UnityEngine.VR.VRSettings.loadedDeviceName != newDevice || UnityEngine.VR.VRSettings.enabled != vrMode)
+            {
+                yield return null;
+            }
+
+            if(vrMode)
+            {
+                // Boot VRManager!
+                // Note: Use your own implementation of GameInterpreter to gain access to a few useful operatoins
+                // (e.g. characters, camera judging, colliders, etc.)
+
+                if(Paths.ProcessName == "CharaStudio")
+                {
+
+                }
+                else
+                {
+                    VRManager.Create<KoikatuInterpreter>(CreateContext(Path.Combine(Paths.ConfigPath, "VRContext.xml")));
+                    VR.Manager.SetMode<GenericStandingMode>();
+                }
+            }
+        }
 
         private IVRManagerContext CreateContext(string path)
         {
@@ -62,9 +89,9 @@ namespace IllusionVR.Koikatu
                     {
                         return serializer.Deserialize(file) as ConfigurableContext;
                     }
-                    catch(Exception)
+                    catch(Exception ex)
                     {
-                        VRLog.Error("Failed to deserialize {0} -- using default", path);
+                        IllusionVR.Logger.LogError($"Failed to deserialize {path} -- using default\n{ex}");
                     }
                 }
             }
@@ -79,46 +106,12 @@ namespace IllusionVR.Koikatu
                     serializer.Serialize(file, context);
                 }
             }
-            catch(Exception)
+            catch(Exception ex)
             {
-                VRLog.Error("Failed to write {0}", path);
+                IllusionVR.Logger.LogError($"Failed to write {path}\n{ex}");
             }
 
             return context;
-        }
-        #endregion
-
-        /// <summary>
-        /// VRデバイスのロード。
-        /// </summary>
-        private IEnumerator LoadDevice(string newDevice)
-        {
-            bool vrMode = newDevice != DeviceNone;
-
-            // 指定されたデバイスの読み込み.
-            UnityEngine.VR.VRSettings.LoadDeviceByName(newDevice);
-            // 次のフレームまで待つ.
-            yield return null;
-            // VRモードを有効にする.
-            UnityEngine.VR.VRSettings.enabled = vrMode;
-            // 次のフレームまで待つ.
-            yield return null;
-
-            // デバイスの読み込みが完了するまで待つ.
-            while(UnityEngine.VR.VRSettings.loadedDeviceName != newDevice || UnityEngine.VR.VRSettings.enabled != vrMode)
-            {
-                yield return null;
-            }
-
-
-            if(vrMode)
-            {
-                // Boot VRManager!
-                // Note: Use your own implementation of GameInterpreter to gain access to a few useful operatoins
-                // (e.g. characters, camera judging, colliders, etc.)
-                VRManager.Create<KoikatuInterpreter>(CreateContext("VRContext.xml"));
-                VR.Manager.SetMode<GenericStandingMode>();
-            }
         }
     }
 }

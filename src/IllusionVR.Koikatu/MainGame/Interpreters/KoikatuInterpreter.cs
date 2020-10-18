@@ -5,22 +5,14 @@ namespace IllusionVR.Koikatu.Interpreters
 {
     internal class KoikatuInterpreter : GameInterpreter
     {
-        public const int NoScene = -1;
-        public const int OtherScene = 0;
-        public const int ActionScene = 1;
-        public const int TalkScene = 2;
-        public const int HScene = 3;
-        public const int NightMenuScene = 4;
-        public const int MakerScene = 5;
-
-        private int _SceneType;
+        private SceneType CurrentSceneType;
         public SceneInterpreter SceneInterpreter;
 
         protected override void OnAwake()
         {
             base.OnAwake();
 
-            _SceneType = NoScene;
+            CurrentSceneType = SceneType.NoScene;
             SceneInterpreter = new OtherSceneInterpreter();
         }
 
@@ -35,77 +27,88 @@ namespace IllusionVR.Koikatu.Interpreters
         // 前回とSceneが変わっていれば切り替え処理をする
         private void DetectScene()
         {
-            int nextSceneType = NoScene;
+            var nextSceneType = SceneType.NoScene;
             SceneInterpreter nextInterpreter = new OtherSceneInterpreter();
 
             if(GameObject.Find("TalkScene") != null)
             {
-                if(_SceneType != TalkScene)
+                if(CurrentSceneType != SceneType.Talk)
                 {
-                    nextSceneType = TalkScene;
+                    nextSceneType = SceneType.Talk;
                     //nextInterpreter = new TalkSceneInterpreter(); 特有の処理がないため不要
-                    VRLog.Info("Start TalkScene");
+                    IllusionVR.Logger.LogDebug("Start TalkScene");
                 }
             }
 
             else if(GameObject.Find("HScene") != null)
             {
-                if(_SceneType != HScene)
+                if(CurrentSceneType != SceneType.HScene)
                 {
-                    nextSceneType = HScene;
+                    nextSceneType = SceneType.HScene;
                     nextInterpreter = new HSceneInterpreter();
-                    VRLog.Info("Start HScene");
+                    IllusionVR.Logger.LogDebug("Start HScene");
                 }
             }
 
             else if(GameObject.Find("NightMenuScene") != null)
             {
-                if(_SceneType != NightMenuScene)
+                if(CurrentSceneType != SceneType.NightMenu)
                 {
-                    nextSceneType = NightMenuScene;
+                    nextSceneType = SceneType.NightMenu;
                     nextInterpreter = new NightMenuSceneInterpreter();
-                    VRLog.Info("Start NightMenuScene");
+                    IllusionVR.Logger.LogDebug("Start NightMenuScene");
                 }
             }
 
             else if(GameObject.Find("ActionScene") != null)
             {
-                if(_SceneType != ActionScene)
+                if(CurrentSceneType != SceneType.Action)
                 {
-                    nextSceneType = ActionScene;
+                    nextSceneType = SceneType.Action;
                     nextInterpreter = new ActionSceneInterpreter();
-                    VRLog.Info("Start ActionScene");
+                    IllusionVR.Logger.LogDebug("Start ActionScene");
                 }
             }
 
             else if(GameObject.Find("CustomScene") != null)
             {
-                if(_SceneType != MakerScene)
+                if(CurrentSceneType != SceneType.Maker)
                 {
-                    nextSceneType = MakerScene;
+                    nextSceneType = SceneType.Maker;
                     nextInterpreter = new MakerInterpreter();
-                    VRLog.Info("Start MakerScene");
+                    IllusionVR.Logger.LogDebug("Start MakerScene");
                 }
             }
 
             else
             {
-                if(_SceneType != OtherScene)
+                if(CurrentSceneType != SceneType.Other)
                 {
-                    nextSceneType = OtherScene;
+                    nextSceneType = SceneType.Other;
                     //nextInterpreter = new OtherSceneInterpreter();
-                    VRLog.Info("Start OtherScene");
+                    IllusionVR.Logger.LogDebug("Start OtherScene");
                 }
             }
 
-            if(nextSceneType != NoScene)
+            if(nextSceneType != SceneType.NoScene)
             {
                 SceneInterpreter.OnDisable();
 
-                _SceneType = nextSceneType;
+                CurrentSceneType = nextSceneType;
                 SceneInterpreter = nextInterpreter;
                 SceneInterpreter.OnStart();
             }
         }
+    }
+
+    public enum SceneType
+    {
+        NoScene,
+        Other,
+        Action,
+        Talk,
+        HScene,
+        NightMenu,
+        Maker
     }
 }
