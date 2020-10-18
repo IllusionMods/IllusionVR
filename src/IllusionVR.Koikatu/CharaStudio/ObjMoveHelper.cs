@@ -18,7 +18,7 @@ namespace KKCharaStudioVR
 
 		public ObjectCtrlInfo GetFirstObject()
 		{
-			Studio instance = Singleton<Studio>.Instance;
+			var instance = Singleton<Studio.Studio>.Instance;
 			if (instance != null)
 			{
 				ObjectCtrlInfo[] selectObjectCtrl = instance.treeNodeCtrl.selectObjectCtrl;
@@ -32,7 +32,7 @@ namespace KKCharaStudioVR
 
 		public void MoveAllCharaAndItemsHere(Vector3 newPos, bool keepY = true)
 		{
-			Studio instance = Singleton<Studio>.Instance;
+			var instance = Singleton<Studio.Studio>.Instance;
 			if (instance == null)
 			{
 				return;
@@ -51,7 +51,7 @@ namespace KKCharaStudioVR
 				if (guideObject != null)
 				{
 					Vector3 localPosition = guideObject.transformTarget.localPosition;
-					guideObject.transformTarget.position = guideObject.transformTarget.position + vector;
+					guideObject.transformTarget.position += vector;
 					guideObject.changeAmount.pos = guideObject.transformTarget.localPosition;
 					if (guideObject.enablePos)
 					{

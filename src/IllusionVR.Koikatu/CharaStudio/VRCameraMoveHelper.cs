@@ -1,4 +1,5 @@
 ﻿using System;
+using HarmonyLib;
 using Studio;
 using UnityEngine;
 using UnityEngine.UI;
@@ -149,16 +150,15 @@ namespace KKCharaStudioVR
 
 		public void CurrentToCameraCtrl()
 		{
-			Vector3 vector;
-			Vector3 vector2;
-			Vector3 vector3;
-			GetCurrentLookDirAndRot(out vector, out vector2, out vector3);
-			CameraControl.CameraData cameraData = new CameraControl.CameraData();
+            GetCurrentLookDirAndRot(out Vector3 vector, out Vector3 vector2, out Vector3 vector3);
+			//var cameraData = new CameraControl.CameraData();
+			var cameraData = Activator.CreateInstance(typeof(BaseCameraControl).Assembly.GetType("BaseCameraControl+CameraData"));
 			VR.Camera.Head.TransformPoint(vector2.normalized * DEFAULT_DISTANCE * DISTANCE_RATIO);
-			Vector3 vector4;
-			vector4..ctor(0f, 0f, -1f * DEFAULT_DISTANCE * DISTANCE_RATIO);
-			cameraData.Set(vector, vector3, vector4, studio.cameraCtrl.fieldOfView);
-			studio.cameraCtrl.Import(cameraData);
+			Vector3 vector4 = new Vector3(0f, 0f, -1f * DEFAULT_DISTANCE * DISTANCE_RATIO);
+			//cameraData.Set(vector, vector3, vector4, studio.cameraCtrl.fieldOfView);
+			Traverse.Create(cameraData).Method("Set").GetValue(vector, vector3, vector4, studio.cameraCtrl.fieldOfView);
+			//studio.cameraCtrl.Import(cameraData);
+			Traverse.Create(studio.cameraCtrl).Method("Import").GetValue(cameraData);
 		}
 
 		private void GetCurrentLookDirAndRot(out Vector3 lookPoint, out Vector3 dir, out Vector3 rot)
@@ -176,14 +176,14 @@ namespace KKCharaStudioVR
 
 		public void MoveToCamera(int slot)
 		{
-			CameraControl.CameraData cameraData = studio.sceneInfo.cameraData[slot];
+			var cameraData = studio.sceneInfo.cameraData[slot];
 			studio.cameraCtrl.Import(cameraData);
 			MoveToCurrent();
 		}
 
 		public void MoveToCurrent()
 		{
-			CameraControl.CameraData cameraData = studio.cameraCtrl.Export();
+			var cameraData = studio.cameraCtrl.Export();
 			Vector3 tobeHeadPos = cameraData.pos + Quaternion.Euler(cameraData.rotate) * cameraData.distance;
 			Quaternion tobeHeadRot = Quaternion.Euler(cameraData.rotate);
 			MoveTo(tobeHeadPos, tobeHeadRot);
@@ -232,11 +232,8 @@ namespace KKCharaStudioVR
 
 		public void MoveToPoint(Vector3 targetPos, bool lockY)
 		{
-			Vector3 vector;
-			Vector3 vector2;
-			Vector3 vector3;
-			GetCurrentLookDirAndRot(out vector, out vector2, out vector3);
-			Vector3 vector4 = targetPos - vector2.normalized * 0.5f;
+            GetCurrentLookDirAndRot(out Vector3 vector, out Vector3 vector2, out Vector3 vector3);
+            Vector3 vector4 = targetPos - vector2.normalized * 0.5f;
 			if (lockY)
 			{
 				vector4.y = VR.Camera.Head.position.y;
@@ -250,11 +247,8 @@ namespace KKCharaStudioVR
 
 		public void MoveForwardBackward(float distance)
 		{
-			Vector3 vector;
-			Vector3 vector2;
-			Vector3 vector3;
-			GetCurrentLookDirAndRot(out vector, out vector2, out vector3);
-			Vector3 tobeHeadPos = VR.Camera.Head.position + vector2 * distance;
+            GetCurrentLookDirAndRot(out _, out Vector3 vector2, out Vector3 vector3);
+            Vector3 tobeHeadPos = VR.Camera.Head.position + vector2 * distance;
 			tobeHeadPos.y = VR.Camera.Head.position.y;
 			MoveTo(tobeHeadPos, Quaternion.Euler(vector3));
 		}
@@ -288,10 +282,7 @@ namespace KKCharaStudioVR
 					}
 					else
 					{
-						VRLog.Info("Not Found. {0}", new object[]
-						{
-							child.name
-						});
+						VRLog.Info("Not Found. {0}", child.name);
 					}
 				}
 			}
@@ -299,7 +290,7 @@ namespace KKCharaStudioVR
 			{
 				VRLog.Error(obj);
 			}
-			VRLog.Info("VR Camera Helper installed.", new object[0]);
+			VRLog.Info("VR Camera Helper installed.");
 		}
 
 		private void OnSaveButtonClick(int idx)

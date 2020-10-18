@@ -92,10 +92,10 @@ namespace VRUtil
 			{
 				return null;
 			}
-			RenderTextureReadWrite renderTextureReadWrite = 1;
+			RenderTextureReadWrite renderTextureReadWrite = RenderTextureReadWrite.Linear;
 			if (!isLiner)
 			{
-				renderTextureReadWrite = 2;
+				renderTextureReadWrite = RenderTextureReadWrite.sRGB;
 			}
 			RenderTexture renderTexture = new RenderTexture(tex.width, tex.height, 0, 0, renderTextureReadWrite);
 			bool sRGBWrite = GL.sRGBWrite;
@@ -105,7 +105,7 @@ namespace VRUtil
 			Graphics.SetRenderTarget(null);
 			Graphics.Blit(tex, renderTexture);
 			GL.sRGBWrite = sRGBWrite;
-			Texture2D texture2D = new Texture2D(renderTexture.width, renderTexture.height, 5, isLiner);
+			Texture2D texture2D = new Texture2D(renderTexture.width, renderTexture.height, TextureFormat.ARGB32, isLiner);
 			RenderTexture.active = renderTexture;
 			texture2D.ReadPixels(new Rect(0f, 0f, (float)renderTexture.width, (float)renderTexture.height), 0, 0);
 			texture2D.Apply();

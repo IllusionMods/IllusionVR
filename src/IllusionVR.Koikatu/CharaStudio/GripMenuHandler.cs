@@ -103,7 +103,7 @@ namespace KKCharaStudioVR
 		{
 			if (_ResizeHandler)
 			{
-				Object.DestroyImmediate(_ResizeHandler);
+				DestroyImmediate(_ResizeHandler);
 			}
 			_ResizeHandler = null;
 		}
@@ -151,7 +151,7 @@ namespace KKCharaStudioVR
 
 		private bool IsLaserable(GUIQuad quad)
 		{
-            return IsWithinRange(quad) && Raycast(quad, out RaycastHit raycastHit);
+            return IsWithinRange(quad) && Raycast(quad, out _);
         }
 
 		private float GetRange(GUIQuad quad)
@@ -161,12 +161,10 @@ namespace KKCharaStudioVR
 
 		private bool IsWithinRange(GUIQuad quad)
 		{
-			if (quad.transform.parent == base.transform)
-			{
+			if (quad.transform.parent == transform)
 				return false;
-			}
+
 			Vector3 vector = -quad.transform.forward;
-			Vector3 position = quad.transform.position;
 			Vector3 position2 = Laser.transform.position;
 			Vector3 forward = Laser.transform.forward;
 			float num = -quad.transform.InverseTransformPoint(position2).z * quad.transform.localScale.magnitude;
@@ -178,13 +176,12 @@ namespace KKCharaStudioVR
 			Vector3 position = Laser.transform.position;
 			Vector3 forward = Laser.transform.forward;
 			Collider component = quad.GetComponent<Collider>();
-			if (component)
+			if(component)
 			{
-				Ray ray;
-				ray..ctor(position, forward);
-				return component.Raycast(ray, ref hit, GetRange(quad));
+				var ray = new Ray(position, forward);
+				return component.Raycast(ray, out hit, GetRange(quad));
 			}
-			hit = default(RaycastHit);
+			hit = default;
 			return false;
 		}
 
@@ -194,17 +191,15 @@ namespace KKCharaStudioVR
 			Laser.SetPosition(1, Laser.transform.position + Laser.transform.forward);
 			if (_Target && _Target.gameObject.activeInHierarchy)
 			{
-				RaycastHit raycastHit;
-				if (!IsWithinRange(_Target) || !Raycast(_Target, out raycastHit))
-				{
-					LaserVisible = false;
-					return;
-				}
-				Laser.SetPosition(1, raycastHit.point);
+                if(!IsWithinRange(_Target) || !Raycast(_Target, out RaycastHit raycastHit))
+                {
+                    LaserVisible = false;
+                    return;
+                }
+                Laser.SetPosition(1, raycastHit.point);
 				if (!IsOtherWorkingOn(_Target))
 				{
-					Vector2 vector;
-					vector..ctor(raycastHit.textureCoord.x * (float)VRGUI.Width, (1f - raycastHit.textureCoord.y) * (float)VRGUI.Height);
+					var vector = new Vector2(raycastHit.textureCoord.x * (float)VRGUI.Width, (1f - raycastHit.textureCoord.y) * (float)VRGUI.Height);
 					if (mouseDownPosition == null || Vector2.Distance(mouseDownPosition.Value, vector) > 30f)
 					{
 						MouseOperations.SetClientCursorPosition((int)vector.x, (int)vector.y);

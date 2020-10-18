@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using IllusionVR.Core;
+using UnityEngine;
 using VRGIN.Core;
 
 namespace IllusionVR.Koikatu.Interpreters
@@ -36,7 +37,7 @@ namespace IllusionVR.Koikatu.Interpreters
                 {
                     nextSceneType = SceneType.Talk;
                     //nextInterpreter = new TalkSceneInterpreter(); 特有の処理がないため不要
-                    IllusionVR.Logger.LogDebug("Start TalkScene");
+                    IVRLog.LogDebug("Start TalkScene");
                 }
             }
 
@@ -46,7 +47,7 @@ namespace IllusionVR.Koikatu.Interpreters
                 {
                     nextSceneType = SceneType.HScene;
                     nextInterpreter = new HSceneInterpreter();
-                    IllusionVR.Logger.LogDebug("Start HScene");
+                    IVRLog.LogDebug("Start HScene");
                 }
             }
 
@@ -56,7 +57,7 @@ namespace IllusionVR.Koikatu.Interpreters
                 {
                     nextSceneType = SceneType.NightMenu;
                     nextInterpreter = new NightMenuSceneInterpreter();
-                    IllusionVR.Logger.LogDebug("Start NightMenuScene");
+                    IVRLog.LogDebug("Start NightMenuScene");
                 }
             }
 
@@ -66,7 +67,7 @@ namespace IllusionVR.Koikatu.Interpreters
                 {
                     nextSceneType = SceneType.Action;
                     nextInterpreter = new ActionSceneInterpreter();
-                    IllusionVR.Logger.LogDebug("Start ActionScene");
+                    IVRLog.LogDebug("Start ActionScene");
                 }
             }
 
@@ -76,7 +77,7 @@ namespace IllusionVR.Koikatu.Interpreters
                 {
                     nextSceneType = SceneType.Maker;
                     nextInterpreter = new MakerInterpreter();
-                    IllusionVR.Logger.LogDebug("Start MakerScene");
+                    IVRLog.LogDebug("Start MakerScene");
                 }
             }
 
@@ -86,7 +87,7 @@ namespace IllusionVR.Koikatu.Interpreters
                 {
                     nextSceneType = SceneType.Other;
                     //nextInterpreter = new OtherSceneInterpreter();
-                    IllusionVR.Logger.LogDebug("Start OtherScene");
+                    IVRLog.LogDebug("Start OtherScene");
                 }
             }
 

@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using BepInEx;
+using IllusionVR.Core;
 using Manager;
 using Studio;
 using UnityEngine;
@@ -114,7 +115,7 @@ namespace KKCharaStudioVR
 
 		private IEnumerator ForceResetVRModeCo()
 		{
-			Logger.Log(32, "Check and reset to StandingMode if not.");
+			IVRLog.LogDebug("Check and reset to StandingMode if not.");
 			yield return null;
 			yield return null;
 			yield return null;
@@ -122,12 +123,12 @@ namespace KKCharaStudioVR
 			yield return null;
 			if (!VRManager.Instance.Mode || !(VRManager.Instance.Mode is GenericStandingMode))
 			{
-				Logger.Log(32, "Mode is not StandingMode. Force reset as Standing Mode.");
+				IVRLog.LogDebug("Mode is not StandingMode. Force reset as Standing Mode.");
 				KKCharaStudioInterpreter.ForceResetAsStandingMode();
 			}
 			else
 			{
-				Logger.Log(32, "Is Standing Mode. Skip to setting force.");
+				IVRLog.LogDebug("Is Standing Mode. Skip to setting force.");
 			}
 			yield break;
 		}
@@ -141,12 +142,12 @@ namespace KKCharaStudioVR
 				{
 					Camera blueprint = VR.Camera.Blueprint;
 					Camera mainCmaera = Singleton<Studio.Studio>.Instance.cameraCtrl.mainCmaera;
-					Logger.Log(32, string.Format("Force replace blueprint camera with {0}", mainCmaera));
+					IVRLog.LogDebug(string.Format("Force replace blueprint camera with {0}", mainCmaera));
 					Camera camera = VR.Camera.SteamCam.camera;
 					Camera camera2 = mainCmaera;
 					camera.nearClipPlane = VR.Context.NearClipPlane;
 					camera.farClipPlane = Mathf.Max(camera2.farClipPlane, 10f);
-					camera.clearFlags = ((camera2.clearFlags == 1) ? 1 : 2);
+					camera.clearFlags = ((camera2.clearFlags == CameraClearFlags.Skybox) ? CameraClearFlags.Skybox : CameraClearFlags.Color);
 					camera.renderingPath = camera2.renderingPath;
 					camera.clearStencilAfterLightingPass = camera2.clearStencilAfterLightingPass;
 					camera.depthTextureMode = camera2.depthTextureMode;
@@ -169,7 +170,7 @@ namespace KKCharaStudioVR
 				}
 				else
 				{
-					Logger.Log(32, "VR.Camera is null");
+					IVRLog.LogDebug("VR.Camera is null");
 				}
 			}
 			catch (Exception value)

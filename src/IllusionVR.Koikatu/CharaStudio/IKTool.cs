@@ -51,7 +51,7 @@ namespace KKCharaStudioVR
 
 		private IEnumerator InstallMoveableObjectCo()
 		{
-			Studio studio = Singleton<Studio>.Instance;
+			var studio = Singleton<Studio.Studio>.Instance;
 			GuideObjectManager guideObjectManager = Singleton<GuideObjectManager>.Instance;
 			for (;;)
 			{
@@ -85,7 +85,6 @@ namespace KKCharaStudioVR
 					Console.WriteLine(value2);
 					continue;
 				}
-				yield break;
 			}
 		}
 
@@ -289,16 +288,16 @@ namespace KKCharaStudioVR
 					Vector3 vector = component.oldScale;
 					switch (guideScale.axis)
 					{
-					case 0:
+					case GuideScale.ScaleAxis.X:
 						vector.x *= num;
 						break;
-					case 1:
+					case GuideScale.ScaleAxis.Y:
 						vector.y *= num;
 						break;
-					case 2:
+					case GuideScale.ScaleAxis.Z:
 						vector.z *= num;
 						break;
-					case 3:
+					case GuideScale.ScaleAxis.XYZ:
 						vector *= num;
 						break;
 					}
@@ -325,13 +324,13 @@ namespace KKCharaStudioVR
 		{
 			switch (guideScale.axis)
 			{
-			case 0:
+			case GuideScale.ScaleAxis.X:
 				return new Vector3(0.25f, 0f, 0f);
-			case 1:
+			case GuideScale.ScaleAxis.Y:
 				return new Vector3(0f, 0.25f, 0f);
-			case 2:
+			case GuideScale.ScaleAxis.Z:
 				return new Vector3(0f, 0f, 0.25f);
-			case 3:
+			case GuideScale.ScaleAxis.XYZ:
 				return new Vector3(0.25f, 0.25f, 0.25f) * 0.25f / DEFAULT_SCALE_POS_XYZ_DIST;
 			default:
 				return Vector3.zero;

@@ -58,17 +58,17 @@ namespace KKCharaStudioVR
 
 		private void InitializeDynamicBoneColliders()
 		{
-			DynamicBone[] array = Object.FindObjectsOfType<DynamicBone>();
+			DynamicBone[] array = FindObjectsOfType<DynamicBone>();
 			for (int i = 0; i < array.Length; i++)
 			{
 				array[i].m_UpdateRate = 90f;
 			}
-			DynamicBone_Ver01[] array2 = Object.FindObjectsOfType<DynamicBone_Ver01>();
+			DynamicBone_Ver01[] array2 = FindObjectsOfType<DynamicBone_Ver01>();
 			for (int i = 0; i < array2.Length; i++)
 			{
 				array2[i].m_UpdateRate = 90f;
 			}
-			DynamicBone_Ver02[] array3 = Object.FindObjectsOfType<DynamicBone_Ver02>();
+			DynamicBone_Ver02[] array3 = FindObjectsOfType<DynamicBone_Ver02>();
 			for (int i = 0; i < array3.Length; i++)
 			{
 				array3[i].UpdateRate = 90f;

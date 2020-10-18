@@ -83,14 +83,14 @@ namespace KKCharaStudioVR
 			}
 			Transform objectListCanvas = studio.gameObject.transform.Find("Canvas Object List");
 			VRItemObjMoveHelper._instance.Init(objectListCanvas);
-			bgTex = new Texture2D(1, 1, 5, false);
+			bgTex = new Texture2D(1, 1, TextureFormat.ARGB32, false);
 			bgTex.SetPixel(0, 0, new Color(0.3f, 0.3f, 0.3f, 1f));
 			bgTex.Apply();
 		}
 
 		private Texture2D LoadImage(string path)
 		{
-			Texture2D texture2D = new Texture2D(1, 1, 5, false);
+			Texture2D texture2D = new Texture2D(1, 1, TextureFormat.ARGB32, false);
 			byte[] array = File.ReadAllBytes(path);
 			texture2D.LoadImage(array);
 			return texture2D;
@@ -99,8 +99,7 @@ namespace KKCharaStudioVR
 		public static Rect RectTransformToScreenSpace(RectTransform transform)
 		{
 			Vector2 vector = Vector2.Scale(transform.rect.size, transform.lossyScale);
-			Rect result;
-			result..ctor(transform.position.x, (float)Screen.height - transform.position.y, vector.x, vector.y);
+			Rect result = new Rect(transform.position.x, (float)Screen.height - transform.position.y, vector.x, vector.y);
 			result.x -= transform.pivot.x * vector.x;
 			result.y -= (1f - transform.pivot.y) * vector.y;
 			return result;
@@ -114,7 +113,7 @@ namespace KKCharaStudioVR
 			if (moveDummy == null)
 			{
 				moveDummy = new GameObject("MoveDummy");
-				Object.DontDestroyOnLoad(moveDummy);
+				DontDestroyOnLoad(moveDummy);
 				moveDummy.transform.parent = base.gameObject.transform;
 			}
 			Transform transform = objectListCanvas.Find("Image Bar/Button Duplicate");
@@ -127,7 +126,7 @@ namespace KKCharaStudioVR
 				Sprite sprite2 = Sprite.Create(UnityHelper.LoadImage("KKCharaStudioVR/icon_call_xz.png"), new Rect(0f, 0f, 32f, 32f), Vector2.zero);
 				if (callButton == null)
 				{
-					GameObject gameObject = Object.Instantiate<GameObject>(transform.gameObject);
+					GameObject gameObject = Instantiate<GameObject>(transform.gameObject);
 					gameObject.name = "Button Call";
 					gameObject.transform.SetParent(transform.transform.parent);
 					gameObject.transform.localPosition = new Vector3(transform2.localPosition.x - num * 2f, transform2.localPosition.y, transform2.localPosition.z);
@@ -142,7 +141,7 @@ namespace KKCharaStudioVR
 					component.onClick.AddListener(new UnityAction(OnCallClick));
 					component.interactable = true;
 					callButton = component;
-					Object.DestroyImmediate(gameObject.GetComponent<Image>());
+					DestroyImmediate(gameObject.GetComponent<Image>());
 					Image image = gameObject.AddComponent<Image>();
 					image.sprite = sprite;
 					image.type = 0;
@@ -150,13 +149,13 @@ namespace KKCharaStudioVR
 				}
 				if (callXZButton == null)
 				{
-					GameObject gameObject2 = Object.Instantiate<GameObject>(transform.gameObject);
+					GameObject gameObject2 = Instantiate<GameObject>(transform.gameObject);
 					gameObject2.name = "Button Call YLock";
 					gameObject2.transform.SetParent(transform.transform.parent);
 					gameObject2.transform.localPosition = new Vector3(transform2.localPosition.x - num, transform2.localPosition.y, transform2.localPosition.z);
 					gameObject2.transform.localScale = Vector3.one;
 					Button component2 = gameObject2.GetComponent<Button>();
-					SpriteState spriteState2 = default(SpriteState);
+					SpriteState spriteState2 = default;
 					spriteState2.disabledSprite = sprite2;
 					spriteState2.highlightedSprite = sprite2;
 					spriteState2.pressedSprite = sprite2;
@@ -165,7 +164,7 @@ namespace KKCharaStudioVR
 					component2.onClick.AddListener(new UnityAction(OnCallClickYLock));
 					component2.interactable = true;
 					callXZButton = component2;
-					Object.DestroyImmediate(gameObject2.GetComponent<Image>());
+					DestroyImmediate(gameObject2.GetComponent<Image>());
 					Image image2 = gameObject2.AddComponent<Image>();
 					image2.sprite = sprite2;
 					image2.type = 0;

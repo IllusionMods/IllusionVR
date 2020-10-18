@@ -12,12 +12,10 @@ namespace KKCharaStudioVR
 	{
 		private DefaultMaterialPalette _Materials;
 
-		private VRSettings _Settings;
-
-		public ConfigurableContext()
+        public ConfigurableContext()
 		{
 			_Materials = new DefaultMaterialPalette();
-			_Settings = KKCharaStudioVRSettings.Load("KKCSVRSettings.xml");
+			Settings = KKCharaStudioVRSettings.Load("KKCSVRSettings.xml");
 			ConfineMouse = true;
 			EnforceDefaultGUIMaterials = false;
 			GUIAlternativeSortingMode = false;
@@ -36,6 +34,7 @@ namespace KKCharaStudioVR
 			UnitToMeter = 1f;
 			NearClipPlane = 0.001f;
 			PreferredGUI = GUIType.IMGUI;
+			CameraClearFlags = CameraClearFlags.Skybox;
 		}
 
 		[XmlIgnore]
@@ -47,16 +46,10 @@ namespace KKCharaStudioVR
 			}
 		}
 
-		[XmlIgnore]
-		public VRSettings Settings
-		{
-			get
-			{
-				return _Settings;
-			}
-		}
+        [XmlIgnore]
+        public VRSettings Settings { get; }
 
-		[XmlIgnore]
+        [XmlIgnore]
 		public Type VoiceCommandType
 		{
 			get
@@ -94,5 +87,7 @@ namespace KKCharaStudioVR
 		public float NearClipPlane { get; set; }
 
 		public GUIType PreferredGUI { get; set; }
-	}
+
+		public CameraClearFlags CameraClearFlags { get; set; }
+    }
 }

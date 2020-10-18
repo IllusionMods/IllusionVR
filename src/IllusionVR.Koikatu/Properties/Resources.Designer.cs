@@ -69,5 +69,15 @@ namespace IllusionVR.Koikatu.Properties {
                 return ((byte[])(obj));
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        internal static byte[] kkcharastudiovrshader {
+            get {
+                object obj = ResourceManager.GetObject("kkcharastudiovrshader", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
     }
 }

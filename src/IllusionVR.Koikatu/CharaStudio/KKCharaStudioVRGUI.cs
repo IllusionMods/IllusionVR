@@ -12,7 +12,7 @@ namespace KKCharaStudioVR
 
 		private string windowTitle = "KKCharaStudioVR";
 
-		private Texture2D windowBG = new Texture2D(1, 1, 5, false);
+		private Texture2D windowBG = new Texture2D(1, 1, TextureFormat.ARGB32, false);
 
 		private Dictionary<string, GUIStyle> styleBackup = new Dictionary<string, GUIStyle>();
 
@@ -36,10 +36,10 @@ namespace KKCharaStudioVR
 				GUI.enabled = true;
 				GUIStyle style = GUI.skin.GetStyle("Button");
 				style.normal.textColor = Color.white;
-				style.alignment = 4;
+				style.alignment = TextAnchor.MiddleCenter;
 				GUIStyle style2 = GUI.skin.GetStyle("Label");
 				style2.normal.textColor = Color.white;
-				style2.alignment = 3;
+				style2.alignment = TextAnchor.MiddleLeft;
 				style2.wordWrap = false;
 				GUIStyle style3 = GUI.skin.GetStyle("Toggle");
 				style3.normal.textColor = Color.white;

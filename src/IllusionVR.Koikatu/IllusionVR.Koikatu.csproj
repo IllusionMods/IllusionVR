@@ -120,6 +120,7 @@
   <ItemGroup>
     <None Include="packages.config" />
     <None Include="Resources\illusionvr.unity3d" />
+    <None Include="Resources\kkcharastudiovrshader" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Images\icon_school.png">

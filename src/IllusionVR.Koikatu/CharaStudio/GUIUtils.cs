@@ -7,7 +7,7 @@ namespace KKCharaStudioVR
 	{
 		private static bool isVR = false;
 
-		private static Texture2D windowBG = new Texture2D(1, 1, 5, false);
+		private static Texture2D windowBG = new Texture2D(1, 1, TextureFormat.ARGB32, false);
 
 		static GUIUtils()
 		{

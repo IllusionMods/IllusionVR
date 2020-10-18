@@ -129,19 +129,19 @@ namespace KKCharaStudioVR
 		{
 			if (marker != null)
 			{
-				Object.Destroy(marker);
+				Destroy(marker);
 			}
 			if (mirror1 != null)
 			{
-				Object.Destroy(mirror1);
+				Destroy(mirror1);
 			}
 			if (grabHandle != null)
 			{
-				Object.Destroy(grabHandle);
+				Destroy(grabHandle);
 			}
 			if (internalGui != null)
 			{
-				Object.DestroyImmediate(internalGui.gameObject);
+				DestroyImmediate(internalGui.gameObject);
 			}
 		}
 
@@ -157,7 +157,7 @@ namespace KKCharaStudioVR
 				internalGui.gameObject.AddComponent<MoveableGUIObject>();
 				internalGui.gameObject.AddComponent<BoxCollider>();
 				internalGui.IsOwned = true;
-				Object.DontDestroyOnLoad(internalGui.gameObject);
+				DontDestroyOnLoad(internalGui.gameObject);
 				CreatePointer();
 				gripMenuHandler = base.gameObject.AddComponent<GripMenuHandler>();
 				gripMenuHandler.enabled = false;
