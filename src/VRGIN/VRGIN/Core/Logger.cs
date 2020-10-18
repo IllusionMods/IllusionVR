@@ -1,31 +1,12 @@
-﻿//#define COLOR_SUPPORT
-
-using System;
+﻿using System;
 using System.Diagnostics;
-using System.IO;
 
 namespace VRGIN.Core
 {
-    public class Logger : VRLog
-    {
-    }
-
     public class VRLog
     {
-        private static string LOG_PATH = "vr.log";
-        private static object _LOCK = new object();
-        private static StreamWriter S_Handle;
+        public static Action<string, LogMode> logCall;
 
-        static VRLog()
-        {
-            S_Handle = new StreamWriter(File.OpenWrite(LOG_PATH));
-            S_Handle.BaseStream.SetLength(0);
-            S_Handle.AutoFlush = true;
-        }
-
-        protected VRLog() { }
-
-        public static LogMode Level = LogMode.Info;
         public enum LogMode
         {
             Debug,
@@ -74,48 +55,9 @@ namespace VRGIN.Core
             Log("{0}", new object[] { obj }, LogMode.Error);
         }
 
-
         public static void Log(string text, object[] args, LogMode severity)
         {
-            try
-            {
-                if(severity < Level) return;
-
-#if COLOR_SUPPORT
-                ConsoleColor foregroundColor = ConsoleColor.White;
-                ConsoleColor backgroundColor = ConsoleColor.Black;
-
-                switch (severity)
-                {
-                    case LogMode.Debug:
-                        foregroundColor = ConsoleColor.Gray;
-                        break;
-                    case LogMode.Warning:
-                        foregroundColor = ConsoleColor.Yellow;
-                        break;
-                    case LogMode.Error:
-                        backgroundColor = ConsoleColor.Red;
-                        break;
-                }
-
-                Console.ForegroundColor = foregroundColor;
-                Console.BackgroundColor = backgroundColor;
-#endif
-                string formatted = String.Format(Format(text, severity), args);
-                lock(_LOCK)
-                {
-                    Console.WriteLine(formatted);
-                    S_Handle.WriteLine(formatted);
-                }
-
-#if COLOR_SUPPORT
-                Console.ResetColor();
-#endif
-            }
-            catch(Exception e)
-            {
-                Console.WriteLine(e);
-            }
+            logCall?.Invoke(string.Format(Format(text, severity), args), severity);
         }
 
         private static String Format(string text, LogMode mode)

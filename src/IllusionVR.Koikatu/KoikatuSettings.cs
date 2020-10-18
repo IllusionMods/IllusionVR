@@ -19,7 +19,7 @@ namespace IllusionVR.Koikatu
         // XMLSerializerは配列にデフォルト値をつけると、指定値とデフォルト値の両方を含む配列にしてしまうので
         public static KoikatuSettings Load(string path)
         {
-            KoikatuSettings settings = VRSettings.Load<KoikatuSettings>(path);
+            KoikatuSettings settings = Load<KoikatuSettings>(path);
             if(settings.KeySets.Count == 0)
             {
                 settings.KeySets = new List<KeySet> { new KeySet() };
@@ -29,32 +29,23 @@ namespace IllusionVR.Koikatu
         }
 
         [XmlElement(Type = typeof(List<KeySet>))]
-        public List<KeySet> KeySets { get => _KeySets; set => _KeySets = value; }
-        private List<KeySet> _KeySets = null;
+        public List<KeySet> KeySets { get; set; } = null;
 
-        public bool UsingHeadPos { get => _UsingHeadPos; set => _UsingHeadPos = value; }
-        private bool _UsingHeadPos = false;
+        public bool UsingHeadPos { get; set; } = false;
 
-        public float StandingCameraPos { get => _StandingCameraPos; set => _StandingCameraPos = value; }
-        private float _StandingCameraPos = 1.5f;
+        public float StandingCameraPos { get; set; } = 1.5f;
 
-        public float CrouchingCameraPos { get => _CrouchingCameraPos; set => _CrouchingCameraPos = value; }
-        private float _CrouchingCameraPos = 0.7f;
+        public float CrouchingCameraPos { get; set; } = 0.7f;
 
-        public bool CrouchByHMDPos { get => _CrouchByHMDPos; set => _CrouchByHMDPos = value; }
-        private bool _CrouchByHMDPos = true;
+        public bool CrouchByHMDPos { get; set; } = true;
 
-        public float CrouchThrethould { get => _CrouchThrethould; set => _CrouchThrethould = value; }
-        private float _CrouchThrethould = 0.15f;
+        public float CrouchThrethould { get; set; } = 0.15f;
 
-        public float StandUpThrethould { get => _StandUpThrethould; set => _StandUpThrethould = value; }
-        private float _StandUpThrethould = -0.55f;
+        public float StandUpThrethould { get; set; } = -0.55f;
 
-        public float TouchpadThreshold { get => _TouchpadThreshold; set => _TouchpadThreshold = value; }
-        private float _TouchpadThreshold = 0.8f;
+        public float TouchpadThreshold { get; set; } = 0.8f;
 
-        public float RotationAngle { get => _RotationAngle; set => _RotationAngle = value; }
-        private float _RotationAngle = 45f;
+        public float RotationAngle { get; set; } = 45f;
     }
 
     [XmlRoot("KeySet")]

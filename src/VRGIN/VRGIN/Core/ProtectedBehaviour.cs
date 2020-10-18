@@ -77,13 +77,13 @@ namespace VRGIN.Core
             }
             catch(Exception ex)
             {
-                Logger.Error(ex);
+                VRLog.Error(ex);
             }
         }
 
         public static void DumpTable()
         {
-            Logger.Info("DUMP");
+            VRLog.Info("DUMP");
             var builder = new StringBuilder();
 
             var enumerator = PerformanceTable.GetEnumerator();

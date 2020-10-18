@@ -249,7 +249,7 @@ namespace VRGIN.Core
             }
             if(_Listeners < 0)
             {
-                Logger.Warn("Numbers don't add up!");
+                VRLog.Warn("Numbers don't add up!");
             }
         }
 

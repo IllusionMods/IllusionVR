@@ -327,7 +327,7 @@ namespace VRGIN.Core
                     }
                     catch(Exception e)
                     {
-                        Logger.Warn(e);
+                        VRLog.Warn(e);
                     }
                 }
             }

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Xml.Serialization;
 using UnityEngine;
 using VRGIN.Controls.Speech;
@@ -13,14 +14,11 @@ namespace IllusionVR.Koikatu
     [XmlRoot("Context")]
     public class ConfigurableContext : IVRManagerContext
     {
-        private DefaultMaterialPalette _Materials;
-        private VRSettings _Settings;
-
         public ConfigurableContext()
         {
             // We'll keep those always the same
             _Materials = new DefaultMaterialPalette();
-            _Settings = KoikatuSettings.Load("VRSettings.xml");
+            Settings = KoikatuSettings.Load(Path.Combine(BepInEx.Paths.ConfigPath, "VRSettings.xml"));
 
             // Set defaults
             ConfineMouse = true;
@@ -43,9 +41,10 @@ namespace IllusionVR.Koikatu
 
         [XmlIgnore]
         public IMaterialPalette Materials => _Materials;
+        private DefaultMaterialPalette _Materials;
 
         [XmlIgnore]
-        public VRSettings Settings => _Settings;
+        public VRSettings Settings { get; }
 
         [XmlIgnore]
         public Type VoiceCommandType => typeof(VoiceCommand);

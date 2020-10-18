@@ -36,7 +36,7 @@ namespace IllusionVR.Koikatu
         {
             base.OnAwake();
 
-            _Settings = (VR.Context.Settings as KoikatuSettings);
+            _Settings = VR.Context.Settings as KoikatuSettings;
             _KeySet = _Settings.KeySets[0];
         }
 
