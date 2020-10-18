@@ -8,6 +8,6 @@ namespace IllusionVR.Koikatu
 {
     internal class StudioStandingMode : StandingMode
     {
-        public override IEnumerable<Type> Tools => base.Tools.Concat(new Type[]{ typeof(MenuTool), typeof(WarpTool)});
+        public override IEnumerable<Type> Tools => base.Tools.Concat(new Type[] { typeof(MenuTool), typeof(WarpTool) });
     }
 }

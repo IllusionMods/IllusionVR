@@ -1,4 +1,5 @@
-﻿using System;
+﻿using IllusionVR.Core;
+using System;
 using System.IO;
 using System.Xml.Serialization;
 using UnityEngine;
@@ -6,21 +7,18 @@ using VRGIN.Controls.Speech;
 using VRGIN.Core;
 using VRGIN.Visuals;
 
-namespace IllusionVR.Koikatu.MainGame
+namespace IllusionVR.Koikatu.CharaStudio
 {
-    /// <summary>
-    /// Context class that can be serialized as an XML. Normally, you would implement this yourself and simply override getters with sensible values.
-    /// </summary>
     [XmlRoot("Context")]
-    public class ConfigurableContext : IVRManagerContext
+    public class StudioContext : IVRManagerContext
     {
-        public ConfigurableContext()
-        {
-            // We'll keep those always the same
-            _Materials = new DefaultMaterialPalette();
-            Settings = KoikatuSettings.Load(Path.Combine(BepInEx.Paths.ConfigPath, "VRSettings.xml"));
+        private static string configPath = Path.Combine(BepInEx.Paths.ConfigPath, "IllusionVR");
 
-            // Set defaults
+        public StudioContext()
+        {
+            _Materials = new DefaultMaterialPalette();
+            Settings = KKCharaStudioVRSettings.Load(Path.Combine(configPath, "KKCSVRSettings.xml"));
+
             ConfineMouse = true;
             EnforceDefaultGUIMaterials = false;
             GUIAlternativeSortingMode = false;
@@ -35,8 +33,47 @@ namespace IllusionVR.Koikatu.MainGame
             UILayerMask = LayerMask.GetMask(UILayer);
             UnitToMeter = 1f;
             NearClipPlane = 0.001f;
-            PreferredGUI = GUIType.uGUI;
+            PreferredGUI = GUIType.IMGUI;
             CameraClearFlags = CameraClearFlags.Skybox;
+        }
+
+        public static StudioContext CreateContext(string contextName)
+        {
+            var serializer = new XmlSerializer(typeof(StudioContext));
+            var path = Path.Combine(configPath, contextName);
+
+            if(File.Exists(path))
+            {
+                // Attempt to load XML
+                using(var file = File.OpenRead(path))
+                {
+                    try
+                    {
+                        return serializer.Deserialize(file) as StudioContext;
+                    }
+                    catch(Exception ex)
+                    {
+                        IVRLog.LogError($"Failed to deserialize {path} -- using default\n{ex}");
+                    }
+                }
+            }
+
+            // Create and save file
+            var context = new StudioContext();
+            try
+            {
+                using(var file = new StreamWriter(path))
+                {
+                    file.BaseStream.SetLength(0);
+                    serializer.Serialize(file, context);
+                }
+            }
+            catch(Exception ex)
+            {
+                IVRLog.LogError($"Failed to write {path}\n{ex}");
+            }
+
+            return context;
         }
 
         [XmlIgnore]

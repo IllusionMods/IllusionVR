@@ -11,5 +11,6 @@
   <ItemGroup>
     <Compile Include="$(MSBuildThisFileDirectory)IllusionVRCore.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)IVRLog.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)VRLoader.cs" />
   </ItemGroup>
 </Project>

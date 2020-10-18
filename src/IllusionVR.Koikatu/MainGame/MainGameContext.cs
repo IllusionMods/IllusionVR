@@ -1,21 +1,24 @@
-﻿using System;
+﻿using IllusionVR.Core;
+using System;
+using System.IO;
 using System.Xml.Serialization;
 using UnityEngine;
 using VRGIN.Controls.Speech;
 using VRGIN.Core;
 using VRGIN.Visuals;
 
-namespace IllusionVR.Koikatu.CharaStudio
+namespace IllusionVR.Koikatu.MainGame
 {
     [XmlRoot("Context")]
-    public class ConfigurableContext : IVRManagerContext
+    public class MainGameContext : IVRManagerContext
     {
-        private DefaultMaterialPalette _Materials;
+        private static string configPath = Path.Combine(BepInEx.Paths.ConfigPath, "IllusionVR");
 
-        public ConfigurableContext()
+        public MainGameContext()
         {
             _Materials = new DefaultMaterialPalette();
-            Settings = KKCharaStudioVRSettings.Load("KKCSVRSettings.xml");
+            Settings = KoikatuSettings.Load(Path.Combine(configPath, "VRSettings.xml"));
+
             ConfineMouse = true;
             EnforceDefaultGUIMaterials = false;
             GUIAlternativeSortingMode = false;
@@ -27,18 +30,55 @@ namespace IllusionVR.Koikatu.CharaStudio
             PrimaryColor = Color.cyan;
             SimulateCursor = true;
             UILayer = "UI";
-            UILayerMask = LayerMask.GetMask(new string[]
-            {
-                UILayer
-            });
+            UILayerMask = LayerMask.GetMask(UILayer);
             UnitToMeter = 1f;
             NearClipPlane = 0.001f;
-            PreferredGUI = GUIType.IMGUI;
+            PreferredGUI = GUIType.uGUI;
             CameraClearFlags = CameraClearFlags.Skybox;
+        }
+
+        public static MainGameContext CreateContext(string contextName)
+        {
+            var serializer = new XmlSerializer(typeof(MainGameContext));
+            var path = Path.Combine(configPath, contextName);
+
+            if(File.Exists(path))
+            {
+                // Attempt to load XML
+                using(var file = File.OpenRead(path))
+                {
+                    try
+                    {
+                        return serializer.Deserialize(file) as MainGameContext;
+                    }
+                    catch(Exception ex)
+                    {
+                        IVRLog.LogError($"Failed to deserialize {path} -- using default\n{ex}");
+                    }
+                }
+            }
+
+            // Create and save file
+            var context = new MainGameContext();
+            try
+            {
+                using(var file = new StreamWriter(path))
+                {
+                    file.BaseStream.SetLength(0);
+                    serializer.Serialize(file, context);
+                }
+            }
+            catch(Exception ex)
+            {
+                IVRLog.LogError($"Failed to write {path}\n{ex}");
+            }
+
+            return context;
         }
 
         [XmlIgnore]
         public IMaterialPalette Materials => _Materials;
+        private DefaultMaterialPalette _Materials;
 
         [XmlIgnore]
         public VRSettings Settings { get; }

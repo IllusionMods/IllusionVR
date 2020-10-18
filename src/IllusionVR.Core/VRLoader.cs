@@ -1,18 +1,14 @@
-﻿using BepInEx;
-using IllusionVR.Core;
-using IllusionVR.Koikatu.MainGame.Interpreters;
-using IllusionVR.Koikatu.CharaStudio;
-using System;
+﻿using System;
 using System.Collections;
-using System.IO;
-using System.Xml.Serialization;
 using UnityEngine;
 using VRGIN.Core;
 
-namespace IllusionVR.Koikatu
+namespace IllusionVR.Core
 {
     internal class VRLoader : ProtectedBehaviour
     {
+        public static Action OnVRSuccess;
+
         private const string DeviceOpenVR = "OpenVR";
         private const string DeviceNone = "None";
 
@@ -65,50 +61,8 @@ namespace IllusionVR.Koikatu
                 // Boot VRManager!
                 // Note: Use your own implementation of GameInterpreter to gain access to a few useful operatoins
                 // (e.g. characters, camera judging, colliders, etc.)
-
-                if(Paths.ProcessName == "CharaStudio")
-                    VRManager.Create<KKCharaStudioInterpreter>(CreateContext(Path.Combine(Paths.ConfigPath, "KKCSVRContext.xml")));
-                else
-                    VRManager.Create<KoikatuInterpreter>(CreateContext(Path.Combine(Paths.ConfigPath, "VRContext.xml")));
+                OnVRSuccess?.Invoke();
             }
-        }
-
-        private IVRManagerContext CreateContext(string path)
-        {
-            var serializer = new XmlSerializer(typeof(ConfigurableContext));
-
-            if(File.Exists(path))
-            {
-                // Attempt to load XML
-                using(var file = File.OpenRead(path))
-                {
-                    try
-                    {
-                        return serializer.Deserialize(file) as ConfigurableContext;
-                    }
-                    catch(Exception ex)
-                    {
-                        IVRLog.LogError($"Failed to deserialize {path} -- using default\n{ex}");
-                    }
-                }
-            }
-
-            // Create and save file
-            var context = new ConfigurableContext();
-            try
-            {
-                using(var file = new StreamWriter(path))
-                {
-                    file.BaseStream.SetLength(0);
-                    serializer.Serialize(file, context);
-                }
-            }
-            catch(Exception ex)
-            {
-                IVRLog.LogError($"Failed to write {path}\n{ex}");
-            }
-
-            return context;
         }
     }
 }

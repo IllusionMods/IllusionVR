@@ -1,39 +1,26 @@
 ﻿using BepInEx;
-using BepInEx.Logging;
 using IllusionVR.Core;
-using System;
+using IllusionVR.Koikatu.CharaStudio;
+using IllusionVR.Koikatu.MainGame;
+using IllusionVR.Koikatu.MainGame.Interpreters;
 using VRGIN.Core;
-using VRGIN.Helpers;
 
 namespace IllusionVR.Koikatu
 {
     [BepInPlugin("keelhauled.illusionvr.koikatu", "IllusionVR", "1.0.0")]
-    public class KoikatuVR : BaseUnityPlugin
+    public class KoikatuVR : IllusionVRCore
     {
-        private void Awake()
+        protected override void Awake()
         {
-            IVRLog.SetLogger(Logger);
-            VRLog.logCall += (x, y) => IVRLog.Log(ConvertLogLevel(y), x);
+            base.Awake();
 
-            bool vrDeactivated = Environment.CommandLine.Contains("--novr");
-            bool vrActivated = Environment.CommandLine.Contains("--vr");
-
-            if(vrActivated || (!vrDeactivated && SteamVRDetector.IsRunning))
-                VRLoader.Create(true);
-            else
-                VRLoader.Create(false);
-        }
-
-        private LogLevel ConvertLogLevel(VRLog.LogMode logMode)
-        {
-            switch(logMode)
+            VRLoader.OnVRSuccess += () =>
             {
-                case VRLog.LogMode.Debug: return LogLevel.Debug;
-                case VRLog.LogMode.Error: return LogLevel.Error;
-                case VRLog.LogMode.Info: return LogLevel.Info;
-                case VRLog.LogMode.Warning: return LogLevel.Warning;
-                default: return LogLevel.Debug;
-            }
+                if(Paths.ProcessName == "CharaStudio")
+                    VRManager.Create<KKCharaStudioInterpreter>(StudioContext.CreateContext("KKCSVRContext.xml"));
+                else
+                    VRManager.Create<KoikatuInterpreter>(MainGameContext.CreateContext("VRContext.xml"));
+            };
         }
     }
 }

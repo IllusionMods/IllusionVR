@@ -5,6 +5,7 @@ namespace IllusionVR.Core
     public static class IVRLog
     {
         private static ManualLogSource logger;
+
         public static void SetLogger(ManualLogSource logger)
         {
             IVRLog.logger = logger;

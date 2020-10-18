@@ -68,7 +68,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="CharaStudio\ConfigurableContext.cs" />
+    <Compile Include="CharaStudio\StudioContext.cs" />
     <Compile Include="CharaStudio\StudioStandingMode.cs" />
     <Compile Include="CharaStudio\GripMenuHandler.cs" />
     <Compile Include="CharaStudio\GripMoveKKCharaStudioTool.cs" />
@@ -88,7 +88,7 @@
     <Compile Include="CharaStudio\VRControllerMgr.cs" />
     <Compile Include="CharaStudio\VRIMGUIUtil.cs" />
     <Compile Include="CharaStudio\VRItemObjMoveHelper.cs" />
-    <Compile Include="MainGame\ConfigurableContext.cs" />
+    <Compile Include="MainGame\MainGameContext.cs" />
     <Compile Include="MainGame\StandingModeSchool.cs" />
     <Compile Include="KoikatuVR.cs" />
     <Compile Include="MainGame\Interpreters\ActionSceneInterpreter.cs" />
@@ -106,7 +106,6 @@
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
     <Compile Include="MainGame\SchoolTool.cs" />
-    <Compile Include="VRLoader.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\VRGIN\VRGIN\VRGIN.csproj">
@@ -140,8 +139,6 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <Analyzer Include="..\..\packages\BepInEx.Analyzers.1.0.1\analyzers\dotnet\cs\BepInEx.Analyzers.CodeFixes.dll" />
-    <Analyzer Include="..\..\packages\BepInEx.Analyzers.1.0.1\analyzers\dotnet\cs\BepInEx.Analyzers.dll" />
     <Analyzer Include="..\..\packages\Microsoft.Unity.Analyzers.1.8.2\analyzers\dotnet\cs\Microsoft.Unity.Analyzers.dll" />
   </ItemGroup>
   <ItemGroup />
