@@ -1,13 +1,13 @@
-﻿using IllusionVR.Koikatu.Interpreters;
+﻿using BepInEx;
+using IllusionVR.Core;
+using IllusionVR.Koikatu.Interpreters;
+using KKCharaStudioVR;
 using System;
 using System.Collections;
 using System.IO;
 using System.Xml.Serialization;
 using UnityEngine;
 using VRGIN.Core;
-using BepInEx;
-using KKCharaStudioVR;
-using IllusionVR.Core;
 
 namespace IllusionVR.Koikatu
 {

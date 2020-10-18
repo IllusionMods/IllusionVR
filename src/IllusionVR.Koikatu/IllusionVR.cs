@@ -1,9 +1,9 @@
 ﻿using BepInEx;
 using BepInEx.Logging;
-using System;
-using VRGIN.Helpers;
-using VRGIN.Core;
 using IllusionVR.Core;
+using System;
+using VRGIN.Core;
+using VRGIN.Helpers;
 
 namespace IllusionVR.Koikatu
 {
@@ -33,7 +33,7 @@ namespace IllusionVR.Koikatu
                 case VRLog.LogMode.Info: return LogLevel.Info;
                 case VRLog.LogMode.Warning: return LogLevel.Warning;
                 default: return LogLevel.Debug;
-            }    
+            }
         }
     }
 }

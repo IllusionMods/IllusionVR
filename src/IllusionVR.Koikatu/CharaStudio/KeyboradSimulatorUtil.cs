@@ -1,8 +1,6 @@
-﻿using System;
-
-namespace KKCharaStudioVR
+﻿namespace KKCharaStudioVR
 {
-	internal class KeyboradSimulatorUtil
-	{
-	}
+    internal class KeyboradSimulatorUtil
+    {
+    }
 }
