@@ -1,4 +1,4 @@
-﻿using IllusionVR.Koikatu.Interpreters;
+﻿using IllusionVR.Koikatu.MainGame.Interpreters;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
@@ -9,7 +9,7 @@ using VRGIN.Helpers;
 using WindowsInput.Native;
 using static SteamVR_Controller;
 
-namespace IllusionVR.Koikatu
+namespace IllusionVR.Koikatu.MainGame
 {
     public class SchoolTool : Tool
     {

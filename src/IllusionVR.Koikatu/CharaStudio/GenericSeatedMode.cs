@@ -5,7 +5,7 @@ using VRGIN.Core;
 using VRGIN.Helpers;
 using VRGIN.Modes;
 
-namespace KKCharaStudioVR
+namespace IllusionVR.Koikatu.CharaStudio
 {
     internal class GenericSeatedMode : SeatedMode
     {

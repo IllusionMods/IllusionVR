@@ -1,7 +1,7 @@
 ﻿using System;
 using UnityEngine;
 
-namespace KKCharaStudioVR
+namespace IllusionVR.Koikatu.CharaStudio
 {
     internal class MaterialHelper
     {
@@ -20,7 +20,7 @@ namespace KKCharaStudioVR
             {
                 if(_GripMovePluginResources == null)
                 {
-                    _GripMovePluginResources = AssetBundle.LoadFromMemory(IllusionVR.Koikatu.Properties.Resources.kkcharastudiovrshader);
+                    _GripMovePluginResources = AssetBundle.LoadFromMemory(KoikatuVR.Resources.kkcharastudiovrshader);
                 }
                 _ColorZOrderShader = _GripMovePluginResources.LoadAsset<Shader>("ColorZOrder");
                 result = _ColorZOrderShader;

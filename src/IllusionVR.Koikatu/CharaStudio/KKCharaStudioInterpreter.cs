@@ -7,7 +7,7 @@ using System.Linq;
 using UnityEngine;
 using VRGIN.Core;
 
-namespace KKCharaStudioVR
+namespace IllusionVR.Koikatu.CharaStudio
 {
     internal class KKCharaStudioInterpreter : GameInterpreter
     {
@@ -146,7 +146,7 @@ namespace KKCharaStudioVR
                 {
                     Camera blueprint = VR.Camera.Blueprint;
                     Camera mainCmaera = Singleton<Studio.Studio>.Instance.cameraCtrl.mainCmaera;
-                    IVRLog.LogDebug($"Force replace blueprint camera with {mainCmaera}"));
+                    IVRLog.LogDebug($"Force replace blueprint camera with {mainCmaera}");
                     Camera camera = VR.Camera.SteamCam.camera;
                     Camera camera2 = mainCmaera;
                     camera.nearClipPlane = VR.Context.NearClipPlane;

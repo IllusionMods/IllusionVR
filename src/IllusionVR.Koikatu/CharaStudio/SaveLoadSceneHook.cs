@@ -5,7 +5,7 @@ using System.Reflection;
 using UnityEngine;
 using VRGIN.Core;
 
-namespace KKCharaStudioVR
+namespace IllusionVR.Koikatu.CharaStudio
 {
     public static class SaveLoadSceneHook
     {

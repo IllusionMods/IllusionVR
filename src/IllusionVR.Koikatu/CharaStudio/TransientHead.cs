@@ -5,7 +5,7 @@ using UnityEngine;
 using VRGIN.Core;
 using VRGIN.Helpers;
 
-namespace KKCharaStudioVR
+namespace IllusionVR.Koikatu.CharaStudio
 {
     public class TransientHead : ProtectedBehaviour
     {

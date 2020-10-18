@@ -2,7 +2,7 @@
 using UnityEngine;
 using VRGIN.Core;
 
-namespace IllusionVR.Koikatu.Interpreters
+namespace IllusionVR.Koikatu.MainGame.Interpreters
 {
     internal class KoikatuInterpreter : GameInterpreter
     {

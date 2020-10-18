@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace IllusionVR.Koikatu.Interpreters
+namespace IllusionVR.Koikatu.MainGame.Interpreters
 {
     internal class NightMenuSceneInterpreter : SceneInterpreter
     {

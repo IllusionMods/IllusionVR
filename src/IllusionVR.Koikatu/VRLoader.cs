@@ -1,7 +1,7 @@
 ﻿using BepInEx;
 using IllusionVR.Core;
-using IllusionVR.Koikatu.Interpreters;
-using KKCharaStudioVR;
+using IllusionVR.Koikatu.MainGame.Interpreters;
+using IllusionVR.Koikatu.CharaStudio;
 using System;
 using System.Collections;
 using System.IO;

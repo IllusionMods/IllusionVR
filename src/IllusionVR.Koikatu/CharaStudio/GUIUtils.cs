@@ -1,7 +1,7 @@
 ﻿using System;
 using UnityEngine;
 
-namespace KKCharaStudioVR
+namespace IllusionVR.Koikatu.CharaStudio
 {
     public class GUIUtils
     {

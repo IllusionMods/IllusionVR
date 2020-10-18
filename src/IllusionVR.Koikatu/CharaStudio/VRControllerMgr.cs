@@ -4,7 +4,7 @@ using UnityEngine;
 using VRGIN.Core;
 using VRGIN.Modes;
 
-namespace KKCharaStudioVR
+namespace IllusionVR.Koikatu.CharaStudio
 {
     public class VRControllerMgr : MonoBehaviour
     {

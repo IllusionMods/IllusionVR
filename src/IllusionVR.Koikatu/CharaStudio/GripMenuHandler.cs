@@ -7,7 +7,7 @@ using VRGIN.Core;
 using VRGIN.Native;
 using VRGIN.Visuals;
 
-namespace KKCharaStudioVR
+namespace IllusionVR.Koikatu.CharaStudio
 {
     public class GripMenuHandler : ProtectedBehaviour
     {

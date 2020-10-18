@@ -9,54 +9,32 @@ using UnityEngine.UI;
 using VRGIN.Core;
 using VRGIN.Helpers;
 
-namespace KKCharaStudioVR
+namespace IllusionVR.Koikatu.CharaStudio
 {
     public class VRItemObjMoveHelper : MonoBehaviour
     {
         public bool showGUI = true;
-
         public RectTransform menuRect;
-
         private Canvas workspaceCanvas;
-
         private static VRItemObjMoveHelper _instance;
-
         public bool keepY = true;
-
         public bool moveAlong;
-
         public Vector3 moveAlongBasePos;
-
         public Quaternion moveAlongBaseRot;
-
         private ObjMoveHelper helper = new ObjMoveHelper();
-
         private GameObject steamVRHeadOrigin;
-
         private Studio.Studio studio;
-
         private GameObject moveDummy;
-
         private int windowID = 8751;
-
         private const int panelWidth = 300;
-
         private const int panelHeight = 150;
-
         private Rect windowRect = new Rect(0f, 0f, 300f, 150f);
-
         private string windowTitle = "";
-
         private Texture2D bgTex;
-
         private Button callButton;
-
         private Button callXZButton;
-
         private static FieldInfo f_m_TreeNodeObject = typeof(TreeNodeCtrl).GetField("m_TreeNodeObject", BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.GetField);
-
         private static MethodInfo m_AddSelectNode = typeof(TreeNodeCtrl).GetMethod("AddSelectNode", BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.InvokeMethod);
-
         public static VRItemObjMoveHelper Instance => _instance;
 
         public static void Install(GameObject container)

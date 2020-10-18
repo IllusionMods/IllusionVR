@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Xml.Serialization;
 using VRGIN.Core;
 
-namespace IllusionVR.Koikatu
+namespace IllusionVR.Koikatu.MainGame
 {
     /// <summary>
     /// Class that holds settings for VR. Saved as an XML file.

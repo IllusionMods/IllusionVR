@@ -2,7 +2,7 @@
 using VRGIN.Core;
 using WindowsInput.Native;
 
-namespace IllusionVR.Koikatu.Interpreters
+namespace IllusionVR.Koikatu.MainGame.Interpreters
 {
     internal class ActionSceneInterpreter : SceneInterpreter
     {

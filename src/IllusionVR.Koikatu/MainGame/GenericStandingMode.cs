@@ -7,7 +7,7 @@ using VRGIN.Core;
 using VRGIN.Helpers;
 using VRGIN.Modes;
 
-namespace IllusionVR.Koikatu
+namespace IllusionVR.Koikatu.MainGame
 {
     internal class GenericStandingMode : StandingMode
     {

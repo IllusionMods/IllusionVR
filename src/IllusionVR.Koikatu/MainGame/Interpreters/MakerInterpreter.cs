@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace IllusionVR.Koikatu.Interpreters
+namespace IllusionVR.Koikatu.MainGame.Interpreters
 {
     internal class MakerInterpreter : SceneInterpreter
     {
@@ -11,7 +11,7 @@ namespace IllusionVR.Koikatu.Interpreters
             {
                 if(!skyboxMat)
                 {
-                    var ass = AssetBundle.LoadFromMemory(Properties.Resources.illusionvr);
+                    var ass = AssetBundle.LoadFromMemory(KoikatuVR.Resources.illusionvr);
                     skyboxMat = ass.LoadAsset<Material>("VRSkybox");
                     ass.Unload(false);
                 }

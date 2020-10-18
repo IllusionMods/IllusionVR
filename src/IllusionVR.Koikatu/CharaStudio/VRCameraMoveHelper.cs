@@ -6,7 +6,7 @@ using UnityEngine.UI;
 using VRGIN.Core;
 using VRUtil;
 
-namespace KKCharaStudioVR
+namespace IllusionVR.Koikatu.CharaStudio
 {
     public class VRCameraMoveHelper : MonoBehaviour
     {

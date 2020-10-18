@@ -12,7 +12,7 @@ using VRGIN.Core;
 using VRGIN.Helpers;
 using VRGIN.Visuals;
 
-namespace KKCharaStudioVR
+namespace IllusionVR.Koikatu.CharaStudio
 {
     internal class GripMoveKKCharaStudioTool : Tool
     {

@@ -6,7 +6,7 @@ using VRGIN.Controls.Speech;
 using VRGIN.Core;
 using VRGIN.Visuals;
 
-namespace IllusionVR.Koikatu
+namespace IllusionVR.Koikatu.MainGame
 {
     /// <summary>
     /// Context class that can be serialized as an XML. Normally, you would implement this yourself and simply override getters with sensible values.

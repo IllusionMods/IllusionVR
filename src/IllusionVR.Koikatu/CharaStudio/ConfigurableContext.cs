@@ -5,7 +5,7 @@ using VRGIN.Controls.Speech;
 using VRGIN.Core;
 using VRGIN.Visuals;
 
-namespace KKCharaStudioVR
+namespace IllusionVR.Koikatu.CharaStudio
 {
     [XmlRoot("Context")]
     public class ConfigurableContext : IVRManagerContext

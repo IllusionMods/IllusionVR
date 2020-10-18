@@ -4,7 +4,7 @@ using Studio;
 using System;
 using VRGIN.Core;
 
-namespace KKCharaStudioVR
+namespace IllusionVR.Koikatu.CharaStudio
 {
     public static class LoadFixHook
     {

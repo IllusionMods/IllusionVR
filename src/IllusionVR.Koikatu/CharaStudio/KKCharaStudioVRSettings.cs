@@ -1,7 +1,7 @@
 ﻿using System.Xml.Serialization;
 using VRGIN.Core;
 
-namespace KKCharaStudioVR
+namespace IllusionVR.Koikatu.CharaStudio
 {
     [XmlRoot("Settings")]
     public class KKCharaStudioVRSettings : VRSettings
