@@ -60,11 +60,11 @@ namespace VRGIN.Core
             logCall?.Invoke(string.Format(Format(text, severity), args), severity);
         }
 
-        private static String Format(string text, LogMode mode)
+        private static string Format(string text, LogMode mode)
         {
             var trace = new StackTrace(3);
             var caller = trace.GetFrame(0);
-            return String.Format("[{0}][{1}][{3}#{4}] {2}", DateTime.Now.ToString("HH':'mm':'ss"), mode.ToString().ToUpper(), text, caller.GetMethod().DeclaringType.Name, caller.GetMethod().Name, caller.GetFileLineNumber());
+            return string.Format("[{1}#{2}] {0}", text, caller.GetMethod().DeclaringType.Name, caller.GetMethod().Name, caller.GetFileLineNumber());
         }
     }
 }

@@ -15,6 +15,8 @@ namespace IllusionVR.Koikatu.Interpreters
 
             CurrentSceneType = SceneType.NoScene;
             SceneInterpreter = new OtherSceneInterpreter();
+
+            VR.Manager.SetMode<GenericStandingMode>();
         }
 
         protected override void OnUpdate()

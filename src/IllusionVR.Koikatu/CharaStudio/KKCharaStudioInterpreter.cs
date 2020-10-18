@@ -2,10 +2,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using BepInEx;
 using IllusionVR.Core;
 using Manager;
-using Studio;
 using UnityEngine;
 using VRGIN.Core;
 
@@ -21,14 +19,26 @@ namespace KKCharaStudioVR
 
 		private int additionalCullingMask;
 
-		protected override void OnStart()
+        protected override void OnAwake()
+        {
+			SaveLoadSceneHook.InstallHook();
+			LoadFixHook.InstallHook();
+
+			VR.Manager.SetMode<GenericStandingMode>();
+			var gameObject = new GameObject("KKCharaStudioVR");
+			DontDestroyOnLoad(gameObject);
+			IKTool.Create(gameObject);
+			VRControllerMgr.Install(gameObject);
+			VRCameraMoveHelper.Install(gameObject);
+			VRItemObjMoveHelper.Install(gameObject);
+			gameObject.AddComponent<KKCharaStudioVRGUI>();
+			DontDestroyOnLoad(VRCamera.Instance.gameObject);
+		}
+
+        protected override void OnStart()
 		{
-			base.OnStart();
 			studioScene = FindObjectOfType<StudioScene>();
-			additionalCullingMask = LayerMask.GetMask(new string[]
-			{
-				"Studio/Select"
-			});
+			additionalCullingMask = LayerMask.GetMask("Studio/Select");
 		}
 
 		protected override void OnLevel(int level)

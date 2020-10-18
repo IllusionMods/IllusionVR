@@ -123,6 +123,9 @@
     <None Include="Resources\kkcharastudiovrshader" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Images\icon_gripmove.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="Images\icon_school.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>

@@ -150,7 +150,7 @@ namespace KKCharaStudioVR
 			base.OnStart();
 			try
 			{
-				VRLog.Info("Loading GripMoveTool", new object[0]);
+				VRLog.Debug("Loading GripMoveTool", new object[0]);
 				_settings = (VR.Manager.Context.Settings as KKCharaStudioVRSettings);
 				internalGui = GUIQuad.Create(null);
 				resetGUIPosition();
