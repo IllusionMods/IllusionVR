@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using VRGIN.Core;
+using VRGIN.Modes;
 
 namespace IllusionVR.Koikatu.MainGame.Interpreters
 {
@@ -10,6 +11,7 @@ namespace IllusionVR.Koikatu.MainGame.Interpreters
         public override void OnStart()
         {
             _NeedsResetCamera = true;
+            VR.Manager.SetMode<StandingMode>();
         }
 
         public override void OnDisable()

@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace KoikatuVR {
+namespace IllusionVR.Koikatu.Properties {
     using System;
     
     

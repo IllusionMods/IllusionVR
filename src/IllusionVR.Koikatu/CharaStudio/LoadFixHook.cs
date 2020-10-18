@@ -20,7 +20,7 @@ namespace IllusionVR.Koikatu.CharaStudio
         public static bool LoadScenePreHook(Studio.Studio __instance)
         {
             IVRLog.LogDebug("Start Scene Loading.");
-            if(VRManager.Instance.Mode is GenericStandingMode)
+            if(VRManager.Instance.Mode is StudioStandingMode)
             {
                 (VR.Manager.Interpreter as KKCharaStudioInterpreter).ForceResetVRMode();
             }

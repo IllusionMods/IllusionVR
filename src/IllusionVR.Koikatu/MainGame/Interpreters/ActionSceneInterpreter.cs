@@ -19,7 +19,9 @@ namespace IllusionVR.Koikatu.MainGame.Interpreters
 
         public override void OnStart()
         {
-            VRLog.Info("ActionScene OnStart");
+            VRLog.Debug("ActionScene OnStart");
+
+            VR.Manager.SetMode<StandingModeSchool>();
 
             _Settings = (VR.Context.Settings as KoikatuSettings);
 
@@ -29,7 +31,7 @@ namespace IllusionVR.Koikatu.MainGame.Interpreters
 
         public override void OnDisable()
         {
-            VRLog.Info("ActionScene OnDisable");
+            VRLog.Debug("ActionScene OnDisable");
 
             ResetState();
             ReleaseCamera();
@@ -37,7 +39,7 @@ namespace IllusionVR.Koikatu.MainGame.Interpreters
 
         private void ResetState()
         {
-            VRLog.Info("ActionScene ResetState");
+            VRLog.Debug("ActionScene ResetState");
 
             StandUp();
             StopWalking();

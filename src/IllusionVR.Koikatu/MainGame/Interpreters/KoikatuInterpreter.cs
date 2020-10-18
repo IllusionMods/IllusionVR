@@ -1,6 +1,7 @@
 ﻿using IllusionVR.Core;
 using UnityEngine;
 using VRGIN.Core;
+using VRGIN.Modes;
 
 namespace IllusionVR.Koikatu.MainGame.Interpreters
 {
@@ -16,7 +17,7 @@ namespace IllusionVR.Koikatu.MainGame.Interpreters
             CurrentSceneType = SceneType.NoScene;
             SceneInterpreter = new OtherSceneInterpreter();
 
-            VR.Manager.SetMode<GenericStandingMode>();
+            VR.Manager.SetMode<StandingMode>();
         }
 
         protected override void OnUpdate()

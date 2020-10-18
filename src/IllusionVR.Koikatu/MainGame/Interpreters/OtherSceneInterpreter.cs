@@ -1,11 +1,13 @@
-﻿
+﻿using VRGIN.Core;
+using VRGIN.Modes;
+
 namespace IllusionVR.Koikatu.MainGame.Interpreters
 {
     internal class OtherSceneInterpreter : SceneInterpreter
     {
         public override void OnStart()
         {
-            // nothing to do.
+            VR.Manager.SetMode<StandingMode>();
         }
 
         public override void OnDisable()

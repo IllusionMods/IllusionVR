@@ -20,7 +20,7 @@ namespace IllusionVR.Koikatu.CharaStudio
             {
                 if(_GripMovePluginResources == null)
                 {
-                    _GripMovePluginResources = AssetBundle.LoadFromMemory(KoikatuVR.Resources.kkcharastudiovrshader);
+                    _GripMovePluginResources = AssetBundle.LoadFromMemory(Properties.Resources.kkcharastudiovrshader);
                 }
                 _ColorZOrderShader = _GripMovePluginResources.LoadAsset<Shader>("ColorZOrder");
                 result = _ColorZOrderShader;

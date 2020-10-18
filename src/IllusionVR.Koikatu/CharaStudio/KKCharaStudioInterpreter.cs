@@ -24,7 +24,7 @@ namespace IllusionVR.Koikatu.CharaStudio
             SaveLoadSceneHook.InstallHook();
             LoadFixHook.InstallHook();
 
-            VR.Manager.SetMode<GenericStandingMode>();
+            VR.Manager.SetMode<StudioStandingMode>();
             var gameObject = new GameObject("KKCharaStudioVR");
             DontDestroyOnLoad(gameObject);
             IKTool.Create(gameObject);
@@ -125,7 +125,7 @@ namespace IllusionVR.Koikatu.CharaStudio
             yield return null;
             yield return null;
             yield return null;
-            if(!VRManager.Instance.Mode || !(VRManager.Instance.Mode is GenericStandingMode))
+            if(!VRManager.Instance.Mode || !(VRManager.Instance.Mode is StudioStandingMode))
             {
                 IVRLog.LogDebug("Mode is not StandingMode. Force reset as Standing Mode.");
                 ForceResetAsStandingMode();
@@ -141,7 +141,7 @@ namespace IllusionVR.Koikatu.CharaStudio
         {
             try
             {
-                VR.Manager.SetMode<GenericStandingMode>();
+                VR.Manager.SetMode<StudioStandingMode>();
                 if(VR.Camera)
                 {
                     Camera blueprint = VR.Camera.Blueprint;

@@ -1,4 +1,6 @@
 ﻿using UnityEngine;
+using VRGIN.Core;
+using VRGIN.Modes;
 
 namespace IllusionVR.Koikatu.MainGame.Interpreters
 {
@@ -6,6 +8,8 @@ namespace IllusionVR.Koikatu.MainGame.Interpreters
     {
         public override void OnStart()
         {
+            VR.Manager.SetMode<StandingMode>();
+
             // 夜メニューの時点で、登校時のイベントでちょうどいい位置に移動しておく
             // これによってキャラクターレイヤの光源がうまく適用されない場合があるのも回避できてる？
             var player = GameObject.Find("ActionScene/Player").transform;

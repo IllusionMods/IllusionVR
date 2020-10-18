@@ -69,8 +69,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CharaStudio\ConfigurableContext.cs" />
-    <Compile Include="CharaStudio\GenericSeatedMode.cs" />
-    <Compile Include="CharaStudio\GenericStandingMode.cs" />
+    <Compile Include="CharaStudio\StudioStandingMode.cs" />
     <Compile Include="CharaStudio\GripMenuHandler.cs" />
     <Compile Include="CharaStudio\GripMoveKKCharaStudioTool.cs" />
     <Compile Include="CharaStudio\GUIUtils.cs" />
@@ -90,9 +89,8 @@
     <Compile Include="CharaStudio\VRIMGUIUtil.cs" />
     <Compile Include="CharaStudio\VRItemObjMoveHelper.cs" />
     <Compile Include="MainGame\ConfigurableContext.cs" />
-    <Compile Include="MainGame\GenericSeatedMode.cs" />
-    <Compile Include="MainGame\GenericStandingMode.cs" />
-    <Compile Include="IllusionVR.cs" />
+    <Compile Include="MainGame\StandingModeSchool.cs" />
+    <Compile Include="KoikatuVR.cs" />
     <Compile Include="MainGame\Interpreters\ActionSceneInterpreter.cs" />
     <Compile Include="MainGame\Interpreters\HSceneInterpreter.cs" />
     <Compile Include="MainGame\Interpreters\KoikatuInterpreter.cs" />
@@ -128,7 +126,7 @@
     <Content Include="Images\icon_school.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <ContentWithTargetPath Include="Resources\System.Drawing.dll">
+    <ContentWithTargetPath Include="Libs\System.Drawing.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <TargetPath>System.Drawing.dll</TargetPath>
     </ContentWithTargetPath>
@@ -137,7 +135,6 @@
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
-      <CustomToolNamespace>KoikatuVR</CustomToolNamespace>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

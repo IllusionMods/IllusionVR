@@ -1,4 +1,6 @@
 ﻿using UnityEngine;
+using VRGIN.Core;
+using VRGIN.Modes;
 
 namespace IllusionVR.Koikatu.MainGame.Interpreters
 {
@@ -11,7 +13,7 @@ namespace IllusionVR.Koikatu.MainGame.Interpreters
             {
                 if(!skyboxMat)
                 {
-                    var ass = AssetBundle.LoadFromMemory(KoikatuVR.Resources.illusionvr);
+                    var ass = AssetBundle.LoadFromMemory(Properties.Resources.illusionvr);
                     skyboxMat = ass.LoadAsset<Material>("VRSkybox");
                     ass.Unload(false);
                 }
@@ -28,6 +30,7 @@ namespace IllusionVR.Koikatu.MainGame.Interpreters
         public override void OnStart()
         {
             RenderSettings.skybox = SkyboxMat;
+            VR.Manager.SetMode<StandingMode>();
         }
 
         public override void OnUpdate()
