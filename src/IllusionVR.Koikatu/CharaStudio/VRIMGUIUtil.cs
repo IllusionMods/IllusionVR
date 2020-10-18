@@ -14,72 +14,72 @@ namespace VRUtil
         {
             get
             {
-                if(VRIMGUIUtil._guiSkin == null)
+                if(_guiSkin == null)
                 {
-                    VRIMGUIUtil._guiSkin = VRIMGUIUtil.CreateVRGUISkin(GUI.skin);
+                    _guiSkin = CreateVRGUISkin(GUI.skin);
                 }
-                return VRIMGUIUtil._guiSkin;
+                return _guiSkin;
             }
             set
             {
                 if(value != null)
                 {
-                    VRIMGUIUtil._guiSkin = value;
+                    _guiSkin = value;
                 }
             }
         }
 
         public static GUISkin CreateVRGUISkin(GUISkin cloneFrom)
         {
-            GUISkin guiskin = UnityEngine.Object.Instantiate<GUISkin>(cloneFrom);
+            GUISkin guiskin = Object.Instantiate<GUISkin>(cloneFrom);
             GUIStyle guistyle = new GUIStyle(guiskin.window);
             Texture2D texture2D = new Texture2D(1, 1);
             texture2D.SetPixel(0, 0, new Color(0.9f, 0.9f, 0.9f, 1f));
             texture2D.Apply();
-            guistyle.normal.textColor = VRIMGUIUtil.windowTextColor;
+            guistyle.normal.textColor = windowTextColor;
             guistyle.normal.background = texture2D;
-            guistyle.onNormal.textColor = VRIMGUIUtil.windowTextColor;
+            guistyle.onNormal.textColor = windowTextColor;
             guistyle.onNormal.background = texture2D;
             guiskin.window = guistyle;
-            guiskin.button.normal.textColor = VRIMGUIUtil.buttonTextColor;
-            guiskin.button.onNormal.textColor = VRIMGUIUtil.buttonTextColor;
-            guiskin.button.normal.background = VRIMGUIUtil.CreateColorInvertedTexture(guiskin.button.normal.background, false);
-            guiskin.button.onNormal.background = VRIMGUIUtil.CreateColorInvertedTexture(guiskin.button.onNormal.background, false);
-            guiskin.label.normal.textColor = VRIMGUIUtil.windowTextColor;
-            guiskin.label.onNormal.textColor = VRIMGUIUtil.windowTextColor;
-            guiskin.toggle.normal.textColor = VRIMGUIUtil.windowTextColor;
-            guiskin.toggle.onNormal.textColor = VRIMGUIUtil.windowTextColor;
-            guiskin.toggle.normal.background = VRIMGUIUtil.CreateColorInvertedTexture(guiskin.toggle.normal.background, false);
-            guiskin.toggle.onNormal.background = VRIMGUIUtil.CreateColorInvertedTexture(guiskin.toggle.normal.background, false);
-            guiskin.settings.selectionColor = VRIMGUIUtil.windowTextColor;
-            guiskin.textField.normal.textColor = VRIMGUIUtil.buttonTextColor;
-            guiskin.textField.onNormal.textColor = VRIMGUIUtil.buttonTextColor;
-            guiskin.textField.focused.textColor = VRIMGUIUtil.buttonTextColor;
-            guiskin.textField.onFocused.textColor = VRIMGUIUtil.buttonTextColor;
-            guiskin.textField.normal.background = VRIMGUIUtil.CreateColorInvertedTexture(guiskin.textField.normal.background, false);
-            guiskin.textField.onNormal.background = VRIMGUIUtil.CreateColorInvertedTexture(guiskin.textField.onNormal.background, false);
-            guiskin.textField.focused.background = VRIMGUIUtil.CreateColorInvertedTexture(guiskin.textField.focused.background, false);
-            guiskin.textField.onFocused.background = VRIMGUIUtil.CreateColorInvertedTexture(guiskin.textField.onFocused.background, false);
-            guiskin.textArea.normal.textColor = VRIMGUIUtil.buttonTextColor;
-            guiskin.textArea.onNormal.textColor = VRIMGUIUtil.buttonTextColor;
-            guiskin.textArea.focused.textColor = VRIMGUIUtil.buttonTextColor;
-            guiskin.textArea.onFocused.textColor = VRIMGUIUtil.buttonTextColor;
-            guiskin.textArea.normal.background = VRIMGUIUtil.CreateColorInvertedTexture(guiskin.textArea.normal.background, false);
-            guiskin.textArea.onNormal.background = VRIMGUIUtil.CreateColorInvertedTexture(guiskin.textArea.onNormal.background, false);
-            guiskin.textArea.focused.background = VRIMGUIUtil.CreateColorInvertedTexture(guiskin.textArea.focused.background, false);
-            guiskin.textArea.onFocused.background = VRIMGUIUtil.CreateColorInvertedTexture(guiskin.textArea.onFocused.background, false);
+            guiskin.button.normal.textColor = buttonTextColor;
+            guiskin.button.onNormal.textColor = buttonTextColor;
+            guiskin.button.normal.background = CreateColorInvertedTexture(guiskin.button.normal.background, false);
+            guiskin.button.onNormal.background = CreateColorInvertedTexture(guiskin.button.onNormal.background, false);
+            guiskin.label.normal.textColor = windowTextColor;
+            guiskin.label.onNormal.textColor = windowTextColor;
+            guiskin.toggle.normal.textColor = windowTextColor;
+            guiskin.toggle.onNormal.textColor = windowTextColor;
+            guiskin.toggle.normal.background = CreateColorInvertedTexture(guiskin.toggle.normal.background, false);
+            guiskin.toggle.onNormal.background = CreateColorInvertedTexture(guiskin.toggle.normal.background, false);
+            guiskin.settings.selectionColor = windowTextColor;
+            guiskin.textField.normal.textColor = buttonTextColor;
+            guiskin.textField.onNormal.textColor = buttonTextColor;
+            guiskin.textField.focused.textColor = buttonTextColor;
+            guiskin.textField.onFocused.textColor = buttonTextColor;
+            guiskin.textField.normal.background = CreateColorInvertedTexture(guiskin.textField.normal.background, false);
+            guiskin.textField.onNormal.background = CreateColorInvertedTexture(guiskin.textField.onNormal.background, false);
+            guiskin.textField.focused.background = CreateColorInvertedTexture(guiskin.textField.focused.background, false);
+            guiskin.textField.onFocused.background = CreateColorInvertedTexture(guiskin.textField.onFocused.background, false);
+            guiskin.textArea.normal.textColor = buttonTextColor;
+            guiskin.textArea.onNormal.textColor = buttonTextColor;
+            guiskin.textArea.focused.textColor = buttonTextColor;
+            guiskin.textArea.onFocused.textColor = buttonTextColor;
+            guiskin.textArea.normal.background = CreateColorInvertedTexture(guiskin.textArea.normal.background, false);
+            guiskin.textArea.onNormal.background = CreateColorInvertedTexture(guiskin.textArea.onNormal.background, false);
+            guiskin.textArea.focused.background = CreateColorInvertedTexture(guiskin.textArea.focused.background, false);
+            guiskin.textArea.onFocused.background = CreateColorInvertedTexture(guiskin.textArea.onFocused.background, false);
             guiskin.box.normal.background = texture2D;
             guiskin.box.onNormal.background = texture2D;
-            guiskin.box.normal.textColor = VRIMGUIUtil.windowTextColor;
-            guiskin.box.onNormal.textColor = VRIMGUIUtil.windowTextColor;
-            guiskin.horizontalSlider.normal.background = VRIMGUIUtil.CreateColorInvertedTexture(guiskin.horizontalSlider.normal.background, false);
-            guiskin.horizontalSlider.onNormal.background = VRIMGUIUtil.CreateColorInvertedTexture(guiskin.horizontalSlider.onNormal.background, false);
-            guiskin.verticalSlider.normal.background = VRIMGUIUtil.CreateColorInvertedTexture(guiskin.verticalSlider.normal.background, false);
-            guiskin.verticalSlider.onNormal.background = VRIMGUIUtil.CreateColorInvertedTexture(guiskin.verticalSlider.onNormal.background, false);
-            guiskin.horizontalSliderThumb.normal.background = VRIMGUIUtil.CreateColorInvertedTexture(guiskin.horizontalSliderThumb.normal.background, false);
-            guiskin.horizontalSliderThumb.onNormal.background = VRIMGUIUtil.CreateColorInvertedTexture(guiskin.horizontalSliderThumb.onNormal.background, false);
-            guiskin.verticalSliderThumb.normal.background = VRIMGUIUtil.CreateColorInvertedTexture(guiskin.verticalSliderThumb.normal.background, false);
-            guiskin.verticalSliderThumb.onNormal.background = VRIMGUIUtil.CreateColorInvertedTexture(guiskin.verticalSliderThumb.onNormal.background, false);
+            guiskin.box.normal.textColor = windowTextColor;
+            guiskin.box.onNormal.textColor = windowTextColor;
+            guiskin.horizontalSlider.normal.background = CreateColorInvertedTexture(guiskin.horizontalSlider.normal.background, false);
+            guiskin.horizontalSlider.onNormal.background = CreateColorInvertedTexture(guiskin.horizontalSlider.onNormal.background, false);
+            guiskin.verticalSlider.normal.background = CreateColorInvertedTexture(guiskin.verticalSlider.normal.background, false);
+            guiskin.verticalSlider.onNormal.background = CreateColorInvertedTexture(guiskin.verticalSlider.onNormal.background, false);
+            guiskin.horizontalSliderThumb.normal.background = CreateColorInvertedTexture(guiskin.horizontalSliderThumb.normal.background, false);
+            guiskin.horizontalSliderThumb.onNormal.background = CreateColorInvertedTexture(guiskin.horizontalSliderThumb.onNormal.background, false);
+            guiskin.verticalSliderThumb.normal.background = CreateColorInvertedTexture(guiskin.verticalSliderThumb.normal.background, false);
+            guiskin.verticalSliderThumb.onNormal.background = CreateColorInvertedTexture(guiskin.verticalSliderThumb.onNormal.background, false);
             return guiskin;
         }
 

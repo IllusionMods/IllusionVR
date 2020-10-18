@@ -42,13 +42,13 @@ namespace KKCharaStudioVR
 
         private float DISTANCE_RATIO = 1f;
 
-        public static VRCameraMoveHelper Instance => VRCameraMoveHelper._instance;
+        public static VRCameraMoveHelper Instance => _instance;
 
         public static void Install(GameObject container)
         {
-            if(VRCameraMoveHelper._instance == null)
+            if(_instance == null)
             {
-                VRCameraMoveHelper._instance = container.AddComponent<VRCameraMoveHelper>();
+                _instance = container.AddComponent<VRCameraMoveHelper>();
             }
         }
 
@@ -64,7 +64,7 @@ namespace KKCharaStudioVR
                 return;
             }
             Transform cameraMenuRootT = studio.transform.Find("Canvas System Menu/02_Camera");
-            VRCameraMoveHelper._instance.Init(cameraMenuRootT);
+            _instance.Init(cameraMenuRootT);
         }
 
         private void OnGUI()
@@ -257,7 +257,7 @@ namespace KKCharaStudioVR
                 {
                     moveDummy = new GameObject("MoveDummy");
                     DontDestroyOnLoad(moveDummy);
-                    moveDummy.transform.parent = base.gameObject.transform;
+                    moveDummy.transform.parent = gameObject.transform;
                 }
                 for(int i = 0; i < menuRect.childCount; i++)
                 {

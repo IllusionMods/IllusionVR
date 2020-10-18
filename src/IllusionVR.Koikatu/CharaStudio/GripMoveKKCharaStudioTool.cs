@@ -17,49 +17,27 @@ namespace KKCharaStudioVR
     internal class GripMoveKKCharaStudioTool : Tool
     {
         private GUIQuad internalGui;
-
         private float pressDownTime;
-
         private Vector2 touchDownPosition;
-
         private float menuDownTime;
-
         private float touchpadDownTime;
-
         private double _DeltaX;
-
         private double _DeltaY;
-
         private EVRButtonId moveSelfButton = EVRButtonId.k_EButton_Grip;
-
         private EVRButtonId grabScreenButton = EVRButtonId.k_EButton_Axis1;
-
         private string moveSelfButtonName = "rgrip";
-
         private KKCharaStudioVRSettings _settings;
-
         private float triggerDownTime;
-
         private float gripDownTime;
-
         private GameObject mirror1;
-
         private GameObject grabHandle;
-
         private GameObject pointer;
-
         private bool screenGrabbed;
-
         private GameObject lastGrabbedObject;
-
         private GameObject grabbingObject;
-
         private MenuHandler menuHandlder;
-
         private GripMenuHandler gripMenuHandler;
-
         private IKTool ikTool;
-
         private float nearestGrabable = float.MaxValue;
 
         private string[] FINGER_KEYS = new string[]
@@ -72,21 +50,16 @@ namespace KKCharaStudioVR
         };
 
         private static FieldInfo f_dicGuideObject = typeof(GuideObjectManager).GetField("dicGuideObject", BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
-
         private GameObject marker;
-
         public GameObject target;
-
         private bool lockRotXZ = true;
-
         public override Texture2D Image => UnityHelper.LoadImage("icon_gripmove.png");
-
         public GUIQuad Gui { get; private set; }
 
         private void resetGUIPosition()
         {
             Transform head = VR.Camera.Head;
-            internalGui.transform.parent = base.transform;
+            internalGui.transform.parent = transform;
             internalGui.transform.localScale = Vector3.one * 0.4f;
             if(head != null)
             {
@@ -98,7 +71,7 @@ namespace KKCharaStudioVR
                 internalGui.transform.localPosition = new Vector3(0f, 0.05f, -0.06f);
                 internalGui.transform.localRotation = Quaternion.Euler(90f, 0f, 0f);
             }
-            internalGui.transform.parent = base.transform.parent;
+            internalGui.transform.parent = transform.parent;
             internalGui.UpdateAspect();
         }
 
@@ -110,7 +83,7 @@ namespace KKCharaStudioVR
                 pointer.name = "pointer";
                 pointer.GetComponent<SphereCollider>();
                 pointer.transform.localScale = new Vector3(0.01f, 0.01f, 0.01f);
-                pointer.transform.parent = base.transform;
+                pointer.transform.parent = transform;
                 pointer.transform.localPosition = new Vector3(0f, -0.03f, 0.03f);
                 Renderer component = pointer.GetComponent<Renderer>();
                 component.enabled = true;
@@ -122,26 +95,22 @@ namespace KKCharaStudioVR
         protected override void OnDestroy()
         {
             if(marker != null)
-            {
                 Destroy(marker);
-            }
+
             if(mirror1 != null)
-            {
                 Destroy(mirror1);
-            }
+
             if(grabHandle != null)
-            {
                 Destroy(grabHandle);
-            }
+
             if(internalGui != null)
-            {
                 DestroyImmediate(internalGui.gameObject);
-            }
         }
 
         protected override void OnStart()
         {
             base.OnStart();
+
             try
             {
                 VRLog.Debug("Loading GripMoveTool", new object[0]);
@@ -153,68 +122,65 @@ namespace KKCharaStudioVR
                 internalGui.IsOwned = true;
                 DontDestroyOnLoad(internalGui.gameObject);
                 CreatePointer();
-                gripMenuHandler = base.gameObject.AddComponent<GripMenuHandler>();
+                gripMenuHandler = gameObject.AddComponent<GripMenuHandler>();
                 gripMenuHandler.enabled = false;
             }
             catch(Exception obj)
             {
                 VRLog.Info(obj);
             }
+
             if(marker == null)
             {
                 marker = new GameObject("__GripMoveMarker__");
-                marker.transform.parent = base.transform.parent;
-                marker.transform.position = base.transform.position;
-                marker.transform.rotation = base.transform.rotation;
+                marker.transform.parent = transform.parent;
+                marker.transform.position = transform.position;
+                marker.transform.rotation = transform.rotation;
             }
+
             if(_settings != null)
             {
                 moveSelfButton = EVRButtonId.k_EButton_Grip;
                 moveSelfButtonName = "rgrip";
                 grabScreenButton = EVRButtonId.k_EButton_Axis1;
             }
-            menuHandlder = base.GetComponent<MenuHandler>();
+
+            menuHandlder = GetComponent<MenuHandler>();
             ikTool = IKTool.instance;
         }
 
         protected override void OnDisable()
         {
             base.OnDisable();
+
             if(gripMenuHandler != null)
-            {
                 gripMenuHandler.enabled = false;
-            }
+
             if(menuHandlder != null)
-            {
                 menuHandlder.enabled = true;
-            }
+
             if(internalGui)
-            {
                 internalGui.gameObject.SetActive(false);
-            }
         }
 
         protected override void OnEnable()
         {
             base.OnEnable();
+
             if(gripMenuHandler != null)
-            {
                 gripMenuHandler.enabled = true;
-            }
+
             if(menuHandlder != null)
-            {
                 menuHandlder.enabled = false;
-            }
+
             if(internalGui)
-            {
                 internalGui.gameObject.SetActive(true);
-            }
         }
 
         protected override void OnLevel(int level)
         {
             base.OnLevel(level);
-            base.StopAllCoroutines();
+            StopAllCoroutines();
         }
 
         protected override void OnUpdate()
@@ -261,9 +227,9 @@ namespace KKCharaStudioVR
                 if(grabHandle == null)
                 {
                     grabHandle = new GameObject("__GripMoveGrabHandle__");
-                    grabHandle.transform.parent = base.transform;
-                    grabHandle.transform.position = base.transform.position;
-                    grabHandle.transform.rotation = base.transform.rotation;
+                    grabHandle.transform.parent = transform;
+                    grabHandle.transform.position = transform.position;
+                    grabHandle.transform.rotation = transform.rotation;
                 }
                 if(pressDown && screenGrabbed && lastGrabbedObject != null && grabHandle != null)
                 {
@@ -333,15 +299,15 @@ namespace KKCharaStudioVR
                         if(mirror1 == null)
                         {
                             mirror1 = new GameObject("__GripMoveMirror1__");
-                            mirror1.transform.position = base.transform.position;
-                            mirror1.transform.rotation = base.transform.rotation;
+                            mirror1.transform.position = transform.position;
+                            mirror1.transform.rotation = transform.rotation;
                         }
-                        Vector3 vector = marker.transform.position - base.transform.position;
-                        Quaternion q = marker.transform.rotation * Quaternion.Inverse(base.transform.rotation);
+                        Vector3 vector = marker.transform.position - transform.position;
+                        Quaternion q = marker.transform.rotation * Quaternion.Inverse(transform.rotation);
                         Quaternion quaternion = RemoveLockedAxisRot(q);
                         Transform parent2 = target.transform.parent;
-                        mirror1.transform.position = base.transform.position;
-                        mirror1.transform.rotation = base.transform.rotation;
+                        mirror1.transform.position = transform.position;
+                        mirror1.transform.rotation = transform.rotation;
                         target.transform.parent = mirror1.transform;
                         mirror1.transform.rotation = quaternion * mirror1.transform.rotation;
                         mirror1.transform.position = mirror1.transform.position + vector;
@@ -350,8 +316,8 @@ namespace KKCharaStudioVR
                 }
                 lastGrabbedObject = null;
                 nearestGrabable = float.MaxValue;
-                marker.transform.position = base.transform.position;
-                marker.transform.rotation = base.transform.rotation;
+                marker.transform.position = transform.position;
+                marker.transform.rotation = transform.rotation;
             }
         }
 
@@ -385,15 +351,15 @@ namespace KKCharaStudioVR
         {
             return new List<HelpText>(new HelpText[]
             {
-                HelpText.Create("Swipe as wheel.", base.FindAttachPosition(new string[]
+                HelpText.Create("Swipe as wheel.", FindAttachPosition(new string[]
                 {
                     "touchpad"
                 }), new Vector3(0.06f, 0.04f, 0f), null),
-                HelpText.Create("Grip and move controller to move yourself", base.FindAttachPosition(new string[]
+                HelpText.Create("Grip and move controller to move yourself", FindAttachPosition(new string[]
                 {
                     "rgrip"
                 }), new Vector3(0.06f, 0.04f, 0f), null),
-                HelpText.Create("Trigger to grab objects / IK markers and move them along with controller.", base.FindAttachPosition(new string[]
+                HelpText.Create("Trigger to grab objects / IK markers and move them along with controller.", FindAttachPosition(new string[]
                 {
                     "trigger"
                 }), new Vector3(-0.06f, -0.04f, 0f), null)
@@ -404,7 +370,7 @@ namespace KKCharaStudioVR
         {
             get
             {
-                SteamVR_TrackedObject component = base.gameObject.GetComponent<SteamVR_TrackedObject>();
+                SteamVR_TrackedObject component = gameObject.GetComponent<SteamVR_TrackedObject>();
                 if(component != null)
                 {
                     return SteamVR_Controller.Input((int)component.index);
@@ -436,7 +402,7 @@ namespace KKCharaStudioVR
         {
             if(lockRotXZ)
             {
-                return GripMoveKKCharaStudioTool.RemoveXZRot(q);
+                return RemoveXZRot(q);
             }
             return q;
         }

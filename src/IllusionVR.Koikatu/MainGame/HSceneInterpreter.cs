@@ -29,7 +29,7 @@ namespace IllusionVR.Koikatu.Interpreters
         {
             VRLog.Info("HScene ResetCamera");
 
-            var cam = GameObject.FindObjectOfType<CameraControl_Ver2>();
+            var cam = Object.FindObjectOfType<CameraControl_Ver2>();
 
             if(cam != null)
             {

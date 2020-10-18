@@ -16,15 +16,15 @@ namespace KKCharaStudioVR
 
         public static VRControllerMgr Install(GameObject container)
         {
-            if(VRControllerMgr._instance == null)
+            if(_instance == null)
             {
-                VRControllerMgr._instance = container.AddComponent<VRControllerMgr>();
-                VRControllerMgr._instance.OnLevelWasLoaded(Application.loadedLevel);
+                _instance = container.AddComponent<VRControllerMgr>();
+                _instance.OnLevelWasLoaded(Application.loadedLevel);
             }
-            return VRControllerMgr._instance;
+            return _instance;
         }
 
-        public static bool IsOculusTouchMode => VRControllerMgr._instance.isOculusTouchMode;
+        public static bool IsOculusTouchMode => _instance.isOculusTouchMode;
 
         private void Start()
         {
@@ -32,9 +32,9 @@ namespace KKCharaStudioVR
 
         private void OnLevelWasLoaded(int level)
         {
-            base.StopAllCoroutines();
+            StopAllCoroutines();
             touchModeCheckCompleted = false;
-            base.StartCoroutine(CheckTouchMode());
+            StartCoroutine(CheckTouchMode());
         }
 
         private IEnumerator CheckTouchMode()

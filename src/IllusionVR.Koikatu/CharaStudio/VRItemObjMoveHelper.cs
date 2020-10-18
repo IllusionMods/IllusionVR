@@ -57,13 +57,13 @@ namespace KKCharaStudioVR
 
         private static MethodInfo m_AddSelectNode = typeof(TreeNodeCtrl).GetMethod("AddSelectNode", BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.InvokeMethod);
 
-        public static VRItemObjMoveHelper Instance => VRItemObjMoveHelper._instance;
+        public static VRItemObjMoveHelper Instance => _instance;
 
         public static void Install(GameObject container)
         {
-            if(VRItemObjMoveHelper._instance == null)
+            if(_instance == null)
             {
-                VRItemObjMoveHelper._instance = container.AddComponent<VRItemObjMoveHelper>();
+                _instance = container.AddComponent<VRItemObjMoveHelper>();
             }
         }
 
@@ -75,7 +75,7 @@ namespace KKCharaStudioVR
                 return;
             }
             Transform objectListCanvas = studio.gameObject.transform.Find("Canvas Object List");
-            VRItemObjMoveHelper._instance.Init(objectListCanvas);
+            _instance.Init(objectListCanvas);
             bgTex = new Texture2D(1, 1, TextureFormat.ARGB32, false);
             bgTex.SetPixel(0, 0, new Color(0.3f, 0.3f, 0.3f, 1f));
             bgTex.Apply();
@@ -107,7 +107,7 @@ namespace KKCharaStudioVR
             {
                 moveDummy = new GameObject("MoveDummy");
                 DontDestroyOnLoad(moveDummy);
-                moveDummy.transform.parent = base.gameObject.transform;
+                moveDummy.transform.parent = gameObject.transform;
             }
             Transform transform = objectListCanvas.Find("Image Bar/Button Duplicate");
             Transform transform2 = objectListCanvas.Find("Image Bar/Button Route");
@@ -225,7 +225,7 @@ namespace KKCharaStudioVR
                     TreeNodeObject component = raycastResult.gameObject.transform.parent.gameObject.GetComponent<TreeNodeObject>();
                     if(component != null && instance.dicInfo.ContainsKey(component))
                     {
-                        VRItemObjMoveHelper.m_AddSelectNode.Invoke(instance.treeNodeCtrl, new object[]
+                        m_AddSelectNode.Invoke(instance.treeNodeCtrl, new object[]
                         {
                             component,
                             true

@@ -66,15 +66,10 @@ namespace IllusionVR.Koikatu
                 // Note: Use your own implementation of GameInterpreter to gain access to a few useful operatoins
                 // (e.g. characters, camera judging, colliders, etc.)
 
-                IVRLog.LogMessage(Paths.ProcessName);
                 if(Paths.ProcessName == "CharaStudio")
-                {
                     VRManager.Create<KKCharaStudioInterpreter>(CreateContext(Path.Combine(Paths.ConfigPath, "KKCSVRContext.xml")));
-                }
                 else
-                {
                     VRManager.Create<KoikatuInterpreter>(CreateContext(Path.Combine(Paths.ConfigPath, "VRContext.xml")));
-                }
             }
         }
 

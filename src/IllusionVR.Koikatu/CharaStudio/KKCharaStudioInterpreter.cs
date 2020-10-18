@@ -114,7 +114,7 @@ namespace KKCharaStudioVR
 
         public void ForceResetVRMode()
         {
-            base.StartCoroutine(ForceResetVRModeCo());
+            StartCoroutine(ForceResetVRModeCo());
         }
 
         private IEnumerator ForceResetVRModeCo()
@@ -128,7 +128,7 @@ namespace KKCharaStudioVR
             if(!VRManager.Instance.Mode || !(VRManager.Instance.Mode is GenericStandingMode))
             {
                 IVRLog.LogDebug("Mode is not StandingMode. Force reset as Standing Mode.");
-                KKCharaStudioInterpreter.ForceResetAsStandingMode();
+                ForceResetAsStandingMode();
             }
             else
             {
@@ -146,7 +146,7 @@ namespace KKCharaStudioVR
                 {
                     Camera blueprint = VR.Camera.Blueprint;
                     Camera mainCmaera = Singleton<Studio.Studio>.Instance.cameraCtrl.mainCmaera;
-                    IVRLog.LogDebug(string.Format("Force replace blueprint camera with {0}", mainCmaera));
+                    IVRLog.LogDebug($"Force replace blueprint camera with {mainCmaera}"));
                     Camera camera = VR.Camera.SteamCam.camera;
                     Camera camera2 = mainCmaera;
                     camera.nearClipPlane = VR.Context.NearClipPlane;
@@ -179,7 +179,7 @@ namespace KKCharaStudioVR
             }
             catch(Exception value)
             {
-                Console.WriteLine(value);
+                IVRLog.LogError(value);
             }
         }
     }

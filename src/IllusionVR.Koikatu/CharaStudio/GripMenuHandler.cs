@@ -12,25 +12,18 @@ namespace KKCharaStudioVR
     public class GripMenuHandler : ProtectedBehaviour
     {
         private Controller _Controller;
-
         private const float RANGE = 0.25f;
-
         private const int MOUSE_STABILIZER_THRESHOLD = 30;
-
         private LineRenderer Laser;
-
         private Vector2? mouseDownPosition;
-
         private GUIQuad _Target;
-
         private GripMenuHandler.ResizeHandler _ResizeHandler;
-
         private Vector3 _ScaleVector;
 
         protected override void OnStart()
         {
             base.OnStart();
-            _Controller = base.GetComponent<Controller>();
+            _Controller = GetComponent<Controller>();
             _ScaleVector = new Vector2(VRGUI.Width / (float)Screen.width, VRGUI.Height / (float)Screen.height);
             InitLaser();
         }
@@ -40,7 +33,7 @@ namespace KKCharaStudioVR
         private void InitLaser()
         {
             Laser = new GameObject().AddComponent<LineRenderer>();
-            Laser.transform.SetParent(base.transform, false);
+            Laser.transform.SetParent(transform, false);
             Laser.material = Resources.GetBuiltinResource<Material>("Sprites-Default.mat");
             Laser.material.renderQueue += 5000;
             Laser.SetColors(Color.cyan, Color.cyan);
@@ -228,19 +221,12 @@ namespace KKCharaStudioVR
         private class ResizeHandler : ProtectedBehaviour
         {
             private GUIQuad _Gui;
-
             private Vector3? _StartLeft;
-
             private Vector3? _StartRight;
-
             private Vector3? _StartScale;
-
             private Quaternion? _StartRotation;
-
             private Vector3? _StartPosition;
-
             private Quaternion _StartRotationController;
-
             private Vector3? _OffsetFromCenter;
 
             public bool IsDragging { get; private set; }
@@ -248,7 +234,7 @@ namespace KKCharaStudioVR
             protected override void OnStart()
             {
                 base.OnStart();
-                _Gui = base.GetComponent<GUIQuad>();
+                _Gui = GetComponent<GUIQuad>();
             }
 
             protected override void OnFixedUpdate()
@@ -297,7 +283,7 @@ namespace KKCharaStudioVR
                 Vector3.Distance(_StartLeft.Value, _StartRight.Value);
                 Vector3 vector = _StartRight.Value - _StartLeft.Value;
                 Vector3 vector2 = _StartLeft.Value + vector * 0.5f;
-                _OffsetFromCenter = new Vector3?(base.transform.position - vector2);
+                _OffsetFromCenter = new Vector3?(transform.position - vector2);
             }
 
             private SteamVR_Controller.Device GetDevice(Controller controller)

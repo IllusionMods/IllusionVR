@@ -24,12 +24,12 @@ namespace KKCharaStudioVR
             set => Head.Visible = value;
         }
 
-        public bool IsFemale => base.Actor.sex == 1;
+        public bool IsFemale => Actor.sex == 1;
 
         protected override void OnStart()
         {
             base.OnStart();
-            _TargetController = LookTargetController.AttachTo(this, base.gameObject);
+            _TargetController = LookTargetController.AttachTo(this, gameObject);
         }
 
         protected override void OnLevel(int level)
@@ -59,8 +59,8 @@ namespace KKCharaStudioVR
         protected override void OnLateUpdate()
         {
             base.OnLateUpdate();
-            EyeLookController eyeLookCtrl = base.Actor.eyeLookCtrl;
-            NeckLookControllerVer2 neckLookCtrl = base.Actor.neckLookCtrl;
+            EyeLookController eyeLookCtrl = Actor.eyeLookCtrl;
+            NeckLookControllerVer2 neckLookCtrl = Actor.neckLookCtrl;
             Transform transform = Camera.main.transform;
             if(transform)
             {
@@ -79,8 +79,8 @@ namespace KKCharaStudioVR
         {
             if(_TargetController != null && !newMode)
             {
-                EyeLookController eyeLookCtrl = base.Actor.eyeLookCtrl;
-                NeckLookControllerVer2 neckLookCtrl = base.Actor.neckLookCtrl;
+                EyeLookController eyeLookCtrl = Actor.eyeLookCtrl;
+                NeckLookControllerVer2 neckLookCtrl = Actor.neckLookCtrl;
                 Transform transform = Camera.main.transform;
                 if(transform)
                 {

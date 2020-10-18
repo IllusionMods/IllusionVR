@@ -73,25 +73,25 @@ namespace IllusionVR.Koikatu
             this.Center = Center;
         }
 
-        [System.Xml.Serialization.XmlElement("Trigger")]
+        [XmlElement("Trigger")]
         public String Trigger { get; set; }
 
-        [System.Xml.Serialization.XmlElement("Grip")]
+        [XmlElement("Grip")]
         public String Grip { get; set; }
 
-        [System.Xml.Serialization.XmlElement("Up")]
+        [XmlElement("Up")]
         public String Up { get; set; }
 
-        [System.Xml.Serialization.XmlElement("Down")]
+        [XmlElement("Down")]
         public String Down { get; set; }
 
-        [System.Xml.Serialization.XmlElement("Right")]
+        [XmlElement("Right")]
         public String Right { get; set; }
 
-        [System.Xml.Serialization.XmlElement("Left")]
+        [XmlElement("Left")]
         public String Left { get; set; }
 
-        [System.Xml.Serialization.XmlElement("Center")]
+        [XmlElement("Center")]
         public String Center { get; set; }
     }
 }

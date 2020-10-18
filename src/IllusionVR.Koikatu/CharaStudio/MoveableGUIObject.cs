@@ -8,30 +8,20 @@ namespace KKCharaStudioVR
     public class MoveableGUIObject : MonoBehaviour
     {
         public List<Action<MonoBehaviour>> onMoveLister = new List<Action<MonoBehaviour>>();
-
         public List<Action<MonoBehaviour>> onReleasedLister = new List<Action<MonoBehaviour>>();
-
         public GuideObject guideObject;
-
         public GuideScale guideScale;
-
         public ObjectCtrlInfo objectCtrlInfo;
-
         public Vector3 oldPos;
-
         public Vector3 oldRot;
-
         public Vector3 oldScale;
-
         public bool isMoveObj;
-
         private Renderer renderer;
-
         public Renderer visibleReference;
 
         private void Start()
         {
-            renderer = base.GetComponent<Renderer>();
+            renderer = GetComponent<Renderer>();
         }
 
         public void OnMoveStart()
@@ -105,6 +95,7 @@ namespace KKCharaStudioVR
                     Singleton<UndoRedoManager>.Instance.Push(new GuideCommand.ScaleEqualsCommand(array));
                 }
             }
+
             foreach(Action<MonoBehaviour> action in onReleasedLister)
             {
                 try
@@ -121,12 +112,14 @@ namespace KKCharaStudioVR
         {
             if(isMoveObj)
             {
-                base.transform.localScale = Vector3.one * 0.1f * Studio.Studio.optionSystem.manipulateSize;
+                transform.localScale = Vector3.one * 0.1f * Studio.Studio.optionSystem.manipulateSize;
             }
+
             if(guideScale != null)
             {
-                base.transform.localScale = Vector3.one * 0.05f * Studio.Studio.optionSystem.manipulateSize;
+                transform.localScale = Vector3.one * 0.05f * Studio.Studio.optionSystem.manipulateSize;
             }
+
             if(visibleReference != null && renderer != null)
             {
                 renderer.gameObject.layer = visibleReference.gameObject.layer;

@@ -13,10 +13,7 @@ namespace KKCharaStudioVR
         {
             IEnumerable<IShortcut> first = base.CreateShortcuts();
             IShortcut[] array = new IShortcut[1];
-            array[0] = new MultiKeyboardShortcut(new KeyStroke("Ctrl+C"), new KeyStroke("Ctrl+C"), delegate ()
-            {
-                VR.Manager.SetMode<GenericStandingMode>();
-            }, KeyMode.PressUp);
+            array[0] = new MultiKeyboardShortcut(new KeyStroke("Ctrl+C"), new KeyStroke("Ctrl+C"), () => VR.Manager.SetMode<GenericStandingMode>(), KeyMode.PressUp);
             return first.Concat(array);
         }
 

@@ -32,12 +32,12 @@ namespace KKCharaStudioVR
 
         public static IKTool Create(GameObject container)
         {
-            if(IKTool.instance != null)
+            if(instance != null)
             {
-                return IKTool.instance;
+                return instance;
             }
-            IKTool.instance = container.AddComponent<IKTool>();
-            return IKTool.instance;
+            instance = container.AddComponent<IKTool>();
+            return instance;
         }
 
         private void Awake()
@@ -95,12 +95,12 @@ namespace KKCharaStudioVR
 
         private void StartWatch()
         {
-            base.StopAllCoroutines();
-            base.StartCoroutine(InstallMoveableObjectCo());
+            StopAllCoroutines();
+            StartCoroutine(InstallMoveableObjectCo());
             if(handle == null)
             {
                 handle = new GameObject("handle");
-                handle.transform.parent = base.gameObject.transform;
+                handle.transform.parent = gameObject.transform;
             }
         }
 

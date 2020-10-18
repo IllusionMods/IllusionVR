@@ -11,19 +11,19 @@ namespace KKCharaStudioVR
 
         public static Shader GetColorZOrderShader()
         {
-            if(MaterialHelper._ColorZOrderShader != null)
+            if(_ColorZOrderShader != null)
             {
-                return MaterialHelper._ColorZOrderShader;
+                return _ColorZOrderShader;
             }
             Shader result;
             try
             {
-                if(MaterialHelper._GripMovePluginResources == null)
+                if(_GripMovePluginResources == null)
                 {
-                    MaterialHelper._GripMovePluginResources = AssetBundle.LoadFromMemory(IllusionVR.Koikatu.Properties.Resources.kkcharastudiovrshader);
+                    _GripMovePluginResources = AssetBundle.LoadFromMemory(IllusionVR.Koikatu.Properties.Resources.kkcharastudiovrshader);
                 }
-                MaterialHelper._ColorZOrderShader = MaterialHelper._GripMovePluginResources.LoadAsset<Shader>("ColorZOrder");
-                result = MaterialHelper._ColorZOrderShader;
+                _ColorZOrderShader = _GripMovePluginResources.LoadAsset<Shader>("ColorZOrder");
+                result = _ColorZOrderShader;
             }
             catch(Exception ex)
             {

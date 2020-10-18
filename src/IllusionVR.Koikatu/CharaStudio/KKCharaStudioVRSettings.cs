@@ -10,7 +10,7 @@ namespace KKCharaStudioVR
 
         public static KKCharaStudioVRSettings Load(string path)
         {
-            return VRSettings.Load<KKCharaStudioVRSettings>(path);
+            return Load<KKCharaStudioVRSettings>(path);
         }
 
         [XmlComment("Lock XZ Axis (pitch / roll) rotation.")]
@@ -20,7 +20,7 @@ namespace KKCharaStudioVR
             set
             {
                 _LockRotXZ = value;
-                base.TriggerPropertyChanged("LockRotXZ");
+                TriggerPropertyChanged("LockRotXZ");
             }
         }
     }

@@ -45,14 +45,14 @@ namespace KKCharaStudioVR
         protected override void OnAwake()
         {
             base.OnAwake();
-            avatar = base.GetComponent<ChaControl>();
+            avatar = GetComponent<ChaControl>();
             Reinitialize();
         }
 
         public void Reinitialize()
         {
-            headTransform = TransientHead.GetHead(avatar);
-            eyesTransform = TransientHead.GetEyes(avatar);
+            headTransform = GetHead(avatar);
+            eyesTransform = GetEyes(avatar);
             root = avatar.objRoot.transform;
             m_tongues = (from renderer in root.GetComponentsInChildren<SkinnedMeshRenderer>()
                          where renderer.name.ToLower().StartsWith("cm_o_tang") || renderer.name == "cf_o_tang"
@@ -73,7 +73,7 @@ namespace KKCharaStudioVR
             {
                 VRLog.Info("Creating eyes", new object[0]);
                 transform = new GameObject("cf_j_faceup_tz").transform;
-                transform.SetParent(TransientHead.GetHead(human), false);
+                transform.SetParent(GetHead(human), false);
                 transform.transform.localPosition = new Vector3(0f, 0.07f, 0.05f);
             }
             else
