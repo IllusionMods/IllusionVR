@@ -6,6 +6,8 @@ using System.Xml.Serialization;
 using UnityEngine;
 using VRGIN.Core;
 using BepInEx;
+using KKCharaStudioVR;
+using IllusionVR.Core;
 
 namespace IllusionVR.Koikatu
 {
@@ -66,7 +68,19 @@ namespace IllusionVR.Koikatu
 
                 if(Paths.ProcessName == "CharaStudio")
                 {
+                    SaveLoadSceneHook.InstallHook();
+                    LoadFixHook.InstallHook();
 
+                    VRManager.Create<KKCharaStudioInterpreter>(CreateContext(Path.Combine(Paths.ConfigPath, "KKCSVRContext.xml")));
+                    VR.Manager.SetMode<GenericStandingMode>();
+                    GameObject gameObject = new GameObject("KKCharaStudioVR");
+                    DontDestroyOnLoad(gameObject);
+                    IKTool.Create(gameObject);
+                    VRControllerMgr.Install(gameObject);
+                    VRCameraMoveHelper.Install(gameObject);
+                    VRItemObjMoveHelper.Install(gameObject);
+                    gameObject.AddComponent<KKCharaStudioVRGUI>();
+                    DontDestroyOnLoad(VRCamera.Instance.gameObject);
                 }
                 else
                 {
@@ -91,7 +105,7 @@ namespace IllusionVR.Koikatu
                     }
                     catch(Exception ex)
                     {
-                        IllusionVR.Logger.LogError($"Failed to deserialize {path} -- using default\n{ex}");
+                        IVRLog.LogError($"Failed to deserialize {path} -- using default\n{ex}");
                     }
                 }
             }
@@ -108,7 +122,7 @@ namespace IllusionVR.Koikatu
             }
             catch(Exception ex)
             {
-                IllusionVR.Logger.LogError($"Failed to write {path}\n{ex}");
+                IVRLog.LogError($"Failed to write {path}\n{ex}");
             }
 
             return context;

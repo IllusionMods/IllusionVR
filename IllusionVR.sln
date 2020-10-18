@@ -7,7 +7,13 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IllusionVR.Koikatu", "src\I
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VRGIN", "src\VRGIN\VRGIN\VRGIN.csproj", "{22788A2C-7695-4A6A-A9F0-115AB9A05FD4}"
 EndProject
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "IllusionVR.Core", "src\IllusionVR.Core\IllusionVR.Core.shproj", "{35C9CF04-D4F8-48DD-B252-D7522F599C12}"
+EndProject
 Global
+	GlobalSection(SharedMSBuildProjectFiles) = preSolution
+		src\IllusionVR.Core\IllusionVR.Core.projitems*{16a433e5-7c81-401b-b7d3-f03239602a59}*SharedItemsImports = 4
+		src\IllusionVR.Core\IllusionVR.Core.projitems*{35c9cf04-d4f8-48dd-b252-d7522f599c12}*SharedItemsImports = 13
+	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU

@@ -1,25 +1,19 @@
 ﻿using BepInEx;
 using BepInEx.Logging;
 using System;
-using UnityEngine;
 using VRGIN.Helpers;
 using VRGIN.Core;
+using IllusionVR.Core;
 
 namespace IllusionVR.Koikatu
 {
     [BepInPlugin("keelhauled.illusionvr.koikatu", "IllusionVR", "1.0.0")]
     public class IllusionVR : BaseUnityPlugin
     {
-        public static new ManualLogSource Logger;
-
-        public static Material DefaultSkybox;
-
         private void Awake()
         {
-            Logger = base.Logger;
-            VRLog.logCall += (x, y) => Logger.Log(ConvertLogLevel(y), x);
-
-            DefaultSkybox = RenderSettings.skybox;
+            IVRLog.SetLogger(Logger);
+            VRLog.logCall += (x, y) => IVRLog.Log(ConvertLogLevel(y), x);
 
             bool vrDeactivated = Environment.CommandLine.Contains("--novr");
             bool vrActivated = Environment.CommandLine.Contains("--vr");

@@ -1055,21 +1055,21 @@ namespace VRGIN.Helpers
             var tmp = new JSONData("");
 
             tmp.AsInt = AsInt;
-            if(tmp.m_Data == this.m_Data)
+            if(tmp.m_Data == m_Data)
             {
                 aWriter.Write((byte)JSONBinaryTag.IntValue);
                 aWriter.Write(AsInt);
                 return;
             }
             tmp.AsFloat = AsFloat;
-            if(tmp.m_Data == this.m_Data)
+            if(tmp.m_Data == m_Data)
             {
                 aWriter.Write((byte)JSONBinaryTag.FloatValue);
                 aWriter.Write(AsFloat);
                 return;
             }
             tmp.AsDouble = AsDouble;
-            if(tmp.m_Data == this.m_Data)
+            if(tmp.m_Data == m_Data)
             {
                 aWriter.Write((byte)JSONBinaryTag.DoubleValue);
                 aWriter.Write(AsDouble);
@@ -1077,7 +1077,7 @@ namespace VRGIN.Helpers
             }
 
             tmp.AsBool = AsBool;
-            if(tmp.m_Data == this.m_Data)
+            if(tmp.m_Data == m_Data)
             {
                 aWriter.Write((byte)JSONBinaryTag.BoolValue);
                 aWriter.Write(AsBool);

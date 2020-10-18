@@ -143,7 +143,7 @@ namespace CapturePanorama
 
         protected override void OnStart()
         {
-            audioSource = this.gameObject.AddComponent<AudioSource>();
+            audioSource = gameObject.AddComponent<AudioSource>();
             audioSource.spatialBlend = 0.0f; // Use 2D sound for sound effects
             audioSource.Play();
 

@@ -64,8 +64,8 @@ namespace IllusionVR.Koikatu
 
         public KeySet(string trigger, string grip, string Up, string Down, string Right, string Left, string Center)
         {
-            this.Trigger = trigger;
-            this.Grip = grip;
+            Trigger = trigger;
+            Grip = grip;
             this.Up = Up;
             this.Down = Down;
             this.Right = Right;

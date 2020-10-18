@@ -151,8 +151,8 @@ public static class SteamVR_Utils
 
         public RigidTransform(Transform t)
         {
-            this.pos = t.position;
-            this.rot = t.rotation;
+            pos = t.position;
+            rot = t.rotation;
         }
 
         public RigidTransform(Transform from, Transform to)
@@ -181,8 +181,8 @@ public static class SteamVR_Utils
             m[2, 2] = pose.m10;
             m[2, 3] = -pose.m11;
 
-            this.pos = m.GetPosition();
-            this.rot = m.GetRotation();
+            pos = m.GetPosition();
+            rot = m.GetRotation();
         }
 
         public RigidTransform(HmdMatrix44_t pose)
@@ -209,8 +209,8 @@ public static class SteamVR_Utils
             m[3, 2] = -pose.m14;
             m[3, 3] = pose.m15;
 
-            this.pos = m.GetPosition();
-            this.rot = m.GetRotation();
+            pos = m.GetPosition();
+            rot = m.GetRotation();
         }
 
         public HmdMatrix44_t ToHmdMatrix44()

@@ -147,7 +147,7 @@ namespace VRGIN.U46.Visuals
             {
                 base.OnUpdate();
 
-                if(!NewParent && !this.enabled)
+                if(!NewParent && !enabled)
                 {
                     DestroyImmediate(gameObject);
                 }
@@ -161,7 +161,7 @@ namespace VRGIN.U46.Visuals
                         transform.localScale = Vector3.one;
                         GetComponent<Renderer>().material.color = VR.Context.PrimaryColor;
 
-                        this.enabled = false;
+                        enabled = false;
                     }
                     else
                     {

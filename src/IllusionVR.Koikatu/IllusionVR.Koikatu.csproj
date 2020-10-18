@@ -32,12 +32,20 @@
     <DebugSymbols>true</DebugSymbols>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="0Harmony, Version=2.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\IllusionLibs.BepInEx.Harmony.2.0.6\lib\net35\0Harmony.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
     <Reference Include="Assembly-CSharp, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\..\packages\IllusionLibs.Koikatu.Assembly-CSharp.2019.4.27\lib\net35\Assembly-CSharp.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="BepInEx, Version=5.3.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\..\packages\IllusionLibs.BepInEx.5.3.0\lib\net35\BepInEx.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="BepInEx.Harmony, Version=2.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\IllusionLibs.BepInEx.Harmony.2.0.6\lib\net35\BepInEx.Harmony.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="System" />
@@ -50,12 +58,38 @@
       <HintPath>..\..\packages\IllusionLibs.Koikatu.UnityEngine.5.6.2\lib\net35\UnityEngine.dll</HintPath>
       <Private>False</Private>
     </Reference>
+    <Reference Include="UnityEngine.UI, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\IllusionLibs.Koikatu.UnityEngine.UI.5.6.2\lib\net35\UnityEngine.UI.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
     <Reference Include="WindowsInput, Version=1.0.4.1, Culture=neutral, PublicKeyToken=9b287f7dc5073cad, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\VRGIN\Libs\WindowsInput.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CharaStudio\ConfigurableContext.cs" />
+    <Compile Include="CharaStudio\GenericSeatedMode.cs" />
+    <Compile Include="CharaStudio\GenericStandingMode.cs" />
+    <Compile Include="CharaStudio\GripMenuHandler.cs" />
+    <Compile Include="CharaStudio\GripMoveKKCharaStudioTool.cs" />
+    <Compile Include="CharaStudio\GUIUtils.cs" />
+    <Compile Include="CharaStudio\IKTool.cs" />
+    <Compile Include="CharaStudio\KeyboradSimulatorUtil.cs" />
+    <Compile Include="CharaStudio\KKCharaStudioActor.cs" />
+    <Compile Include="CharaStudio\KKCharaStudioInterpreter.cs" />
+    <Compile Include="CharaStudio\KKCharaStudioVRGUI.cs" />
+    <Compile Include="CharaStudio\KKCharaStudioVRSettings.cs" />
+    <Compile Include="CharaStudio\LoadFixHook.cs" />
+    <Compile Include="CharaStudio\MaterialHelper.cs" />
+    <Compile Include="CharaStudio\MoveableGUIObject.cs" />
+    <Compile Include="CharaStudio\ObjMoveHelper.cs" />
+    <Compile Include="CharaStudio\SaveLoadSceneHook.cs" />
+    <Compile Include="CharaStudio\TransientHead.cs" />
+    <Compile Include="CharaStudio\VRCameraMoveHelper.cs" />
+    <Compile Include="CharaStudio\VRControllerMgr.cs" />
+    <Compile Include="CharaStudio\VRIMGUIUtil.cs" />
+    <Compile Include="CharaStudio\VRItemObjMoveHelper.cs" />
     <Compile Include="ConfigurableContext.cs" />
     <Compile Include="GenericSeatedMode.cs" />
     <Compile Include="GenericStandingMode.cs" />
@@ -91,9 +125,10 @@
     <Content Include="Images\icon_school.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="System.Drawing.dll">
+    <ContentWithTargetPath Include="Resources\System.Drawing.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
+      <TargetPath>System.Drawing.dll</TargetPath>
+    </ContentWithTargetPath>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Properties\Resources.resx">
@@ -104,8 +139,7 @@
   <ItemGroup>
     <Analyzer Include="..\..\packages\Microsoft.Unity.Analyzers.1.8.2\analyzers\dotnet\cs\Microsoft.Unity.Analyzers.dll" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="CharaStudio\" />
-  </ItemGroup>
+  <ItemGroup />
+  <Import Project="..\IllusionVR.Core\IllusionVR.Core.projitems" Label="Shared" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

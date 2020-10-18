@@ -148,7 +148,7 @@ namespace VRGIN.Core
         {
             PropertyChanged += Distribute;
 
-            _OldSettings = this.MemberwiseClone() as VRSettings;
+            _OldSettings = MemberwiseClone() as VRSettings;
         }
 
         /// <summary>
@@ -188,7 +188,7 @@ namespace VRGIN.Core
                 Path = path;
             }
 
-            _OldSettings = this.MemberwiseClone() as VRSettings;
+            _OldSettings = MemberwiseClone() as VRSettings;
         }
 
         protected virtual void PostProcess(string path)
@@ -298,8 +298,8 @@ namespace VRGIN.Core
         /// </summary>
         public void Reset()
         {
-            var blueprint = Activator.CreateInstance(this.GetType()) as VRSettings;
-            this.CopyFrom(blueprint);
+            var blueprint = Activator.CreateInstance(GetType()) as VRSettings;
+            CopyFrom(blueprint);
         }
 
         /// <summary>
@@ -307,7 +307,7 @@ namespace VRGIN.Core
         /// </summary>
         public void Reload()
         {
-            this.CopyFrom(_OldSettings);
+            CopyFrom(_OldSettings);
         }
 
         /// <summary>

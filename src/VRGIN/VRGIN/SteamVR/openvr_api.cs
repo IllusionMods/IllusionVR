@@ -4490,17 +4490,17 @@ namespace Valve.VR
         public VREvent_Data_t data;
         public VREvent_t_Packed(VREvent_t unpacked)
         {
-            this.eventType = unpacked.eventType;
-            this.trackedDeviceIndex = unpacked.trackedDeviceIndex;
-            this.eventAgeSeconds = unpacked.eventAgeSeconds;
-            this.data = unpacked.data;
+            eventType = unpacked.eventType;
+            trackedDeviceIndex = unpacked.trackedDeviceIndex;
+            eventAgeSeconds = unpacked.eventAgeSeconds;
+            data = unpacked.data;
         }
         public void Unpack(ref VREvent_t unpacked)
         {
-            unpacked.eventType = this.eventType;
-            unpacked.trackedDeviceIndex = this.trackedDeviceIndex;
-            unpacked.eventAgeSeconds = this.eventAgeSeconds;
-            unpacked.data = this.data;
+            unpacked.eventType = eventType;
+            unpacked.trackedDeviceIndex = trackedDeviceIndex;
+            unpacked.eventAgeSeconds = eventAgeSeconds;
+            unpacked.data = data;
         }
     }
     [StructLayout(LayoutKind.Sequential)]
@@ -4541,25 +4541,25 @@ namespace Valve.VR
         public VRControllerAxis_t rAxis4;
         public VRControllerState_t_Packed(VRControllerState_t unpacked)
         {
-            this.unPacketNum = unpacked.unPacketNum;
-            this.ulButtonPressed = unpacked.ulButtonPressed;
-            this.ulButtonTouched = unpacked.ulButtonTouched;
-            this.rAxis0 = unpacked.rAxis0;
-            this.rAxis1 = unpacked.rAxis1;
-            this.rAxis2 = unpacked.rAxis2;
-            this.rAxis3 = unpacked.rAxis3;
-            this.rAxis4 = unpacked.rAxis4;
+            unPacketNum = unpacked.unPacketNum;
+            ulButtonPressed = unpacked.ulButtonPressed;
+            ulButtonTouched = unpacked.ulButtonTouched;
+            rAxis0 = unpacked.rAxis0;
+            rAxis1 = unpacked.rAxis1;
+            rAxis2 = unpacked.rAxis2;
+            rAxis3 = unpacked.rAxis3;
+            rAxis4 = unpacked.rAxis4;
         }
         public void Unpack(ref VRControllerState_t unpacked)
         {
-            unpacked.unPacketNum = this.unPacketNum;
-            unpacked.ulButtonPressed = this.ulButtonPressed;
-            unpacked.ulButtonTouched = this.ulButtonTouched;
-            unpacked.rAxis0 = this.rAxis0;
-            unpacked.rAxis1 = this.rAxis1;
-            unpacked.rAxis2 = this.rAxis2;
-            unpacked.rAxis3 = this.rAxis3;
-            unpacked.rAxis4 = this.rAxis4;
+            unpacked.unPacketNum = unPacketNum;
+            unpacked.ulButtonPressed = ulButtonPressed;
+            unpacked.ulButtonTouched = ulButtonTouched;
+            unpacked.rAxis0 = rAxis0;
+            unpacked.rAxis1 = rAxis1;
+            unpacked.rAxis2 = rAxis2;
+            unpacked.rAxis3 = rAxis3;
+            unpacked.rAxis4 = rAxis4;
         }
     }
     [StructLayout(LayoutKind.Sequential)]
@@ -4721,15 +4721,15 @@ namespace Valve.VR
         public IntPtr rubTextureMapData; // const uint8_t *
         public RenderModel_TextureMap_t_Packed(RenderModel_TextureMap_t unpacked)
         {
-            this.unWidth = unpacked.unWidth;
-            this.unHeight = unpacked.unHeight;
-            this.rubTextureMapData = unpacked.rubTextureMapData;
+            unWidth = unpacked.unWidth;
+            unHeight = unpacked.unHeight;
+            rubTextureMapData = unpacked.rubTextureMapData;
         }
         public void Unpack(ref RenderModel_TextureMap_t unpacked)
         {
-            unpacked.unWidth = this.unWidth;
-            unpacked.unHeight = this.unHeight;
-            unpacked.rubTextureMapData = this.rubTextureMapData;
+            unpacked.unWidth = unWidth;
+            unpacked.unHeight = unHeight;
+            unpacked.rubTextureMapData = rubTextureMapData;
         }
     }
     [StructLayout(LayoutKind.Sequential)]
@@ -4752,19 +4752,19 @@ namespace Valve.VR
         public int diffuseTextureId;
         public RenderModel_t_Packed(RenderModel_t unpacked)
         {
-            this.rVertexData = unpacked.rVertexData;
-            this.unVertexCount = unpacked.unVertexCount;
-            this.rIndexData = unpacked.rIndexData;
-            this.unTriangleCount = unpacked.unTriangleCount;
-            this.diffuseTextureId = unpacked.diffuseTextureId;
+            rVertexData = unpacked.rVertexData;
+            unVertexCount = unpacked.unVertexCount;
+            rIndexData = unpacked.rIndexData;
+            unTriangleCount = unpacked.unTriangleCount;
+            diffuseTextureId = unpacked.diffuseTextureId;
         }
         public void Unpack(ref RenderModel_t unpacked)
         {
-            unpacked.rVertexData = this.rVertexData;
-            unpacked.unVertexCount = this.unVertexCount;
-            unpacked.rIndexData = this.rIndexData;
-            unpacked.unTriangleCount = this.unTriangleCount;
-            unpacked.diffuseTextureId = this.diffuseTextureId;
+            unpacked.rVertexData = rVertexData;
+            unpacked.unVertexCount = unVertexCount;
+            unpacked.rIndexData = rIndexData;
+            unpacked.unTriangleCount = unTriangleCount;
+            unpacked.diffuseTextureId = diffuseTextureId;
         }
     }
     [StructLayout(LayoutKind.Sequential)]

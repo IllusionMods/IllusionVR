@@ -33,7 +33,7 @@ namespace VRGIN.Core
 
         protected virtual void Initialize(T actor)
         {
-            this.Actor = actor;
+            Actor = actor;
             VRLog.Info("Creating character {0}", actor.name);
         }
     }

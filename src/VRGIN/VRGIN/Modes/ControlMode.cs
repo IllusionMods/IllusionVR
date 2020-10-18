@@ -25,7 +25,7 @@ namespace VRGIN.Modes
 
         public virtual void Impersonate(IActor actor)
         {
-            this.Impersonate(actor, ImpersonationMode.Approximately);
+            Impersonate(actor, ImpersonationMode.Approximately);
         }
 
         public virtual void Impersonate(IActor actor, ImpersonationMode mode)

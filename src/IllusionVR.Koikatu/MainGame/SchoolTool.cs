@@ -70,7 +70,7 @@ namespace IllusionVR.Koikatu
         protected override void OnUpdate()
         {
             base.OnUpdate();
-            var device = this.Controller;
+            var device = Controller;
 
             if(device.GetPressDown(ButtonMask.Trigger))
             {

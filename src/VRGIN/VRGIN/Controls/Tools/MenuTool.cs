@@ -102,7 +102,7 @@ namespace VRGIN.Controls.Tools
         {
             base.OnUpdate();
 
-            var device = this.Controller;
+            var device = Controller;
 
             if(device.GetPressDown(ButtonMask.Touchpad | ButtonMask.Trigger))
             {

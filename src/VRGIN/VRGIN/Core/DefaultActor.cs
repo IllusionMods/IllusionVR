@@ -19,7 +19,7 @@ namespace VRGIN.Core
         {
             Actor = nativeActor;
 
-            this.Initialize(nativeActor);
+            Initialize(nativeActor);
         }
 
         public virtual bool IsValid => Actor;

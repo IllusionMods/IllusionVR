@@ -129,11 +129,11 @@ namespace VRGIN.Helpers
         public VelocityRumble(SteamVR_Controller.Device device, ushort microDuration, float milliInterval, float maxVelocity, ushort maxMicroDuration, float maxMilliInterval)
         {
             Device = device;
-            this._MaxMilliInterval = maxMilliInterval;
-            this._MaxMicroDuration = maxMicroDuration;
-            this._MaxVelocity = maxVelocity;
-            this._MilliInterval = milliInterval;
-            this._MicroDuration = microDuration;
+            _MaxMilliInterval = maxMilliInterval;
+            _MaxMicroDuration = maxMicroDuration;
+            _MaxVelocity = maxVelocity;
+            _MilliInterval = milliInterval;
+            _MicroDuration = microDuration;
         }
 
         public int CompareTo(IRumbleSession other)
