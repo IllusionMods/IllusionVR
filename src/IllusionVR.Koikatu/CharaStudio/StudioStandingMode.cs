@@ -4,10 +4,10 @@ using System.Linq;
 using VRGIN.Controls.Tools;
 using VRGIN.Modes;
 
-namespace IllusionVR.Koikatu
+namespace IllusionVR.Koikatu.CharaStudio
 {
     internal class StudioStandingMode : StandingMode
     {
-        public override IEnumerable<Type> Tools => base.Tools.Concat(new Type[] { typeof(MenuTool), typeof(WarpTool) });
+        public override IEnumerable<Type> Tools => base.Tools.Concat(new Type[] { typeof(MenuTool), typeof(WarpTool), typeof(GripMoveKKCharaStudioTool) });
     }
 }

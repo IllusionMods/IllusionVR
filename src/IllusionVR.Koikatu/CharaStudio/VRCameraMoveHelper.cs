@@ -1,5 +1,4 @@
-﻿using HarmonyLib;
-using Studio;
+﻿using Studio;
 using System;
 using UnityEngine;
 using UnityEngine.UI;
@@ -144,15 +143,12 @@ namespace IllusionVR.Koikatu.CharaStudio
 
         public void CurrentToCameraCtrl()
         {
-            GetCurrentLookDirAndRot(out Vector3 vector, out Vector3 vector2, out Vector3 vector3);
-            //var cameraData = new CameraControl.CameraData();
-            var cameraData = Activator.CreateInstance(typeof(BaseCameraControl).Assembly.GetType("BaseCameraControl+CameraData"));
-            VR.Camera.Head.TransformPoint(vector2.normalized * DEFAULT_DISTANCE * DISTANCE_RATIO);
-            Vector3 vector4 = new Vector3(0f, 0f, -1f * DEFAULT_DISTANCE * DISTANCE_RATIO);
-            //cameraData.Set(vector, vector3, vector4, studio.cameraCtrl.fieldOfView);
-            Traverse.Create(cameraData).Method("Set").GetValue(vector, vector3, vector4, studio.cameraCtrl.fieldOfView);
-            //studio.cameraCtrl.Import(cameraData);
-            Traverse.Create(studio.cameraCtrl).Method("Import").GetValue(cameraData);
+            GetCurrentLookDirAndRot(out Vector3 pos, out Vector3 vector, out Vector3 rotate);
+            Studio.CameraControl.CameraData cameraData = new Studio.CameraControl.CameraData();
+            VR.Camera.Head.TransformPoint(vector.normalized * DEFAULT_DISTANCE * DISTANCE_RATIO);
+            Vector3 distance = new Vector3(0f, 0f, -1f * DEFAULT_DISTANCE * DISTANCE_RATIO);
+            cameraData.Set(pos, rotate, distance, studio.cameraCtrl.fieldOfView);
+            studio.cameraCtrl.Import(cameraData);
         }
 
         private void GetCurrentLookDirAndRot(out Vector3 lookPoint, out Vector3 dir, out Vector3 rot)

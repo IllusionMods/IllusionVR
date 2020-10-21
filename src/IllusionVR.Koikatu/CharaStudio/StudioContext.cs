@@ -39,8 +39,12 @@ namespace IllusionVR.Koikatu.CharaStudio
 
         public static StudioContext CreateContext(string contextName)
         {
-            var serializer = new XmlSerializer(typeof(StudioContext));
+            if(!Directory.Exists(configPath))
+                Directory.CreateDirectory(configPath);
+
             var path = Path.Combine(configPath, contextName);
+
+            var serializer = new XmlSerializer(typeof(StudioContext));
 
             if(File.Exists(path))
             {

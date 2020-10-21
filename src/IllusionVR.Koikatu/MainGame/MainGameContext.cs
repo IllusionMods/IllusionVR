@@ -39,8 +39,12 @@ namespace IllusionVR.Koikatu.MainGame
 
         public static MainGameContext CreateContext(string contextName)
         {
-            var serializer = new XmlSerializer(typeof(MainGameContext));
+            if(!Directory.Exists(configPath))
+                Directory.CreateDirectory(configPath);
+
             var path = Path.Combine(configPath, contextName);
+
+            var serializer = new XmlSerializer(typeof(MainGameContext));
 
             if(File.Exists(path))
             {
