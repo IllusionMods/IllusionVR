@@ -13,17 +13,16 @@ namespace IllusionVR.Koikatu.CharaStudio
 
         public static void InstallHook()
         {
-            IVRLog.LogDebug("Install SaveLoadSceneHook");
-            new Harmony("KKChacaStudioVR.SaveLoadSceneHook").PatchAll(typeof(SaveLoadSceneHook));
+            Harmony.CreateAndPatchAll(typeof(SaveLoadSceneHook));
         }
 
         [HarmonyPrefix]
-        [HarmonyPatch(typeof(Studio.Studio), "SaveScene", new Type[] { }, null)]
+        [HarmonyPatch(typeof(Studio.Studio), "SaveScene", new Type[] { })]
         public static bool SaveScenePreHook(Studio.Studio __instance, ref Camera[] __state)
         {
             IVRLog.LogDebug("Update Camera position and rotation for Scene Capture and last Camera data.");
             VRCameraMoveHelper.Instance.CurrentToCameraCtrl();
-            FieldInfo field = typeof(GameScreenShot).GetField("renderCam", BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
+            FieldInfo field = typeof(Studio.GameScreenShot).GetField("renderCam", BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
             Camera[] array = field.GetValue(Singleton<Studio.Studio>.Instance.gameScreenShot) as Camera[];
             IVRLog.LogDebug("Backup Screenshot render cam.");
             backupRenderCam = array;
@@ -38,7 +37,7 @@ namespace IllusionVR.Koikatu.CharaStudio
         public static void SaveScenePostHook(Studio.Studio __instance, Camera[] __state)
         {
             IVRLog.LogDebug("Restore backup render cam.");
-            typeof(GameScreenShot).GetField("renderCam", BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic).SetValue(Singleton<Studio.Studio>.Instance.gameScreenShot, __state);
+            typeof(Studio.GameScreenShot).GetField("renderCam", BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic).SetValue(Singleton<Studio.Studio>.Instance.gameScreenShot, __state);
         }
     }
 }
