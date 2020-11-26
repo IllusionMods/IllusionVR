@@ -63,7 +63,7 @@ namespace VRGIN.Controls.Tools
 
         protected override void OnAwake()
         {
-            VRLog.Info("Awake!");
+            VRLog.Debug("Awake!");
             ArcRenderer = new GameObject("Arc Renderer").AddComponent<ArcRenderer>();
             ArcRenderer.transform.SetParent(transform, false);
             ArcRenderer.gameObject.SetActive(false);
@@ -81,14 +81,14 @@ namespace VRGIN.Controls.Tools
 
         protected override void OnDestroy()
         {
-            VRLog.Info("Destroy!");
+            VRLog.Debug("Destroy!");
 
             DestroyImmediate(_Visualization.gameObject);
         }
 
         protected override void OnStart()
         {
-            VRLog.Info("Start!");
+            VRLog.Debug("Start!");
 
             base.OnStart();
             _IPDOnStart = VR.Settings.IPDScale;
@@ -345,7 +345,7 @@ namespace VRGIN.Controls.Tools
 
                         VR.Camera.SteamCam.origin.transform.position -= diffPos;
                         _ProspectedPlayArea.Height -= diffPos.y;
-                        //VRLog.Info("Rotate: {0}", NormalizeAngle(diffRot.eulerAngles.y));
+                        //VRLog.Debug("Rotate: {0}", NormalizeAngle(diffRot.eulerAngles.y));
                         if(!VR.Settings.GrabRotationImmediateMode && Controller.GetPress(ButtonMask.Trigger | ButtonMask.Touchpad))
                         {
                             VR.Camera.SteamCam.origin.transform.RotateAround(VR.Camera.Head.position, Vector3.up, -angleDiff);
@@ -418,7 +418,7 @@ namespace VRGIN.Controls.Tools
                 }
                 else
                 {
-                    VRLog.Info("Discarding too large rotation: {0}", rot);
+                    VRLog.Debug("Discarding too large rotation: {0}", rot);
                 }
             }
             _Points.Clear();
@@ -442,7 +442,7 @@ namespace VRGIN.Controls.Tools
                     _ScaleInitialized = _RotationInitialized = false;
                     if(HasLock())
                     {
-                        VRLog.Info("Releasing lock on other controller!");
+                        VRLog.Debug("Releasing lock on other controller!");
                         _OtherLock.SafeRelease();
                     }
                     break;

@@ -31,11 +31,11 @@ namespace VRGIN.Visuals
             _Plane.xSegments = 100;
             if(_Plane)
             {
-                VRLog.Info("Plane was added...");
+                VRLog.Debug("Plane was added...");
             }
             else
             {
-                VRLog.Info("No plane either?");
+                VRLog.Debug("No plane either?");
             }
             UpdateGUI();
 
@@ -101,7 +101,7 @@ namespace VRGIN.Visuals
 
         public void Rebuild()
         {
-            VRLog.Info("Build monitor");
+            VRLog.Debug("Build monitor");
             try
             {
                 transform.localPosition = new Vector3(transform.localPosition.x, VR.Settings.OffsetY, transform.localPosition.z);

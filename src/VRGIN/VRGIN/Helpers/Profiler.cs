@@ -44,7 +44,7 @@ namespace VRGIN.Helpers
             double startInterval = _CurrentInterval;
 
 
-            VRLog.Info("Starting to profile! This might take a while...");
+            VRLog.Debug("Starting to profile! This might take a while...");
 
             while(queue.Count > 0)
             {
@@ -60,7 +60,7 @@ namespace VRGIN.Helpers
 
                 // How much faster it is without this GO
                 double impact = startInterval / _CurrentInterval;
-                VRLog.Info("{0}{1}: {2:0.00}", string.Join("", Enumerable.Repeat(" ", obj.transform.Depth()).ToArray()), obj.name, impact);
+                VRLog.Debug("{0}{1}: {2:0.00}", string.Join("", Enumerable.Repeat(" ", obj.transform.Depth()).ToArray()), obj.name, impact);
 
                 if(impact > 1.15f)
                 {
@@ -74,13 +74,13 @@ namespace VRGIN.Helpers
                         component.enabled = true;
                         // How much faster it is without this comp
                         impact = startInterval / _CurrentInterval;
-                        VRLog.Info("{0}{1} [{2}]: {3:0.000}", string.Join("", Enumerable.Repeat(" ", obj.transform.Depth()).ToArray()), obj.name, component.GetType().Name, impact);
+                        VRLog.Debug("{0}{1} [{2}]: {3:0.000}", string.Join("", Enumerable.Repeat(" ", obj.transform.Depth()).ToArray()), obj.name, component.GetType().Name, impact);
                     }
                 }
                 yield return null;
 
             }
-            VRLog.Info("Done!");
+            VRLog.Debug("Done!");
 
             _Callback();
             Destroy(gameObject);

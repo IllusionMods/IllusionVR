@@ -51,7 +51,7 @@ namespace VRGIN.Controls.Speech
                 {
                     if (_LastResult.Value.Confidence > 0.2f || _LastResult.Value.Final)
                     {
-                        VRLog.Info(_Command);
+                        VRLog.Debug(_Command);
                         _Action();
                         _MinID = _LastResult.Value.ID + 1;
                     }

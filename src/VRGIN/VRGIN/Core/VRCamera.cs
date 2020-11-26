@@ -50,14 +50,14 @@ namespace VRGIN.Core
         public void OnPreCull()
         {
             _Camera.enabled = false;
-            //VRLog.Info("Disable");
+            //VRLog.Debug("Disable");
         }
 
         public void OnGUI()
         {
             if(Event.current.type == EventType.Repaint)
             {
-                //VRLog.Info("Enable");
+                //VRLog.Debug("Enable");
 
                 _Camera.enabled = true;
             }
@@ -69,7 +69,7 @@ namespace VRGIN.Core
         //    foreach(var fx in _CameraEffects.Where(fx => fx.enabled))
         //    {
         //        fx.enabled = false;
-        //        VRLog.Info("Disabled camera effect: {0}", fx.GetType().Name);
+        //        VRLog.Debug("Disabled camera effect: {0}", fx.GetType().Name);
         //    }
         //}
     }
@@ -189,7 +189,7 @@ namespace VRGIN.Core
 
         protected override void OnAwake()
         {
-            VRLog.Info("Creating VR Camera");
+            VRLog.Debug("Creating VR Camera");
             _Camera = gameObject.AddComponent<Camera>();
             gameObject.AddComponent<SteamVR_Camera>();
             SteamCam = GetComponent<SteamVR_Camera>();
@@ -217,7 +217,7 @@ namespace VRGIN.Core
         /// <param name="blueprint">The camera to copy.</param>
         public void Copy(Camera blueprint, bool master = false, bool hasOtherConsumers = false)
         {
-            VRLog.Info("Copying camera: {0}", blueprint ? blueprint.name : "NULL");
+            VRLog.Debug("Copying camera: {0}", blueprint ? blueprint.name : "NULL");
 
             if(blueprint && blueprint.GetComponent<CameraSlave>())
             {
@@ -300,7 +300,7 @@ namespace VRGIN.Core
                 // We already have a main camera
                 if(_Blueprint.name == "Main Camera")
                 {
-                    VRLog.Info("Using {0} over {1} as main camera", _Blueprint.name, blueprint.name);
+                    VRLog.Debug("Using {0} over {1} as main camera", _Blueprint.name, blueprint.name);
                     return false;
                 }
             }
@@ -318,7 +318,7 @@ namespace VRGIN.Core
             cullingMask &= ~(LayerMask.GetMask(VR.Context.UILayer, VR.Context.InvisibleLayer));
             cullingMask &= ~(VR.Context.IgnoreMask);
 
-            VRLog.Info("The camera sees {0} ({1})", string.Join(", ", UnityHelper.GetLayerNames(cullingMask)), string.Join(", ", Slaves.Select(s => s.name).ToArray()));
+            VRLog.Debug("The camera sees {0} ({1})", string.Join(", ", UnityHelper.GetLayerNames(cullingMask)), string.Join(", ", Slaves.Select(s => s.name).ToArray()));
 
             GetComponent<Camera>().cullingMask = cullingMask;
         }
@@ -353,23 +353,23 @@ namespace VRGIN.Core
             }
             int comps = target.GetComponents<Component>().Length;
 
-            VRLog.Info("Copying FX to {0}...", target.name);
+            VRLog.Debug("Copying FX to {0}...", target.name);
             // Rebuild
             foreach(var fx in source.GetCameraEffects())
             {
                 if(VR.Interpreter.IsAllowedEffect(fx))
                 {
-                    VRLog.Info("Copy FX: {0} (enabled={1})", fx.GetType().Name, fx.enabled);
+                    VRLog.Debug("Copy FX: {0} (enabled={1})", fx.GetType().Name, fx.enabled);
                     var attachedFx = target.CopyComponentFrom(fx);
                     if(attachedFx)
                     {
-                        VRLog.Info("Attached!");
+                        VRLog.Debug("Attached!");
                     }
                     attachedFx.enabled = fx.enabled;
                 }
                 else
                 {
-                    VRLog.Info("Skipping image effect {0}", fx.GetType().Name);
+                    VRLog.Debug("Skipping image effect {0}", fx.GetType().Name);
                 }
 
                 if(disabledSourceFx)
@@ -377,7 +377,7 @@ namespace VRGIN.Core
                     fx.enabled = false;
                 }
             }
-            VRLog.Info("{0} components before the additions, {1} after", comps, target.GetComponents<Component>().Length);
+            VRLog.Debug("{0} components before the additions, {1} after", comps, target.GetComponents<Component>().Length);
         }
 
         private void ApplyToCameras(CameraOperation operation)

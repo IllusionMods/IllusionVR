@@ -166,7 +166,7 @@ namespace VRGIN.U46.Visuals
                     else
                     {
                         // Seems like we're too late...
-                        VRLog.Info("We're too late!");
+                        VRLog.Debug("We're too late!");
                         Destroy(gameObject);
                     }
 

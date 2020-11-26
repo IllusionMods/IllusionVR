@@ -28,7 +28,7 @@ namespace VRGIN.Controls.Handlers
         protected override void OnStart()
         {
             base.OnStart();
-            VRLog.Info("Menu Handler started");
+            VRLog.Debug("Menu Handler started");
             _Controller = GetComponent<Controller>();
             _ScaleVector = new Vector2((float)VRGUI.Width / Screen.width, (float)VRGUI.Height / Screen.height);
             _Other = _Controller.Other.GetComponent<MenuHandler>();
@@ -244,7 +244,7 @@ namespace VRGIN.Controls.Handlers
                     if(!IsOtherWorkingOn(_Target))
                     {
                         var newPos = new Vector2(hit.textureCoord.x * VRGUI.Width, (1 - hit.textureCoord.y) * VRGUI.Height);
-                        //VRLog.Info("New Pos: {0}, textureCoord: {1}", newPos, hit.textureCoord);
+                        //VRLog.Debug("New Pos: {0}, textureCoord: {1}", newPos, hit.textureCoord);
                         if(!mouseDownPosition.HasValue || Vector2.Distance(mouseDownPosition.Value, newPos) > MOUSE_STABILIZER_THRESHOLD)
                         {
                             MouseOperations.SetClientCursorPosition((int)newPos.x, (int)newPos.y);

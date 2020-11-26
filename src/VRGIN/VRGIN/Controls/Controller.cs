@@ -194,7 +194,7 @@ namespace VRGIN.Controls
                 var renderModel = model;
                 if(renderModel && renderModel.transform.IsChildOf(transform))
                 {
-                    VRLog.Info("Render model loaded!");
+                    VRLog.Debug("Render model loaded!");
                     gameObject.SendMessageToAll("OnRenderModelLoaded");
                     OnRenderModelLoaded();
                 }
@@ -254,11 +254,11 @@ namespace VRGIN.Controls
                 if(i++ != ToolIndex && tool)
                 {
                     tool.enabled = false;
-                    VRLog.Info("Disable tool #{0} ({1})", i - 1, ToolIndex);
+                    VRLog.Debug("Disable tool #{0} ({1})", i - 1, ToolIndex);
                 }
                 else
                 {
-                    VRLog.Info("Enable Tool #{0}", i - 1);
+                    VRLog.Debug("Enable Tool #{0}", i - 1);
                     if(tool.enabled) tool.enabled = false;
                     tool.enabled = true;
                 }

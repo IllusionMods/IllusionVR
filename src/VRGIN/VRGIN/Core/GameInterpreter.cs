@@ -36,7 +36,7 @@ namespace VRGIN.Core
         {
             base.OnLevel(level);
 
-            VRLog.Info("Loaded level {0}", level);
+            VRLog.Debug("Loaded level {0}", level);
         }
 
         /// <summary>

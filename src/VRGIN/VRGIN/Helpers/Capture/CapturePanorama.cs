@@ -149,7 +149,7 @@ namespace CapturePanorama
 
             Reinitialize();
 
-            VRLog.Info("Started panorama");
+            VRLog.Debug("Started panorama");
         }
 
         // A function from [-1, 1] to [0, 1] which has f(0)=1, f(-1)=f(1)=0,
@@ -362,7 +362,7 @@ namespace CapturePanorama
 
         private void Log(string s)
         {
-            VRLog.Info(s);
+            VRLog.Debug(s);
 
             if(enableDebugging)
                 Debug.Log(s, this);
@@ -371,7 +371,7 @@ namespace CapturePanorama
         protected override void OnUpdate()
         {
             bool captureKeyPressed = Input.GetKeyDown(captureKey);
-            //VRLog.Info("{0}:{1}", captureKey, captureKeyPressed);
+            //VRLog.Debug("{0}:{1}", captureKey, captureKeyPressed);
             if(initializeFailed || panoramaWidth < 4 || (captureStereoscopic && numCirclePoints < 8)) // Can occur temporarily while modifying properties in editor
             {
                 if(captureKeyPressed)
@@ -1007,7 +1007,7 @@ namespace CapturePanorama
             var finalCameras = new List<Camera>();
             foreach(Camera c in cameras)
             {
-                VRLog.Info("Camera found: " + c.name);
+                VRLog.Debug("Camera found: " + c.name);
 #if OVR_SUPPORT
                 if (c.gameObject.name.Contains("RightEye"))
                     continue; // Only render left eyes

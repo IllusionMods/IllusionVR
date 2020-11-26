@@ -164,7 +164,7 @@ namespace VRGIN.Modes
 
         public void Recenter()
         {
-            VRLog.Info("Recenter");
+            VRLog.Debug("Recenter");
             OpenVR.System.ResetSeatedZeroPose();
         }
 

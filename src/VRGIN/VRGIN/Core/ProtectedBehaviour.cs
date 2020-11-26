@@ -83,7 +83,7 @@ namespace VRGIN.Core
 
         public static void DumpTable()
         {
-            VRLog.Info("DUMP");
+            VRLog.Debug("DUMP");
             var builder = new StringBuilder();
 
             var enumerator = PerformanceTable.GetEnumerator();

@@ -70,7 +70,7 @@ namespace VRGIN.Controls.Speech
 
             if (server == null)
             {
-                VRLog.Info(serverBin.FullName);
+                VRLog.Debug(serverBin.FullName);
                 server = new System.Diagnostics.Process();
                 server.StartInfo.FileName = serverBin.FullName;
                 server.StartInfo.UseShellExecute = false;
@@ -85,12 +85,12 @@ namespace VRGIN.Controls.Speech
                 server.OutputDataReceived += OnOutputReceived;
                 server.ErrorDataReceived += OnErrorReceived;
                 
-                VRLog.Info("Starting speech server: {0}", server.StartInfo.Arguments);
+                VRLog.Debug("Starting speech server: {0}", server.StartInfo.Arguments);
 
                 server.Start();
                 server.BeginOutputReadLine();
                 server.BeginErrorReadLine();
-                VRLog.Info("Started!");
+                VRLog.Debug("Started!");
             }
         }
 
@@ -105,9 +105,9 @@ namespace VRGIN.Controls.Speech
             var reader = new DictionaryReader(VR.Context.VoiceCommandType);
 
             // Load dictionary and save immediately
-            VRLog.Info("Loading dictionary at {0}...", path);
+            VRLog.Debug("Loading dictionary at {0}...", path);
             reader.LoadDictionary(path);
-            VRLog.Info("Saving dictionary at {0}...", path);
+            VRLog.Debug("Saving dictionary at {0}...", path);
             reader.SaveDictionary(path);
         }
 
@@ -130,7 +130,7 @@ namespace VRGIN.Controls.Speech
                 lock (LOCK)
                 {
                     result = SpeechResult.Deserialize(e.Data);
-                    VRLog.Info("RECEIVED MESSAGE: " + e.Data);
+                    VRLog.Debug("RECEIVED MESSAGE: " + e.Data);
                 }
             }
             catch (Exception err)

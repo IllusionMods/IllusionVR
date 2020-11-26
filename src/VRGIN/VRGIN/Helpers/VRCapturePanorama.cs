@@ -29,7 +29,7 @@ namespace VRGIN.Helpers
                 if(!Capturing)
                 {
                     string filenameBase = String.Format("{0}_{1:yyyy-MM-dd_HH-mm-ss-fff}", Application.productName, DateTime.Now);
-                    VRLog.Info("Panorama capture key pressed, capturing " + filenameBase);
+                    VRLog.Debug("Panorama capture key pressed, capturing " + filenameBase);
                     CaptureScreenshotAsync(filenameBase); ;
                 }
             });

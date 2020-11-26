@@ -143,9 +143,9 @@ namespace VRGIN.Core
         protected override void OnAwake()
         {
             var trackingSystem = SteamVR.instance.hmd_TrackingSystemName;
-            VRLog.Info("------------------------------------");
-            VRLog.Info(" Booting VR [{0}]", trackingSystem);
-            VRLog.Info("------------------------------------");
+            VRLog.Debug("------------------------------------");
+            VRLog.Debug(" Booting VR [{0}]", trackingSystem);
+            VRLog.Debug("------------------------------------");
             HMD = trackingSystem == "oculus" ? HMDType.Oculus : trackingSystem == "lighthouse" ? HMDType.Vive : HMDType.Other;
 
             Application.targetFrameRate = 90;
@@ -174,7 +174,7 @@ namespace VRGIN.Core
             {
                 _CheckedCameras.Add(camera);
                 var judgement = VR.Interpreter.JudgeCamera(camera);
-                VRLog.Info("Detected new camera {0} Action: {1}", camera.name, judgement);
+                VRLog.Debug("Detected new camera {0} Action: {1}", camera.name, judgement);
                 switch(judgement)
                 {
                     case CameraJudgement.MainCamera:

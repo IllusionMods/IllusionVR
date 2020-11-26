@@ -41,9 +41,9 @@ namespace VRGIN.Helpers
             var assetBundle = AssetBundle.CreateFromMemoryImmediate(assetBundleBytes);
             //foreach(var asset in assetBundle.LoadAll())
             //{
-            //    VRLog.Info(asset.name);
+            //    VRLog.Debug(asset.name);
             //}
-            VRLog.Info("Getting {0} from {1}", name, assetBundle.name);
+            VRLog.Debug("Getting {0} from {1}", name, assetBundle.name);
             var obj = GameObject.Instantiate(assetBundle.Load(name)) as T;
             assetBundle.Unload(false);
             return obj;
@@ -60,10 +60,10 @@ namespace VRGIN.Helpers
 
             try
             {
-                VRLog.Info("Loading: {0} ({1})", name, key);
+                VRLog.Debug("Loading: {0} ({1})", name, key);
                 //foreach (var asset in _AssetBundles[key].LoadAllAssets())
                 //{
-                //    VRLog.Info(asset.name);
+                //    VRLog.Debug(asset.name);
                 //}
 
                 name = name.Replace("Custom/", "");
@@ -214,7 +214,7 @@ namespace VRGIN.Helpers
 
         public static void DumpScene(string path, bool onlyActive = false)
         {
-            VRLog.Info("Dumping scene...");
+            VRLog.Debug("Dumping scene...");
 
             var rootArray = new JSONArray();
             foreach(var gameObject in UnityEngine.Object.FindObjectsOfType<GameObject>().Where(go => go.transform.parent == null))
@@ -223,16 +223,16 @@ namespace VRGIN.Helpers
             }
 
             File.WriteAllText(path, rootArray.ToJSON(0));
-            VRLog.Info("Done!");
+            VRLog.Debug("Done!");
         }
 
         public static void DumpObject(GameObject obj, string path)
         {
-            VRLog.Info("Dumping object...");
+            VRLog.Debug("Dumping object...");
 
             File.WriteAllText(path, AnalyzeNode(obj).ToJSON(0));
 
-            VRLog.Info("Done!");
+            VRLog.Debug("Done!");
         }
 
         public static IEnumerable<GameObject> GetRootNodes()

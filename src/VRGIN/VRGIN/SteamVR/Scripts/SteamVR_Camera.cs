@@ -196,7 +196,7 @@ public class SteamVR_Camera : MonoBehaviour
             transform.localScale = Vector3.one;
 
             while(transform.childCount > 0)
-                VRLog.Info("Timing change because not end of expnad");
+                VRLog.Debug("Timing change because not end of expnad");
             transform.GetChild(0).parent = head;
 #if !UNITY_2017_2_OR_NEWER
             var guiLayer = GetComponent<GUILayer>();

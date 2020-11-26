@@ -79,7 +79,7 @@ namespace VRGIN.Core
                         _Instance.SoftCursor = SimulatedCursor.Create();
                         _Instance.SoftCursor.transform.SetParent(_Instance.transform, false);
 
-                        VRLog.Info("Cursor is simulated");
+                        VRLog.Debug("Cursor is simulated");
                     }
                 }
                 return _Instance;
@@ -188,7 +188,7 @@ namespace VRGIN.Core
             {
                 if(VR.Interpreter.IsIgnoredCanvas(canvas)) continue;
 
-                VRLog.Info("Add {0} [Layer: {1}, SortingLayer: {2}, SortingOrder: {3}, RenderMode: {4}, Camera: {5}, Position: {6} ]", canvas.name, LayerMask.LayerToName(canvas.gameObject.layer), canvas.sortingLayerName, canvas.sortingOrder, canvas.renderMode, canvas.worldCamera, canvas.transform.position);
+                VRLog.Debug("Add {0} [Layer: {1}, SortingLayer: {2}, SortingOrder: {3}, RenderMode: {4}, Camera: {5}, Position: {6} ]", canvas.name, LayerMask.LayerToName(canvas.gameObject.layer), canvas.sortingLayerName, canvas.sortingOrder, canvas.renderMode, canvas.worldCamera, canvas.transform.position);
 
                 //if (canvas.name.Contains("TexFade")) continue;
                 canvas.renderMode = RenderMode.ScreenSpaceCamera;
@@ -316,14 +316,14 @@ namespace VRGIN.Core
 
         public void AddCamera(Camera camera)
         {
-            VRLog.Info("Trying to find a GUI mapping for camera {0}", camera.name);
+            VRLog.Debug("Trying to find a GUI mapping for camera {0}", camera.name);
             var grabber = FindCameraMapping(camera);
             if(grabber != null)
             {
                 _CameraMappings[camera] = grabber;
                 grabber.OnAssign(camera);
 
-                VRLog.Info("Assigned camera {0} to {1}", camera.name, grabber);
+                VRLog.Debug("Assigned camera {0} to {1}", camera.name, grabber);
             }
             _CheckedCameras.Add(camera);
         }

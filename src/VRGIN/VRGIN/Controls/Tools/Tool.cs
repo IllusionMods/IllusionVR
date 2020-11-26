@@ -33,7 +33,7 @@ namespace VRGIN.Controls.Tools
             Tracking = GetComponent<SteamVR_TrackedObject>();
             Owner = GetComponent<Controller>();
             Neighbor = VR.Mode.Left == Owner ? VR.Mode.Right : VR.Mode.Left;
-            VRLog.Info(Neighbor ? "Got my neighbor!" : "No neighbor");
+            VRLog.Debug(Neighbor ? "Got my neighbor!" : "No neighbor");
         }
 
         protected abstract void OnDestroy();
@@ -57,28 +57,28 @@ namespace VRGIN.Controls.Tools
 
         protected virtual void OnEnable()
         {
-            VRLog.Info("On Enable: {0}", GetType().Name);
+            VRLog.Debug("On Enable: {0}", GetType().Name);
             if(Icon)
             {
                 Icon.SetActive(true);
             }
             else
             {
-                VRLog.Info("But no icon...");
+                VRLog.Debug("But no icon...");
 
             }
         }
 
         protected virtual void OnDisable()
         {
-            VRLog.Info("On Disable: {0}", GetType().Name);
+            VRLog.Debug("On Disable: {0}", GetType().Name);
             if(Icon)
             {
                 Icon.SetActive(false);
             }
             else
             {
-                VRLog.Info("But no icon...");
+                VRLog.Debug("But no icon...");
             }
         }
 

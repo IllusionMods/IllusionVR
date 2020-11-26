@@ -105,12 +105,12 @@ namespace VRGIN.Modes
         protected virtual void OnEnable()
         {
             SteamVR_Events.DeviceConnected.Listen(OnDeviceConnected);
-            VRLog.Info("Enabled {0}", GetType().Name);
+            VRLog.Debug("Enabled {0}", GetType().Name);
         }
 
         protected virtual void OnDisable()
         {
-            VRLog.Info("Disabled {0}", GetType().Name);
+            VRLog.Debug("Disabled {0}", GetType().Name);
 
             SteamVR_Events.DeviceConnected.Remove(OnDeviceConnected);
         }
@@ -156,10 +156,10 @@ namespace VRGIN.Modes
             }
             steamCam.origin.gameObject.SetActive(true);
 
-            VRLog.Info("---- Initialize left tools");
+            VRLog.Debug("---- Initialize left tools");
             InitializeTools(Left, true);
 
-            VRLog.Info("---- Initialize right tools");
+            VRLog.Debug("---- Initialize right tools");
             InitializeTools(Right, false);
 
             ControllersCreated(this, new EventArgs());
@@ -305,7 +305,7 @@ namespace VRGIN.Modes
 
             foreach (var obj in handObj.Descendants())
             {
-                VRLog.Info("{0}: {1}", obj.transform.name, obj.transform.localScale);
+                VRLog.Debug("{0}: {1}", obj.transform.name, obj.transform.localScale);
             }
             return hand;
         }
@@ -377,7 +377,7 @@ namespace VRGIN.Modes
                 controller.AddTool(type);
             }
 
-            VRLog.Info("{0} tools added", toolTypes.Count());
+            VRLog.Debug("{0} tools added", toolTypes.Count());
         }
 
         protected virtual Controller CreateLeftController()
@@ -427,13 +427,13 @@ namespace VRGIN.Modes
         {
             if(!PlayerCamera.Created)
             {
-                VRLog.Info("Create user camera");
+                VRLog.Debug("Create user camera");
 
                 PlayerCamera.Create();
             }
             else
             {
-                VRLog.Info("Remove user camera");
+                VRLog.Debug("Remove user camera");
 
                 PlayerCamera.Remove();
             }
@@ -504,7 +504,7 @@ namespace VRGIN.Modes
             if(!_ControllerFound)
             {
                 uint index = (uint)idx;
-                VRLog.Info("Device connected: {0}", index);
+                VRLog.Debug("Device connected: {0}", index);
 
                 if(connected && index > OpenVR.k_unTrackedDeviceIndex_Hmd)
                 {

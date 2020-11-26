@@ -34,7 +34,7 @@ namespace VRGIN.Visuals
         {
             source = source ?? VR.GUI;
 
-            VRLog.Info("Create GUI");
+            VRLog.Debug("Create GUI");
             var gui = GameObject.CreatePrimitive(PrimitiveType.Quad).AddComponent<GUIQuad>();
             gui.name = "GUIQuad";
 
@@ -71,7 +71,7 @@ namespace VRGIN.Visuals
         {
             if(IsGUISource())
             {
-                VRLog.Info("Start listening to GUI ({0})", name);
+                VRLog.Debug("Start listening to GUI ({0})", name);
                 GUIQuadRegistry.Register(this);
                 VR.GUI.Listen();
             }
@@ -81,7 +81,7 @@ namespace VRGIN.Visuals
         {
             if(IsGUISource())
             {
-                VRLog.Info("Stop listening to GUI ({0})", name);
+                VRLog.Debug("Stop listening to GUI ({0})", name);
                 GUIQuadRegistry.Unregister(this);
                 VR.GUI.Unlisten();
             }
@@ -102,7 +102,7 @@ namespace VRGIN.Visuals
 
         public virtual void UpdateGUI()
         {
-            //VRLog.Info();
+            //VRLog.Debug();
             //renderGUI = false;
             UpdateAspect();
             if(!renderer) VRLog.Warn("No renderer!");
@@ -116,7 +116,7 @@ namespace VRGIN.Visuals
 #endif
 
                 var textures = _Source.GetTextures();
-                VRLog.Info("Updating GUI {0} with {1} textures", name, textures.Count());
+                VRLog.Debug("Updating GUI {0} with {1} textures", name, textures.Count());
 
                 if(textures.Count() >= 2)
                 {
@@ -132,7 +132,7 @@ namespace VRGIN.Visuals
             }
             catch(Exception e)
             {
-                VRLog.Info(e);
+                VRLog.Debug(e);
             }
         }
     }
