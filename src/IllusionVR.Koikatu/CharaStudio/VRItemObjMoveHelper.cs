@@ -93,8 +93,8 @@ namespace IllusionVR.Koikatu.CharaStudio
             if(transform != null)
             {
                 float num = transform3.localPosition.x - transform2.localPosition.x;
-                Sprite sprite = Sprite.Create(UnityHelper.LoadImage("KKCharaStudioVR/icon_call.png"), new Rect(0f, 0f, 32f, 32f), Vector2.zero);
-                Sprite sprite2 = Sprite.Create(UnityHelper.LoadImage("KKCharaStudioVR/icon_call_xz.png"), new Rect(0f, 0f, 32f, 32f), Vector2.zero);
+                Sprite sprite = Sprite.Create(UnityHelper.LoadImage("icon_call.png"), new Rect(0f, 0f, 32f, 32f), Vector2.zero);
+                Sprite sprite2 = Sprite.Create(UnityHelper.LoadImage("icon_call_xz.png"), new Rect(0f, 0f, 32f, 32f), Vector2.zero);
                 if(callButton == null)
                 {
                     GameObject gameObject = Instantiate<GameObject>(transform.gameObject);

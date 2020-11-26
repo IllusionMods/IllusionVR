@@ -127,6 +127,14 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <TargetPath>Images\icon_school.png</TargetPath>
     </ContentWithTargetPath>
+    <ContentWithTargetPath Include="Resources\icon_call.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <TargetPath>Images\icon_call.png</TargetPath>
+    </ContentWithTargetPath>
+    <ContentWithTargetPath Include="Resources\icon_call_xz.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <TargetPath>Images\icon_call_xz.png</TargetPath>
+    </ContentWithTargetPath>
     <ContentWithTargetPath Include="Resources\System.Drawing.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <TargetPath>System.Drawing.dll</TargetPath>
