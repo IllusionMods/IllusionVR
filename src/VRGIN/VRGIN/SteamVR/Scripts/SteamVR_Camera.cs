@@ -61,7 +61,7 @@ public class SteamVR_Camera : MonoBehaviour
 
         // Convert camera rig for native OpenVR integration.
         var t = transform;
-        if(head != t && t.childCount > 0)
+        if(head != t)
         {
             Expand();
 
@@ -196,11 +196,8 @@ public class SteamVR_Camera : MonoBehaviour
             transform.localScale = Vector3.one;
 
             while(transform.childCount > 0)
-            {
-                VRLog.Debug("Timing change because not end of expand");
-                transform.GetChild(0).parent = head;
-            }
-
+                VRLog.Debug("Timing change because not end of expnad");
+            transform.GetChild(0).parent = head;
 #if !UNITY_2017_2_OR_NEWER
             var guiLayer = GetComponent<GUILayer>();
             if(guiLayer != null)
