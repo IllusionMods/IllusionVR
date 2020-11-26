@@ -200,8 +200,7 @@ namespace VRGIN.Core
                 var property = FindProperty(element.Name.LocalName);
                 if(property != null)
                 {
-                    var commentAttribute = property.GetCustomAttributes(typeof(XmlCommentAttribute), true).FirstOrDefault() as XmlCommentAttribute;
-                    if(commentAttribute != null)
+                    if(property.GetCustomAttributes(typeof(XmlCommentAttribute), true).FirstOrDefault() is XmlCommentAttribute commentAttribute)
                     {
                         element.AddBeforeSelf(new XComment(" " + commentAttribute.Value + " "));
                     }

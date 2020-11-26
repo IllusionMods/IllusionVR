@@ -41,7 +41,7 @@ namespace VRGIN.Modes
             MoveToPosition(targetPosition, VR.Camera.SteamCam.head.rotation, ignoreHeight);
         }
 
-        public virtual void MoveToPosition(Vector3 targetPosition, Quaternion rotation = default(Quaternion), bool ignoreHeight = true)
+        public virtual void MoveToPosition(Vector3 targetPosition, Quaternion rotation = default, bool ignoreHeight = true)
         {
             var targetForward = Calculator.GetForwardVector(rotation);
             var currentForward = Calculator.GetForwardVector(VR.Camera.SteamCam.head.rotation);

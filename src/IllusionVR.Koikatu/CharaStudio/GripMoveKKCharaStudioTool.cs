@@ -125,9 +125,9 @@ namespace IllusionVR.Koikatu.CharaStudio
                 gripMenuHandler = gameObject.AddComponent<GripMenuHandler>();
                 gripMenuHandler.enabled = false;
             }
-            catch(Exception obj)
+            catch(Exception ex)
             {
-                VRLog.Info(obj);
+                VRLog.Debug(ex);
             }
 
             if(marker == null)
@@ -268,7 +268,7 @@ namespace IllusionVR.Koikatu.CharaStudio
                 }
                 if(controller.GetPressDown(EVRButtonId.k_EButton_Axis0) || (controller.GetPressDown(EVRButtonId.k_EButton_A) && !flag))
                 {
-                    VRLog.Info("Called on Select VRToggle", new object[0]);
+                    VRLog.Debug("Called on Select VRToggle", new object[0]);
                     if(gripMenuHandler && gripMenuHandler.LaserVisible)
                     {
                         VRItemObjMoveHelper.Instance.VRToggleObjectSelectOnCursor();
@@ -351,18 +351,9 @@ namespace IllusionVR.Koikatu.CharaStudio
         {
             return new List<HelpText>(new HelpText[]
             {
-                HelpText.Create("Swipe as wheel.", FindAttachPosition(new string[]
-                {
-                    "touchpad"
-                }), new Vector3(0.06f, 0.04f, 0f), null),
-                HelpText.Create("Grip and move controller to move yourself", FindAttachPosition(new string[]
-                {
-                    "rgrip"
-                }), new Vector3(0.06f, 0.04f, 0f), null),
-                HelpText.Create("Trigger to grab objects / IK markers and move them along with controller.", FindAttachPosition(new string[]
-                {
-                    "trigger"
-                }), new Vector3(-0.06f, -0.04f, 0f), null)
+                HelpText.Create("Swipe as wheel.", FindAttachPosition("touchpad"), new Vector3(0.06f, 0.04f, 0f), null),
+                HelpText.Create("Grip and move controller to move yourself", FindAttachPosition("rgrip"), new Vector3(0.06f, 0.04f, 0f), null),
+                HelpText.Create("Trigger to grab objects / IK markers and move them along with controller.", FindAttachPosition("trigger"), new Vector3(-0.06f, -0.04f, 0f), null)
             });
         }
 
@@ -443,10 +434,6 @@ namespace IllusionVR.Koikatu.CharaStudio
             {
                 pointer.GetComponent<MeshRenderer>().material.color = Color.red;
             }
-        }
-
-        private void OnTriggerEnter(Collider collider)
-        {
         }
 
         private void OnTriggerExit(Collider collider)

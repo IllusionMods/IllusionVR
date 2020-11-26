@@ -266,11 +266,9 @@ public static class SteamVR_Utils
 
         public override bool Equals(object o)
         {
-            if(o is RigidTransform)
-            {
-                RigidTransform t = (RigidTransform)o;
+            if(o is RigidTransform t)
                 return pos == t.pos && rot == t.rot;
-            }
+
             return false;
         }
 

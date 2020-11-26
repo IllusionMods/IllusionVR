@@ -33,15 +33,9 @@ namespace IllusionVR.Koikatu.CharaStudio
         public static IKTool Create(GameObject container)
         {
             if(instance != null)
-            {
                 return instance;
-            }
-            instance = container.AddComponent<IKTool>();
-            return instance;
-        }
 
-        private void Awake()
-        {
+            return instance = container.AddComponent<IKTool>();
         }
 
         private void Start()
@@ -52,7 +46,6 @@ namespace IllusionVR.Koikatu.CharaStudio
         private IEnumerator InstallMoveableObjectCo()
         {
             var studio = Singleton<Studio.Studio>.Instance;
-            GuideObjectManager guideObjectManager = Singleton<GuideObjectManager>.Instance;
             for(; ; )
             {
                 yield return new WaitForSeconds(1f);
@@ -80,9 +73,9 @@ namespace IllusionVR.Koikatu.CharaStudio
                     }
                     continue;
                 }
-                catch(Exception value2)
+                catch(Exception ex)
                 {
-                    Console.WriteLine(value2);
+                    Console.WriteLine(ex);
                     continue;
                 }
             }

@@ -26,10 +26,6 @@ namespace IllusionVR.Koikatu.CharaStudio
 
         public static bool IsOculusTouchMode => _instance.isOculusTouchMode;
 
-        private void Start()
-        {
-        }
-
         private void OnLevelWasLoaded(int level)
         {
             StopAllCoroutines();

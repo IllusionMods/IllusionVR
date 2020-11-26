@@ -209,14 +209,14 @@ namespace VRGIN.Helpers
 
         public static implicit operator string(JSONNode d)
         {
-            return (d == null) ? null : d.Value;
+            return d?.Value;
         }
 
         public static bool operator ==(JSONNode a, object b)
         {
             if(b == null && a is JSONLazyCreator)
                 return true;
-            return System.Object.ReferenceEquals(a, b);
+            return ReferenceEquals(a, b);
         }
 
         public static bool operator !=(JSONNode a, object b)
@@ -226,7 +226,7 @@ namespace VRGIN.Helpers
 
         public override bool Equals(object obj)
         {
-            return System.Object.ReferenceEquals(this, obj);
+            return ReferenceEquals(this, obj);
         }
 
         public override int GetHashCode()

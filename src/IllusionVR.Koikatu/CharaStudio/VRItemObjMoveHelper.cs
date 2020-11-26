@@ -103,7 +103,7 @@ namespace IllusionVR.Koikatu.CharaStudio
                     gameObject.transform.localPosition = new Vector3(transform2.localPosition.x - num * 2f, transform2.localPosition.y, transform2.localPosition.z);
                     gameObject.transform.localScale = Vector3.one;
                     Button component = gameObject.GetComponent<Button>();
-                    SpriteState spriteState = default(SpriteState);
+                    SpriteState spriteState = default;
                     spriteState.disabledSprite = sprite;
                     spriteState.highlightedSprite = sprite;
                     spriteState.pressedSprite = sprite;
@@ -142,7 +142,7 @@ namespace IllusionVR.Koikatu.CharaStudio
                     image2.SetAllDirty();
                 }
             }
-            VRLog.Info("VR ItemObjMoveHelper installed", new object[0]);
+            VRLog.Debug("VR ItemObjMoveHelper installed", new object[0]);
         }
 
         private void OnCallClick()

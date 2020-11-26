@@ -51,10 +51,6 @@ namespace IllusionVR.Koikatu.CharaStudio
             }
         }
 
-        private void Start()
-        {
-        }
-
         private void OnLevelWasLoaded(int level)
         {
             studio = Singleton<Studio.Studio>.Instance;
@@ -245,7 +241,7 @@ namespace IllusionVR.Koikatu.CharaStudio
 
         private void Init(Transform cameraMenuRootT)
         {
-            VRLog.Info("Initializing VRCameraMoveHelper", new object[0]);
+            VRLog.Debug("Initializing VRCameraMoveHelper", new object[0]);
             try
             {
                 menuRect = cameraMenuRootT.GetComponent<RectTransform>();
@@ -272,15 +268,15 @@ namespace IllusionVR.Koikatu.CharaStudio
                     }
                     else
                     {
-                        VRLog.Info("Not Found. {0}", child.name);
+                        VRLog.Debug("Not Found. {0}", child.name);
                     }
                 }
             }
-            catch(Exception obj)
+            catch(Exception ex)
             {
-                VRLog.Error(obj);
+                VRLog.Error(ex);
             }
-            VRLog.Info("VR Camera Helper installed.");
+            VRLog.Debug("VR Camera Helper installed.");
         }
 
         private void OnSaveButtonClick(int idx)

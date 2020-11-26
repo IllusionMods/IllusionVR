@@ -70,13 +70,13 @@ namespace IllusionVR.Koikatu.MainGame.Interpreters
                 MoveCameraToPlayer();
 
                 _NeedsResetCamera = false;
-                VRLog.Info("ResetCamera succeeded");
+                VRLog.Debug("ResetCamera succeeded");
             }
         }
 
         private void HoldCamera()
         {
-            VRLog.Info("ActionScene HoldCamera");
+            VRLog.Debug("ActionScene HoldCamera");
 
             _CameraSystem = GameObject.Find("ActionScene").transform.Find("CameraSystem").gameObject;
 
@@ -84,19 +84,19 @@ namespace IllusionVR.Koikatu.MainGame.Interpreters
             {
                 _CameraSystem.SetActive(false);
 
-                VRLog.Info("succeeded");
+                VRLog.Debug("succeeded");
             }
         }
 
         private void ReleaseCamera()
         {
-            VRLog.Info("ActionScene ReleaseCamera");
+            VRLog.Debug("ActionScene ReleaseCamera");
 
             if(_CameraSystem != null)
             {
                 _CameraSystem.SetActive(true);
 
-                VRLog.Info("succeeded");
+                VRLog.Debug("succeeded");
             }
         }
 
@@ -115,7 +115,7 @@ namespace IllusionVR.Koikatu.MainGame.Interpreters
             if(map != _Map)
             {
 
-                VRLog.Info("! map changed.");
+                VRLog.Debug("! map changed.");
 
                 ResetState();
                 _Map = map;
@@ -171,7 +171,7 @@ namespace IllusionVR.Koikatu.MainGame.Interpreters
             var player = GameObject.Find("ActionScene/Player").transform;
 
             var playerHead = player.transform.Find("chaM_001/BodyTop/p_cf_body_bone/cf_j_root/cf_n_height/cf_j_hips/cf_j_spine01/cf_j_spine02/cf_j_spine03/cf_j_neck/cf_j_head/cf_s_head");
-            playerHead = playerHead ?? player.transform.Find("chaM_001/BodyTop/p_cf_body_bone_low/cf_j_root/cf_n_height/cf_j_hips/cf_j_spine01/cf_j_spine02/cf_j_spine03/cf_j_neck/cf_j_head/cf_s_head");
+            playerHead = playerHead != null ? playerHead : player.transform.Find("chaM_001/BodyTop/p_cf_body_bone_low/cf_j_root/cf_n_height/cf_j_hips/cf_j_spine01/cf_j_spine02/cf_j_spine03/cf_j_neck/cf_j_head/cf_s_head");
             //var playerHead = GameObject.Find("ActionScene/Player/chaM_001/BodyTop/p_cf_body_bone_low/cf_j_root/cf_n_height/cf_j_hips/cf_j_spine01/cf_j_spine02/cf_j_spine03/cf_j_neck/cf_j_head/cf_s_head").transform;
             var cam = GameObject.Find("VRGIN_Camera (origin)").transform;
             var headCam = GameObject.Find("VRGIN_Camera (origin)/VRGIN_Camera (eye)/VRGIN_Camera (head)").transform;
@@ -206,7 +206,7 @@ namespace IllusionVR.Koikatu.MainGame.Interpreters
         {
             var player = GameObject.Find("ActionScene/Player").transform;
             var playerHead = player.transform.Find("chaM_001/BodyTop/p_cf_body_bone/cf_j_root/cf_n_height/cf_j_hips/cf_j_spine01/cf_j_spine02/cf_j_spine03/cf_j_neck/cf_j_head/cf_s_head");
-            playerHead = playerHead ?? player.transform.Find("chaM_001/BodyTop/p_cf_body_bone_low/cf_j_root/cf_n_height/cf_j_hips/cf_j_spine01/cf_j_spine02/cf_j_spine03/cf_j_neck/cf_j_head/cf_s_head");
+            playerHead = playerHead != null ? playerHead : player.transform.Find("chaM_001/BodyTop/p_cf_body_bone_low/cf_j_root/cf_n_height/cf_j_hips/cf_j_spine01/cf_j_spine02/cf_j_spine03/cf_j_neck/cf_j_head/cf_s_head");
             //var playerHead = GameObject.Find("ActionScene/Player/chaM_001/BodyTop/p_cf_body_bone_low/cf_j_root/cf_n_height/cf_j_hips/cf_j_spine01/cf_j_spine02/cf_j_spine03/cf_j_neck/cf_j_head/cf_s_head").transform;
             //var cam = GameObject.Find("VRGIN_Camera (origin)").transform;
             var headCam = GameObject.Find("VRGIN_Camera (origin)/VRGIN_Camera (eye)/VRGIN_Camera (head)").transform;

@@ -16,10 +16,6 @@ namespace IllusionVR.Koikatu.CharaStudio
 
         private Dictionary<string, GUIStyle> styleBackup = new Dictionary<string, GUIStyle>();
 
-        private void OnGUI()
-        {
-        }
-
         private void FuncWindowGUI(int winID)
         {
             styleBackup = new Dictionary<string, GUIStyle>();

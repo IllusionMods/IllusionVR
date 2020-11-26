@@ -46,9 +46,8 @@ namespace VRGIN.Native
             GCHandle gch = GCHandle.FromIntPtr(pointer);
             List<IntPtr> list = gch.Target as List<IntPtr>;
             if(list == null)
-            {
                 throw new InvalidCastException("GCHandle Target could not be cast as List<IntPtr>");
-            }
+
             list.Add(handle);
             //  You can modify this to check to see if you want to cancel the operation, then return a null here
             return true;

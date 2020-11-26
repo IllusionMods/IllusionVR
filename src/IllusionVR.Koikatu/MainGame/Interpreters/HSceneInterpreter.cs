@@ -29,7 +29,7 @@ namespace IllusionVR.Koikatu.MainGame.Interpreters
 
         private void ResetCamera()
         {
-            VRLog.Info("HScene ResetCamera");
+            VRLog.Debug("HScene ResetCamera");
 
             var cam = Object.FindObjectOfType<CameraControl_Ver2>();
 
@@ -38,7 +38,7 @@ namespace IllusionVR.Koikatu.MainGame.Interpreters
                 cam.enabled = false;
                 _NeedsResetCamera = false;
 
-                VRLog.Info("succeeded");
+                VRLog.Debug("succeeded");
             }
         }
     }

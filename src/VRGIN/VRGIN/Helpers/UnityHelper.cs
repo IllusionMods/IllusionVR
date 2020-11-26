@@ -254,7 +254,7 @@ namespace VRGIN.Helpers
                         comp[field.Name] = val;
                     }
                 }
-                catch(Exception e)
+                catch(Exception)
                 {
                     VRLog.Warn("Failed to get field {0}", field.Name);
                 }
@@ -273,7 +273,7 @@ namespace VRGIN.Helpers
                         }
                     }
                 }
-                catch(Exception e)
+                catch(Exception)
                 {
                     VRLog.Warn("Failed to get prop {0}", prop.Name);
                 }
@@ -284,15 +284,16 @@ namespace VRGIN.Helpers
 
         public static JSONClass AnalyzeNode(GameObject go, bool onlyActive = false)
         {
-            var obj = new JSONClass();
-
-            obj["name"] = (go.name);
-            obj["active"] = go.activeSelf.ToString();
-            obj["tag"] = (go.tag);
-            obj["layer"] = (LayerMask.LayerToName(go.gameObject.layer));
-            obj["pos"] = go.transform.localPosition.ToString();
-            obj["rot"] = go.transform.localEulerAngles.ToString();
-            obj["scale"] = go.transform.localScale.ToString();
+            var obj = new JSONClass
+            {
+                ["name"] = (go.name),
+                ["active"] = go.activeSelf.ToString(),
+                ["tag"] = (go.tag),
+                ["layer"] = (LayerMask.LayerToName(go.gameObject.layer)),
+                ["pos"] = go.transform.localPosition.ToString(),
+                ["rot"] = go.transform.localEulerAngles.ToString(),
+                ["scale"] = go.transform.localScale.ToString()
+            };
 
             var components = new JSONClass();
             foreach(var c in go.GetComponents<Component>())
@@ -330,21 +331,17 @@ namespace VRGIN.Helpers
             {
                 case "cullingMask":
                     return string.Join(", ", GetLayerNames((int)value));
+
                 case "renderer":
                     return ((Renderer)value).material.shader.name;
-                default:
-                    if(value is Vector3)
-                    {
-                        var v = (Vector3)value;
-                        return String.Format("({0:0.000}, {1:0.000}, {2:0.000})", v.x, v.y, v.z);
-                    }
-                    if(value is Vector2)
-                    {
-                        var v = (Vector2)value;
-                        return String.Format("({0:0.000}, {1:0.000})", v.x, v.y);
-                    }
-                    return value.ToString();
 
+                default:
+                    if(value is Vector3 v3)
+                        return string.Format("({0:0.000}, {1:0.000}, {2:0.000})", v3.x, v3.y, v3.z);
+                    if(value is Vector2 v2)
+                        return string.Format("({0:0.000}, {1:0.000})", v2.x, v2.y);
+
+                    return value.ToString();
             }
         }
 

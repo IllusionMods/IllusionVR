@@ -70,10 +70,6 @@ namespace IllusionVR.Koikatu.CharaStudio
             CheckInput();
         }
 
-        private void OnDisable()
-        {
-        }
-
         private void EnsureResizeHandler()
         {
             if(!_ResizeHandler)

@@ -71,14 +71,14 @@ namespace IllusionVR.Koikatu.CharaStudio
             Transform transform = human.objHeadBone.transform.Descendants().FirstOrDefault((Transform t) => t.name.StartsWith("c") && t.name.ToLower().EndsWith("j_faceup_tz"));
             if(!transform)
             {
-                VRLog.Info("Creating eyes", new object[0]);
+                VRLog.Debug("Creating eyes", new object[0]);
                 transform = new GameObject("cf_j_faceup_tz").transform;
                 transform.SetParent(GetHead(human), false);
                 transform.transform.localPosition = new Vector3(0f, 0.07f, 0.05f);
             }
             else
             {
-                VRLog.Info("found eyes", new object[0]);
+                VRLog.Debug("found eyes", new object[0]);
             }
             return transform;
         }

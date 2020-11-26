@@ -27,7 +27,7 @@ namespace VRGIN.Controls
 
             // Normalize coordinates
             ht._TextOffset = textOffset;
-            ht._LineOffset = lineOffset.HasValue ? lineOffset.Value : Vector3.zero;
+            ht._LineOffset = lineOffset ?? Vector3.zero;
 
             var difference = lineOffset.HasValue
                     ? (textOffset - lineOffset.Value)
