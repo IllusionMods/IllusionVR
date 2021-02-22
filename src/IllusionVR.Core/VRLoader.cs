@@ -12,34 +12,31 @@ namespace IllusionVR.Core
         private const string DeviceOpenVR = "OpenVR";
         private const string DeviceNone = "None";
 
-        private static bool _isVREnable = false;
+        private static bool isVREnable = false;
 
-        private static VRLoader _Instance;
+        private static VRLoader instance;
         public static VRLoader Instance
         {
             get
             {
-                if(_Instance == null)
+                if(instance == null)
                     throw new InvalidOperationException("VR Loader has not been created yet!");
 
-                return _Instance;
+                return instance;
             }
         }
 
         public static VRLoader Create(bool isEnable)
         {
-            _isVREnable = isEnable;
-            _Instance = new GameObject("VRLoader").AddComponent<VRLoader>();
+            isVREnable = isEnable;
+            instance = new GameObject("VRLoader").AddComponent<VRLoader>();
 
-            return _Instance;
+            return instance;
         }
 
         protected override void OnAwake()
         {
-            if(_isVREnable)
-                StartCoroutine(LoadDevice(DeviceOpenVR));
-            else
-                StartCoroutine(LoadDevice(DeviceNone));
+            StartCoroutine(isVREnable ? LoadDevice(DeviceOpenVR) : LoadDevice(DeviceNone));
         }
 
         private IEnumerator LoadDevice(string newDevice)
@@ -61,6 +58,8 @@ namespace IllusionVR.Core
                 // Boot VRManager!
                 // Note: Use your own implementation of GameInterpreter to gain access to a few useful operatoins
                 // (e.g. characters, camera judging, colliders, etc.)
+                
+                VRLog.Debug("VR succesfully initialized");
                 OnVRSuccess?.Invoke();
             }
         }

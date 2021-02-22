@@ -3,9 +3,9 @@ using System.Diagnostics;
 
 namespace VRGIN.Core
 {
-    public class VRLog
+    public static class VRLog
     {
-        public static Action<string, LogMode> logCall;
+        public static Action<string, LogMode> LogCall;
 
         public enum LogMode
         {
@@ -37,27 +37,27 @@ namespace VRGIN.Core
 
         public static void Debug(object obj)
         {
-            Log("{0}", new object[] { obj }, LogMode.Debug);
+            Log("{0}", new[] { obj }, LogMode.Debug);
         }
 
         public static void Info(object obj)
         {
-            Log("{0}", new object[] { obj }, LogMode.Info);
+            Log("{0}", new[] { obj }, LogMode.Info);
         }
 
         public static void Warn(object obj)
         {
-            Log("{0}", new object[] { obj }, LogMode.Warning);
+            Log("{0}", new[] { obj }, LogMode.Warning);
         }
 
         public static void Error(object obj)
         {
-            Log("{0}", new object[] { obj }, LogMode.Error);
+            Log("{0}", new[] { obj }, LogMode.Error);
         }
 
-        public static void Log(string text, object[] args, LogMode severity)
+        private static void Log(string text, object[] args, LogMode severity)
         {
-            logCall?.Invoke(string.Format(Format(text, severity), args), severity);
+            LogCall?.Invoke(string.Format(Format(text, severity), args), severity);
         }
 
         private static string Format(string text, LogMode mode)

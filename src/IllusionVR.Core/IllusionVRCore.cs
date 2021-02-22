@@ -11,7 +11,7 @@ namespace IllusionVR.Core
         protected virtual void Awake()
         {
             IVRLog.SetLogger(Logger);
-            VRLog.logCall += (x, y) => IVRLog.Log(ConvertLogLevel(y), x);
+            VRLog.LogCall += (x, y) => IVRLog.Log(ConvertLogLevel(y), x);
 
             bool vrDeactivated = Environment.CommandLine.Contains("--novr");
             bool vrActivated = Environment.CommandLine.Contains("--vr");
@@ -22,7 +22,7 @@ namespace IllusionVR.Core
                 VRLoader.Create(false);
         }
 
-        private LogLevel ConvertLogLevel(VRLog.LogMode logMode)
+        private static LogLevel ConvertLogLevel(VRLog.LogMode logMode)
         {
             switch(logMode)
             {
