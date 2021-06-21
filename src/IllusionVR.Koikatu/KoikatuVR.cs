@@ -12,6 +12,12 @@ namespace IllusionVR.Koikatu
     {
         protected override void Awake()
         {
+            if(Paths.ProcessName.Contains("KoikatuVR"))
+            {
+                Destroy(this);
+                return;
+            }
+            
             base.Awake();
 
             VRLoader.OnVRSuccess += () =>
